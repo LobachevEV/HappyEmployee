@@ -4,13 +4,13 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace Ems.Data.Models
 {
-    public partial class SalariesContext : DbContext
+    public partial class EmployeesContext : DbContext
     {
-        public SalariesContext()
+        public EmployeesContext()
         {
         }
 
-        public SalariesContext(DbContextOptions<SalariesContext> options)
+        public EmployeesContext(DbContextOptions<EmployeesContext> options)
             : base(options)
         {
         }
@@ -21,11 +21,6 @@ namespace Ems.Data.Models
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            if (!optionsBuilder.IsConfigured)
-            {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseMySQL("server=localhost;port=3306;user=root;password=P@ssword;database=Salaries");
-            }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

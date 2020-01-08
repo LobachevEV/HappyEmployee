@@ -17,7 +17,11 @@
     },
     "frameworks": {
       "netcoreapp2.2": {
-        "projectReferences": {}
+        "projectReferences": {
+          "D:\\Repos\\EmployeeMS\\Ems.Data\\Ems.Data.csproj": {
+            "projectPath": "D:\\Repos\\EmployeeMS\\Ems.Data\\Ems.Data.csproj"
+          }
+        }
       }
     },
     "warningProperties": {

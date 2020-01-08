@@ -1,11 +1,11 @@
-import * as WeatherForecasts from "./WeatherForecasts";
+import * as Employees from "./Employees";
 import * as DialogActions from "./DialogActions";
 import thunk from "redux-thunk";
 import {applyMiddleware, combineReducers, compose, createStore} from "redux";
 
 export default function configureStore(history: any, initialState: any) {
   const reducers = {
-    weatherForecasts: WeatherForecasts.reducer,
+    employees: Employees.reducer,
     dialogActions: DialogActions.reducer
   };
 

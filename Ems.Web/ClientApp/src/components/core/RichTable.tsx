@@ -24,10 +24,11 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export interface IColumn {
   title: string,
-  format: (item: any) => any;
+  format: (item: any) => any;  
 }
 
 interface ITableProps {
+  title?: string
   columns: IColumn[],
   items: any[],
   total: number,
@@ -39,11 +40,11 @@ interface ITableProps {
 }
 
 const RichTable = (props: ITableProps) => {
-  const {items, rowsPerPage, onChangeRowsPage, columns, page, onChangePage, total, actions} = props;
+  const {title, items, rowsPerPage, onChangeRowsPage, columns, page, onChangePage, total, actions} = props;
   const classes = useStyles();
   return (
     <Paper className={classes.root}>
-      <TableTitle title={"TableTitle"}>
+      <TableTitle title={title || ""}>
         {actions}
       </TableTitle>
       <Table className='table table-striped'>
@@ -53,7 +54,7 @@ const RichTable = (props: ITableProps) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {items && items.map(item => <TableRow key={item.dateFormatted}>
+          {items && items.map(item => <TableRow key={item.id}>
               {columns.map(col =>
                 <TableCell>{col.format(item)}</TableCell>)}
             </TableRow>

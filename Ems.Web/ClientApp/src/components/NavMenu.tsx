@@ -24,8 +24,8 @@ function ButtonAppBar() {
         <Toolbar>
           <Typography variant="h6" className={classes.title}>
             TestApp
-          </Typography>          
-          <Button color="inherit"href="/forecast/:startDateIndex?/:rowsPerPage?" >Forecast</Button>
+          </Typography>
+          <Button color="inherit" href="/Employees">Employees</Button>
         </Toolbar>
       </AppBar>
     </div>
