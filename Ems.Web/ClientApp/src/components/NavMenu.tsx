@@ -27,6 +27,7 @@ function ButtonAppBar() {
           </Typography>
           <Button color="inherit" href="/Employees">Employees</Button>
           <Button color="inherit" href="/Grades">Grades</Button>
+          <Button color="inherit" href="/Positions">Positions</Button>
         </Toolbar>
       </AppBar>
     </div>

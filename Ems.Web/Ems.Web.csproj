@@ -30,12 +30,14 @@
     <TypeScriptCompile Include="ClientApp\src\components\Employees.tsx" />
     <TypeScriptCompile Include="ClientApp\src\components\Grades.tsx" />
     <TypeScriptCompile Include="ClientApp\src\components\NavMenu.tsx" />
+    <TypeScriptCompile Include="ClientApp\src\components\Positions.tsx" />
     <TypeScriptCompile Include="ClientApp\src\index.tsx" />
     <TypeScriptCompile Include="ClientApp\src\react-app-env.d.ts" />
     <TypeScriptCompile Include="ClientApp\src\store\configureStore.ts" />
     <TypeScriptCompile Include="ClientApp\src\store\DialogActions.ts" />
     <TypeScriptCompile Include="ClientApp\src\store\Employees.ts" />
     <TypeScriptCompile Include="ClientApp\src\store\Grades.ts" />
+    <TypeScriptCompile Include="ClientApp\src\store\Positions.ts" />
   </ItemGroup>
 
   <ItemGroup>
