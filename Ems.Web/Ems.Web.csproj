@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
@@ -19,6 +19,23 @@
     <Content Remove="$(SpaRoot)**" />
     <None Remove="$(SpaRoot)**" />
     <None Include="$(SpaRoot)**" Exclude="$(SpaRoot)node_modules\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <TypeScriptCompile Include="ClientApp\src\App.test.tsx" />
+    <TypeScriptCompile Include="ClientApp\src\App.tsx" />
+    <TypeScriptCompile Include="ClientApp\src\components\core\DialogService.tsx" />
+    <TypeScriptCompile Include="ClientApp\src\components\core\FormDialog.tsx" />
+    <TypeScriptCompile Include="ClientApp\src\components\core\RichTable.tsx" />
+    <TypeScriptCompile Include="ClientApp\src\components\EditFormDialog.tsx" />
+    <TypeScriptCompile Include="ClientApp\src\components\Forecast.tsx" />
+    <TypeScriptCompile Include="ClientApp\src\components\Home.tsx" />
+    <TypeScriptCompile Include="ClientApp\src\components\NavMenu.tsx" />
+    <TypeScriptCompile Include="ClientApp\src\index.tsx" />
+    <TypeScriptCompile Include="ClientApp\src\react-app-env.d.ts" />
+    <TypeScriptCompile Include="ClientApp\src\store\configureStore.ts" />
+    <TypeScriptCompile Include="ClientApp\src\store\DialogActions.ts" />
+    <TypeScriptCompile Include="ClientApp\src\store\WeatherForecasts.ts" />
   </ItemGroup>
 
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">
