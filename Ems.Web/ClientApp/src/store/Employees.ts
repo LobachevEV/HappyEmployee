@@ -1,8 +1,8 @@
-const requestEmployeesType = "REQUEST_WEATHER_FORECASTS";
-const receiveEmployeesType = "RECEIVE_WEATHER_FORECASTS";
-const addEmployeeType = "ADD_WEATHER_FORECAST";
-const editEmployeeType = "EDIT_WEATHER_FORECAST";
-const removeEmployeeType = "REMOVE_WEATHER_FORECAST";
+const requestEmployeesType = "REQUEST_EMPLOYEES";
+const receiveEmployeesType = "RECEIVE_EMPLOYEES";
+const addEmployeeType = "ADD_EMPLOYEE";
+const editEmployeeType = "EDIT_EMPLOYEE";
+const removeEmployeeType = "REMOVE_EMPLOYEE";
 const initialState = {employees: [], isLoading: false};
 
 export const actionCreators = {

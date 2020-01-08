@@ -26,6 +26,7 @@ function ButtonAppBar() {
             TestApp
           </Typography>
           <Button color="inherit" href="/Employees">Employees</Button>
+          <Button color="inherit" href="/Grades">Grades</Button>
         </Toolbar>
       </AppBar>
     </div>
