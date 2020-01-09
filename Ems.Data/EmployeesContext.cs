@@ -1,9 +1,27 @@
-﻿using System;
+﻿using System.IO;
+using Ems.Data.Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Design;
+using Microsoft.Extensions.Configuration;
 
-namespace Ems.Data.Models
+namespace Ems.Data
 {
+    //to use dotnet ef CLI
+    public class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<EmployeesContext>
+    {
+        public EmployeesContext CreateDbContext(string[] args)
+        {
+            var configuration = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile(@Directory.GetCurrentDirectory() + "/../Ems.Web/appsettings.Development.json")
+                .AddJsonFile(@Directory.GetCurrentDirectory() + "/../Ems.Web/appsettings.json")
+                .Build();
+            var builder = new DbContextOptionsBuilder<EmployeesContext>();
+            var connectionString = configuration.GetConnectionString("EmsDb");
+            builder.UseMySql(connectionString);
+            return new EmployeesContext(builder.Options);
+        }
+    }
+
     public partial class EmployeesContext : DbContext
     {
         public EmployeesContext()
@@ -29,7 +47,7 @@ namespace Ems.Data.Models
 
             modelBuilder.Entity<Employee>(entity =>
             {
-                entity.ToTable("employee", "ems");
+                entity.ToTable("employee", null);
 
                 entity.HasIndex(e => e.GradeId)
                     .HasName("grade_id");
@@ -76,7 +94,7 @@ namespace Ems.Data.Models
 
             modelBuilder.Entity<Grade>(entity =>
             {
-                entity.ToTable("grade", "ems");
+                entity.ToTable("grade", null);
 
                 entity.Property(e => e.Id)
                     .HasColumnName("id")
@@ -94,7 +112,7 @@ namespace Ems.Data.Models
 
             modelBuilder.Entity<Position>(entity =>
             {
-                entity.ToTable("position", "ems");
+                entity.ToTable("position", null);
 
                 entity.Property(e => e.Id)
                     .HasColumnName("id")

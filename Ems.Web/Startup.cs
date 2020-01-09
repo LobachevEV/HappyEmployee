@@ -1,3 +1,4 @@
+using Ems.Data;
 using Ems.Data.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -23,7 +24,7 @@ namespace Ems.Web
         {
             services.AddControllersWithViews();
             services.AddDbContext<EmployeesContext>(options =>
-                options.UseMySql(Configuration.GetConnectionString("EmsDb")));
+                options.UseMySql(Configuration.GetConnectionString("EmsDb"), builder => builder.MigrationsAssembly("Ems.Data")));
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration => { configuration.RootPath = "ClientApp/build"; });
         }
