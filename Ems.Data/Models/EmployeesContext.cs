@@ -29,7 +29,7 @@ namespace Ems.Data.Models
 
             modelBuilder.Entity<Employee>(entity =>
             {
-                entity.ToTable("employee", "salaries");
+                entity.ToTable("employee", "ems");
 
                 entity.HasIndex(e => e.GradeId)
                     .HasName("grade_id");
@@ -76,7 +76,7 @@ namespace Ems.Data.Models
 
             modelBuilder.Entity<Grade>(entity =>
             {
-                entity.ToTable("grade", "salaries");
+                entity.ToTable("grade", "ems");
 
                 entity.Property(e => e.Id)
                     .HasColumnName("id")
@@ -94,7 +94,7 @@ namespace Ems.Data.Models
 
             modelBuilder.Entity<Position>(entity =>
             {
-                entity.ToTable("position", "salaries");
+                entity.ToTable("position", "ems");
 
                 entity.Property(e => e.Id)
                     .HasColumnName("id")
