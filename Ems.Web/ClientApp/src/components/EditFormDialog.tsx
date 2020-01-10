@@ -3,7 +3,7 @@ import React, {Component} from "react";
 import Button from "@material-ui/core/Button";
 import {connect} from "react-redux";
 import {bindActionCreators} from "redux";
-import {actionCreators} from "../store/DialogActions";
+import {actionCreators} from "../store/BladeActions";
 
 interface IEditDialogProps {
   title: string

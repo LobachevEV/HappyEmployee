@@ -1,7 +1,7 @@
 import * as Employees from "./Employees";
 import * as Grades from "./Grades";
 import * as Positions from "./Positions";
-import * as DialogActions from "./DialogActions";
+import * as Blades from "./BladeActions";
 import thunk from "redux-thunk";
 import {applyMiddleware, combineReducers, compose, createStore} from "redux";
 
@@ -11,7 +11,7 @@ export default function configureStore(history: any, initialState: any) {
     employees: Employees.reducer,
     grades: Grades.reducer,
     positions: Positions.reducer,
-    dialogActions: DialogActions.reducer
+    blades: Blades.reducer
   };
 
   const middleware = [
