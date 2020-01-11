@@ -4,7 +4,7 @@ import Select from "@material-ui/core/Select";
 
 export interface ISelectValue{
   value:any;
-  label:string
+  label?:string
 }
 
 interface IProps extends SelectProps{
@@ -35,8 +35,8 @@ const SelectCmp = (props: IProps) => {
   const {label, items} = props;
   return <FormControl className={classes.formControl}>
     <InputLabel ref={inputLabel} id="demo-simple-select-label">{label}</InputLabel>
-    <Select {...props} labelWidth={labelWidth}>
-      {items.map(item => <MenuItem value={item.value}>{item.label}</MenuItem>)}
+    <Select value={props.value || items[0]?.value} {...props} labelWidth={labelWidth}>
+      {items.map(item => <MenuItem key={item.value} value={item.value}>{item.label || item.value}</MenuItem>)}
     </Select>
   </FormControl>
 };
