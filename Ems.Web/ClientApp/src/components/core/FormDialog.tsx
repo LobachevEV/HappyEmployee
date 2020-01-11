@@ -7,20 +7,23 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 
 interface IDialogProps {
   title: string
-  buttonCaption: string,
-  open?: boolean,
+  buttonCaption: string,  
   onClose: () => void
   children?: React.ReactNode
   actions?: React.ReactNode[]
 }
 
 const FormDialog = (props: IDialogProps) => {
-  const [open, setOpen] = React.useState(!!props.open);
+  const [open, setOpen] = React.useState(false);
   console.log("FormDialog open is " + open);
 
   function handleClickOpen() {
     setOpen(true);
   }
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   const {buttonCaption, onClose, actions, title, children} = props;
 
@@ -35,7 +38,12 @@ const FormDialog = (props: IDialogProps) => {
           {children}
         </DialogContent>
         <DialogActions>
-          {actions}
+          <Button onClick={handleClose} color="primary">
+            Cancel
+          </Button>
+          <Button onClick={handleClose} color="primary">
+            Save
+          </Button>
         </DialogActions>
       </Dialog>
     </React.Fragment>

@@ -8,36 +8,27 @@ import {actionCreators} from "../store/BladeActions";
 interface IEditDialogProps {
   title: string
   buttonCaption: string,
-  open?: boolean,
   children?: React.ReactNode
   onCancel: () => void
   onSave: () => void
-  close?: () => void
 }
 
 class EditFormDialog extends Component<IEditDialogProps> {
   
   render() {    
-    let {buttonCaption, children, close, onCancel, onSave, open, title} = this.props;
+    let {buttonCaption, children, onCancel, onSave, title} = this.props;
 
     function handleSave() {
       onSave();
-      close && close()
     }
 
     function handleCancel() {
       onCancel();
-      close && close()
     }
 
-    return <FormDialog title={title} buttonCaption={buttonCaption} onClose={onCancel} open={open} actions={
+    return <FormDialog title={title} buttonCaption={buttonCaption} onClose={onCancel} actions={
       [
-        <Button onClick={handleCancel} color="primary">
-          Cancel
-        </Button>,
-        <Button onClick={handleSave} color="primary">
-          Save
-        </Button>
+       
       ]
     }>
       <React.Fragment>

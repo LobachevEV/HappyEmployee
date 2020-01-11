@@ -13,6 +13,7 @@ import InboxIcon from '@material-ui/icons/MoveToInbox';
 import MailIcon from '@material-ui/icons/Mail';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+import {Link as RouterLink, LinkProps as RouterLinkProps} from 'react-router-dom';
 
 const drawerWidth = 240;
 
@@ -78,6 +79,34 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
+interface ListItemLinkProps {
+  icon?: React.ReactElement;
+  primary: string;
+  to: string;
+}
+
+
+function ListItemLink(props: ListItemLinkProps) {
+  const { icon, primary, to } = props;
+
+  const renderLink = React.useMemo(
+    () =>
+      React.forwardRef<any, Omit<RouterLinkProps, 'to'>>((itemProps, ref) => (
+        <RouterLink to={to} ref={ref} {...itemProps} />
+      )),
+    [to],
+  );
+
+  return (
+    <li>
+      <ListItem button component={renderLink}>
+        {icon ? <ListItemIcon>{icon}</ListItemIcon> : null}
+        <ListItemText primary={primary} />
+      </ListItem>
+    </li>
+  );
+}
+
 function ButtonAppBar() {
   const classes = useStyles();
   const theme = useTheme();
@@ -88,7 +117,7 @@ function ButtonAppBar() {
 
   const handleDrawerClose = () => {
     setOpen(false);
-  };
+  };  
 
   return (
     <div className={classes.root}>
@@ -132,18 +161,9 @@ function ButtonAppBar() {
         </div>
         <Divider/>
         <List>
-          <ListItem button key="Employees">
-            <ListItemIcon><InboxIcon/></ListItemIcon>
-            <ListItemText primary="Employees"/>
-          </ListItem>
-          <ListItem button key="Grades">
-            <ListItemIcon><InboxIcon/></ListItemIcon>
-            <ListItemText primary="Grades"/>
-          </ListItem>
-          <ListItem button key="Positions">
-            <ListItemIcon><MailIcon/></ListItemIcon>
-            <ListItemText primary="Positions"/>
-          </ListItem>
+          <ListItemLink to="/employees" primary="Employees" icon={<InboxIcon />} />
+          <ListItemLink to="/positions" primary="Positions" icon={<MailIcon />} />
+          <ListItemLink to="/grades" primary="Grades" icon={<InboxIcon />} />          
         </List>
       </Drawer>
     </div>
@@ -151,3 +171,6 @@ function ButtonAppBar() {
 }
 
 export default ButtonAppBar;
+// <Button color="inherit" href="/Employees">Employees</Button>
+// <Button color="inherit" href="/Grades">Grades</Button>
+//   <Button color="inherit" href="/Positions">Positions</Button>

@@ -27,8 +27,8 @@ const rootElement = document.getElementById('root');
 
 ReactDOM.render(
   <Provider store={store}>
-    <NavMenu/>
     <Router history={history}>
+      <NavMenu/>
       <App/>
     </Router>
   </Provider>,

@@ -4,14 +4,13 @@ import Employees from './components/Employees';
 import {Container} from "@material-ui/core";
 import Grades from "./components/Grades";
 import Positions from "./components/Positions";
-import BladePanel from "./components/core/Blades/BladePanel";
 
 export default () => (
-  <Container>
-    <Route exact path='/' component={BladePanel}/>
+  <Container>    
+    <Route exact path='/' component={Employees}/>
     <Route exact path='/employees' component={Employees}/>
     <Route exact path='/employees/:startIndex/:rowsPerPage' component={Employees}/>
     <Route exact path='/grades' component={Grades}/>
-    <Route exact path='/Positions' component={Positions}/>
+    <Route exact path='/positions' component={Positions}/>    
   </Container>
 );
