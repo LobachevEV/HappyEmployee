@@ -1,15 +1,15 @@
-import FormDialog from "./core/FormDialog";
 import React, {Component} from "react";
-import Button from "@material-ui/core/Button";
 import {connect} from "react-redux";
 import {bindActionCreators} from "redux";
-import {actionCreators} from "../store/BladeActions";
+import FormDialog from "../core/FormDialog";
+import {actionCreators} from "../../store/Employees";
+
 
 interface IEditDialogProps {
   title: string
   buttonCaption: string,
   children?: React.ReactNode
-  onCancel: () => void
+  onCancel?: () => void
   onSave: () => void
 }
 
@@ -23,14 +23,10 @@ class EditFormDialog extends Component<IEditDialogProps> {
     }
 
     function handleCancel() {
-      onCancel();
+      onCancel?.();
     }
 
-    return <FormDialog title={title} buttonCaption={buttonCaption} onClose={onCancel} actions={
-      [
-       
-      ]
-    }>
+    return <FormDialog title={title} buttonCaption={buttonCaption} onClose={onCancel}>
       <React.Fragment>
         {children}
       </React.Fragment>

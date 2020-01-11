@@ -8,9 +8,8 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 interface IDialogProps {
   title: string
   buttonCaption: string,  
-  onClose: () => void
-  children?: React.ReactNode
-  actions?: React.ReactNode[]
+  onClose?: () => void
+  children?: React.ReactNode  
 }
 
 const FormDialog = (props: IDialogProps) => {
@@ -25,7 +24,7 @@ const FormDialog = (props: IDialogProps) => {
     setOpen(false);
   };
 
-  const {buttonCaption, onClose, actions, title, children} = props;
+  const {buttonCaption, onClose, title, children} = props;
 
   return (
     <React.Fragment>
