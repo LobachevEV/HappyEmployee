@@ -6,6 +6,7 @@ import {createBrowserHistory} from "history";
 import RichTable, {IColumn} from "../core/RichTable";
 import EmployeeEditDialog from "./EmployeeEditDialog";
 import {actionCreators} from "../../store/Employees";
+import {IEmployee} from "../../Model/Api";
 
 const baseUrl = document.getElementsByTagName('base')[0].getAttribute('href') || undefined;
 const history = createBrowserHistory({basename: baseUrl});
@@ -33,13 +34,10 @@ class Employees extends Component<any> {
   render() {
     const {employees, startIndex, rowsPerPage, requestEmployees} = this.props;
 
-    function onEditCancel() {
-
-    }
-
-    function onSave() {
-
-    }
+    const save = (employee:IEmployee) => {
+      console.log("Employees save");
+      this.props.addEmployee(employee);
+    };
 
     return (
       <div>
@@ -58,7 +56,7 @@ class Employees extends Component<any> {
                        this.props.requestEmployees(startIndex, newRowsPerPage);
                        history.push(`/Employees/${startIndex}/${newRowsPerPage}`);
                      }}
-                     actions={[<EmployeeEditDialog/>]}/>
+                     actions={[<EmployeeEditDialog save={save}/>]}/>
         </Grid>
       </div>
     );

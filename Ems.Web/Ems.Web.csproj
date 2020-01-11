@@ -39,6 +39,7 @@
     <TypeScriptCompile Include="ClientApp\src\components\Positions\EmployeeEditDialog.tsx" />
     <TypeScriptCompile Include="ClientApp\src\components\Positions\Positions.tsx" />
     <TypeScriptCompile Include="ClientApp\src\index.tsx" />
+    <TypeScriptCompile Include="ClientApp\src\Model\Api.ts" />
     <TypeScriptCompile Include="ClientApp\src\react-app-env.d.ts" />
     <TypeScriptCompile Include="ClientApp\src\store\configureStore.ts" />
     <TypeScriptCompile Include="ClientApp\src\store\BladeActions.ts" />

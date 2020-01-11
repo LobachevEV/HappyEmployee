@@ -1,3 +1,5 @@
+import {IEmployee} from "../Model/Api";
+
 const requestEmployeesType = "REQUEST_EMPLOYEES";
 const receiveEmployeesType = "RECEIVE_EMPLOYEES";
 const addEmployeeType = "ADD_EMPLOYEE";
@@ -21,9 +23,13 @@ export const actionCreators = {
     return Promise.resolve();
   },
 
-  addEmployee: (employee: any) => async (dispatch: any, getState: any) => {
+  addEmployee: (employee: IEmployee) => async (dispatch: any, getState: any) => {
+    console.log("addEmployee");
+    const url = `api/Main/Employee`;
+    const response = await fetch(url,{method:"POST", body: JSON.stringify(employee)});
+    const result = JSON.parse(await response.json());
     const employees = getState().employees.employees;
-    employees.push(employees);
+    employees.push(result);
     dispatch({type: addEmployeeType, employees});
   },
   editEmployee: (employee: any) => async (dispatch: any, getState: any) => {
