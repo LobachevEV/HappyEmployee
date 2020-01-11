@@ -39,13 +39,13 @@ export default class EmployeeEditDialog extends Component<any> {
           <TextField id="emp_name" label="Employee name" value={this.name}/>
         </Grid>
         <Grid item xs={6}>
-          <SelectCmp id={"position_id"} label="Position" items={[{value:10, label:"Ten"},{value:20, label:"Twenty"},{value:30, label:"Thirty"}]}/>          
+          <SelectCmp id={"position_id"} label="Position" onChange={handleGradeChange} items={[{value:10, label:"Ten"},{value:20, label:"Twenty"},{value:30, label:"Thirty"}]}/>          
         </Grid>
         <Grid item xs={6}>
-          <SelectCmp id={"grade_id"} label="Grade" items={[{value:10, label:"Ten"},{value:20, label:"Twenty"},{value:30, label:"Thirty"}]}/>          
+          <SelectCmp id={"grade_id"} label="Grade" onChange={handlePositionChange} items={[{value:10, label:"Ten"},{value:20, label:"Twenty"},{value:30, label:"Thirty"}]}/>          
         </Grid>
         <Grid item xs={12}>
-          <TextField id="per_cost_mult" label="Personal cost multiplier" value={this.personalCostMultiplier}/>
+          <TextField id="per_cost_mult" type="number" label="Personal cost multiplier" value={this.personalCostMultiplier}/>
         </Grid>
       </Grid>
     </EditFormDialog>;

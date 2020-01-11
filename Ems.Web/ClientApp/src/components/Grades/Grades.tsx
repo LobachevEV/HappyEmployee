@@ -6,6 +6,7 @@ import {Grid, Typography} from "@material-ui/core";
 import {createBrowserHistory} from "history";
 import RichTable, {IColumn} from "../core/RichTable";
 import EditFormDialog from "../core/EditFormDialog";
+import GradeEditDialog from "./GradeEditDialog";
 
 const baseUrl = document.getElementsByTagName('base')[0].getAttribute('href') || undefined;
 const history = createBrowserHistory({basename: baseUrl});
@@ -54,7 +55,7 @@ class Grades extends Component<any> {
                        this.props.requestGrades(startIndex, newRowsPerPage);
                        history.push(`/Grades/${startIndex}/${newRowsPerPage}`);
                      }}
-                     actions={[<EditFormDialog title={"New grade"} buttonCaption={"Add grade"} onCancel={onEditCancel} onSave={onSave}/>]}/>
+                     actions={[<GradeEditDialog/>]}/>
         </Grid>
       </div>
     );
