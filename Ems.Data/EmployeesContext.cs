@@ -57,7 +57,8 @@ namespace Ems.Data
 
                 entity.Property(e => e.Id)
                     .HasColumnName("id")
-                    .HasColumnType("int(10) unsigned");
+                    .HasColumnType("int(10) unsigned")
+                    .ValueGeneratedNever();
 
                 entity.Property(e => e.GradeId)
                     .HasColumnName("grade_id")
