@@ -1,11 +1,11 @@
 import React, {Component} from "react";
 import {bindActionCreators} from "redux";
 import {connect} from "react-redux";
-import {actionCreators} from "../store/Positions";
+import {actionCreators} from "../../store/Positions";
 import {Grid, Typography} from "@material-ui/core";
 import {createBrowserHistory} from "history";
-import RichTable, {IColumn} from "./core/RichTable";
-import EditFormDialog from "./EditFormDialog";
+import RichTable, {IColumn} from "../core/RichTable";
+import EditFormDialog from "../core/EditFormDialog";
 
 const baseUrl = document.getElementsByTagName('base')[0].getAttribute('href') || undefined;
 const history = createBrowserHistory({basename: baseUrl});

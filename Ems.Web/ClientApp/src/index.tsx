@@ -6,7 +6,7 @@ import configureStore from './store/configureStore';
 import App from './App';
 import registerServiceWorker from './registerServiceWorker';
 import {Router} from "react-router";
-import NavMenu from "./components/NavMenu";
+import NavMenu from "./components/core/NavMenu";
 
 declare global {
   interface Window {

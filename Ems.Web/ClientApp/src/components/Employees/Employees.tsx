@@ -4,7 +4,7 @@ import {connect} from "react-redux";
 import {Grid, Typography} from "@material-ui/core";
 import {createBrowserHistory} from "history";
 import RichTable, {IColumn} from "../core/RichTable";
-import EmployeeEditDialog from "../EmployeeEditDialog";
+import EmployeeEditDialog from "./EmployeeEditDialog";
 import {actionCreators} from "../../store/Employees";
 
 const baseUrl = document.getElementsByTagName('base')[0].getAttribute('href') || undefined;

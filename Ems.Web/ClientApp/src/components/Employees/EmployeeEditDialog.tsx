@@ -1,7 +1,7 @@
 import React, {Component, ReactElement, ReactNodeArray, ReactPortal} from "react";
-import {FormControl, Grid, InputLabel, MenuItem, Select, TextField} from "@material-ui/core";
-import EditFormDialog from "./EditFormDialog";
-import SelectCmp from "./core/SelectCmp";
+import {Grid, TextField} from "@material-ui/core";
+import EditFormDialog from "../core/EditFormDialog";
+import SelectCmp from "../core/SelectCmp";
 
 export default class EmployeeEditDialog extends Component<any> {
   name: string;
