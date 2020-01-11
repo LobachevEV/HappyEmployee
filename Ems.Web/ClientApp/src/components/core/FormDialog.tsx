@@ -5,11 +5,17 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
+interface IDialogAction {
+  label: string,
+  action?: () => any
+}
+
 interface IDialogProps {
   title: string
-  buttonCaption: string,  
+  buttonCaption: string,
   onClose?: () => void
-  children?: React.ReactNode  
+  children?: React.ReactNode,
+  actions?: IDialogAction[]
 }
 
 const FormDialog = (props: IDialogProps) => {
@@ -20,11 +26,7 @@ const FormDialog = (props: IDialogProps) => {
     setOpen(true);
   }
 
-  const handleClose = () => {
-    setOpen(false);
-  };
-
-  const {buttonCaption, onClose, title, children} = props;
+  const {buttonCaption, onClose, title, children, actions} = props;
 
   return (
     <React.Fragment>
@@ -37,12 +39,15 @@ const FormDialog = (props: IDialogProps) => {
           {children}
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} color="primary">
-            Cancel
-          </Button>
-          <Button onClick={handleClose} color="primary">
-            Save
-          </Button>
+          {actions && actions.length > 0 && actions.map(action => {
+            const handleAction = () => {
+              action.action?.();
+              setOpen(false);
+            };
+            return <Button onClick={handleAction} color="primary">
+              {action.label}
+            </Button>;
+          })}
         </DialogActions>
       </Dialog>
     </React.Fragment>
