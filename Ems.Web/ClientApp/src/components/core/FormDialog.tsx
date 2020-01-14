@@ -19,8 +19,7 @@ interface IDialogProps {
 }
 
 const FormDialog = (props: IDialogProps) => {
-  const [open, setOpen] = React.useState(false);
-  console.log("FormDialog open is " + open);
+  const [open, setOpen] = React.useState(false);  
 
   function handleClickOpen() {
     setOpen(true);

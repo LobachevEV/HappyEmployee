@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace Ems.Data.Models
+﻿namespace Ems.Data.Models
 {
     public partial class Employee
     {

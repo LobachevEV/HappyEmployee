@@ -32,6 +32,7 @@ const SelectCmp = (props: IProps) => {
   React.useEffect(() => {
     setLabelWidth(inputLabel.current!.offsetWidth);
   }, []);
+  
   const {label, items} = props;
   return <FormControl className={classes.formControl}>
     <InputLabel ref={inputLabel} id="demo-simple-select-label">{label}</InputLabel>

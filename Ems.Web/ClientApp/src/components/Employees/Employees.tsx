@@ -34,8 +34,7 @@ class Employees extends Component<any> {
   render() {
     const {employees, startIndex, rowsPerPage, requestEmployees} = this.props;
 
-    const save = (employee:IEmployee) => {
-      console.log("Employees save");
+    const save = (employee:IEmployee) => {      
       this.props.addEmployee(employee);
     };
 
