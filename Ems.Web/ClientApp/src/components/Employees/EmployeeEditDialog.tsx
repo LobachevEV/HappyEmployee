@@ -1,12 +1,17 @@
-import React, {ReactElement, ReactNodeArray, ReactPortal} from "react";
+import React from "react";
 import {Grid, TextField} from "@material-ui/core";
 import EditFormDialog from "../core/EditFormDialog";
 import SelectCmp from "../core/SelectCmp";
 import {IEmployee} from "../../Model/Api";
+import {connect} from "react-redux";
+import {bindActionCreators} from "redux";
+import {actionCreators} from "../../store/Grades";
 
 interface IEmployeeEditDialog {
   employee?: IEmployee,
-  save: (employee: IEmployee) => any,
+  save?: (employee: IEmployee) => any,
+  grades?: any,
+  positions?: any
 }
 
 const EmployeeEditDialog = (props: IEmployeeEditDialog) => {
@@ -33,7 +38,10 @@ const EmployeeEditDialog = (props: IEmployeeEditDialog) => {
   };
 
   const save = () => {
-    props.save({id, name, gradeId, positionId, personalCostMultiplier});
+    if (props.save) {
+      props.save({id, name, gradeId, positionId, personalCostMultiplier});
+    }
+    
   };
 
   return <EditFormDialog title={"New employee"} buttonCaption={"Add employee"} onSave={save}>
@@ -43,11 +51,11 @@ const EmployeeEditDialog = (props: IEmployeeEditDialog) => {
       </Grid>
       <Grid item xs={6}>
         <SelectCmp id={"position_id"} label="Position" onChange={handleGradeChange}
-                   items={[{value: "DevOps"}, {value: "HR Specialist"}, {value: "Project Manager"}, {value: "QA Specialist"}, {value: "Software Developer"},]}/>
+                   items={props.grades.items}/>
       </Grid>
       <Grid item xs={6}>
         <SelectCmp id={"grade_id"} label="Grade" onChange={handlePositionChange}
-                   items={[{value: 1, label: "Junior"}, {value: 2, label: "Mediocre"}, {value: 3, label: "Senior"}]}/>
+                   items={props.positions.items}/>
       </Grid>
       <Grid item xs={12}>
         <TextField id="per_cost_mult" type="number" label="Personal cost multiplier"
@@ -58,4 +66,10 @@ const EmployeeEditDialog = (props: IEmployeeEditDialog) => {
   </EditFormDialog>;
 };
 
-export default EmployeeEditDialog
+
+export default connect<any>(
+  (state: any) => {
+    return {grades: state.grades, positions: state.positions, save: state.employees.addEmployee}
+  },
+  dispatch => bindActionCreators(actionCreators, dispatch)
+)(EmployeeEditDialog);
