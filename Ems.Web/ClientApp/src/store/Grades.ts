@@ -3,7 +3,7 @@ const receiveGradesType = "RECEIVE_GRADES";
 const addGradeType = "ADD_GRADE";
 const editGradeType = "EDIT_GRADE";
 const removeGradeType = "REMOVE_GRADE";
-const initialState = {grades: [], isLoading: false};
+const initialState = {items: [], isLoading: false};
 
 export const actionCreators = {
   requestGrades: (startIndex: number, rowsPerPage: number) => async (dispatch: any, getState: any) => {
@@ -15,26 +15,26 @@ export const actionCreators = {
     dispatch({type: requestGradesType, startIndex, rowsPerPage});
     const url = `api/Main/Grades?startIndex=${startIndex}&amount=${rowsPerPage}`;
     const response = await fetch(url);
-    const grades = await response.json();
+    const items = await response.json();
 
-    dispatch({type: receiveGradesType, startIndex, rowsPerPage, grades});
+    dispatch({type: receiveGradesType, startIndex, rowsPerPage, items});
     return Promise.resolve();
   },
 
   addGrade: (grade: any) => async (dispatch: any, getState: any) => {
-    const grades = getState().grades.grades;
-    grades.push(grades);
-    dispatch({type: addGradeType, grades});
+    const items = getState().grades.items;
+    items.push(items);
+    dispatch({type: addGradeType, items});
   },
   editGrade: (grade: any) => async (dispatch: any, getState: any) => {
-    const grades = getState().grades.grades;
-    grades.push(grades);
-    dispatch({type: editGradeType, grades});
+    const items = getState().grades.items;
+    items.push(items);
+    dispatch({type: editGradeType, items});
   },
   removeGrade: (grade: any) => async (dispatch: any, getState: any) => {
-    const grades = getState().grades.grades;
-    grades.push(grades);
-    dispatch({type: removeGradeType, grades});
+    const items = getState().grades.items;
+    items.push(items);
+    dispatch({type: removeGradeType, items});
   },
 };
 
@@ -55,7 +55,7 @@ export const reducer = (state: any, action: any) => {
       ...state,
       startIndex: action.startIndex,
       rowsPerPage: action.rowsPerPage,
-      grades: action.grades,
+      items: action.items,
       isLoading: false
     };
   }
@@ -63,7 +63,7 @@ export const reducer = (state: any, action: any) => {
   if (action.type === addGradeType) {
     return {
       ...state,
-      grades: action.grades
+      items: action.items
     };
   }
 

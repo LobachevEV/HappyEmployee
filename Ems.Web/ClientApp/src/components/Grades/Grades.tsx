@@ -5,7 +5,6 @@ import {actionCreators} from "../../store/Grades";
 import {Grid, Typography} from "@material-ui/core";
 import {createBrowserHistory} from "history";
 import RichTable, {IColumn} from "../core/RichTable";
-import EditFormDialog from "../core/EditFormDialog";
 import GradeEditDialog from "./GradeEditDialog";
 
 const baseUrl = document.getElementsByTagName('base')[0].getAttribute('href') || undefined;

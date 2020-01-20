@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ems.Web", "Ems.Web\Ems.Web.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ems.Data", "Ems.Data\Ems.Data.csproj", "{C94F2588-0871-4B0B-BA1F-450EBFED8888}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ems.Test", "Ems.Test\Ems.Test.csproj", "{CF8D3017-EC3E-4EF8-9CAA-D752BEC82EB7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{C94F2588-0871-4B0B-BA1F-450EBFED8888}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C94F2588-0871-4B0B-BA1F-450EBFED8888}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C94F2588-0871-4B0B-BA1F-450EBFED8888}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CF8D3017-EC3E-4EF8-9CAA-D752BEC82EB7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CF8D3017-EC3E-4EF8-9CAA-D752BEC82EB7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CF8D3017-EC3E-4EF8-9CAA-D752BEC82EB7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CF8D3017-EC3E-4EF8-9CAA-D752BEC82EB7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

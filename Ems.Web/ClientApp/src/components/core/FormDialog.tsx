@@ -19,29 +19,19 @@ interface IDialogProps {
 }
 
 const FormDialog = (props: IDialogProps) => {
-  const [open, setOpen] = React.useState(false);  
-
-  function handleClickOpen() {
-    setOpen(true);
-  }
-
-  const {buttonCaption, onClose, title, children, actions} = props;
-
+  const {onClose, title, children, actions} = props;
   return (
     <React.Fragment>
-      <Button variant="outlined" color="primary" onClick={handleClickOpen}>
-        {buttonCaption}
-      </Button>
-      <Dialog open={open} onClose={onClose} aria-labelledby="form-dialog-title">
+      <Dialog open={true} onClose={onClose} aria-labelledby="form-dialog-title">
         <DialogTitle id="form-dialog-title">{title}</DialogTitle>
         <DialogContent>
           {children}
         </DialogContent>
         <DialogActions>
           {actions && actions.length > 0 && actions.map(action => {
-            const handleAction = () => {
-              action.action?.();
-              setOpen(false);
+            const handleAction = async () => {
+              await action.action?.();
+              window.history.back();
             };
             return <Button onClick={handleAction} color="primary">
               {action.label}

@@ -3,7 +3,7 @@ const receivePositionsType = "RECEIVE_POSITIONS";
 const addPositionType = "ADD_POSITION";
 const editPositionType = "EDIT_POSITION";
 const removePositionType = "REMOVE_POSITION";
-const initialState = {positions: [], isLoading: false};
+const initialState = {items: [], isLoading: false};
 
 export const actionCreators = {
   requestPositions: (startIndex: number, rowsPerPage: number) => async (dispatch: any, getState: any) => {
@@ -15,21 +15,21 @@ export const actionCreators = {
     dispatch({type: requestPositionsType, startIndex, rowsPerPage});
     const url = `api/Main/Positions?startIndex=${startIndex}&amount=${rowsPerPage}`;
     const response = await fetch(url);
-    const positions = await response.json();
+    const items = await response.json();
 
-    dispatch({type: receivePositionsType, startIndex, rowsPerPage, positions});
+    dispatch({type: receivePositionsType, startIndex, rowsPerPage, items});
     return Promise.resolve();
   },
 
   addPosition: (position: any) => async (dispatch: any, getState: any) => {
-    const positions = getState().positions.positions;
-    positions.push(positions);
-    dispatch({type: addPositionType, positions});
+    const items = getState().positions.items;
+    items.push(items);
+    dispatch({type: addPositionType, items});
   },
   editPosition: (position: any) => async (dispatch: any, getState: any) => {
-    const positions = getState().positions.positions;
-    positions.push(positions);
-    dispatch({type: editPositionType, positions});
+    const items = getState().positions.items;
+    items.push(items);
+    dispatch({type: editPositionType, items});
   },
   removePosition: (position: any) => async (dispatch: any, getState: any) => {
     const positions = getState().positions.positions;
@@ -55,7 +55,7 @@ export const reducer = (state: any, action: any) => {
       ...state,
       startIndex: action.startIndex,
       rowsPerPage: action.rowsPerPage,
-      positions: action.positions,
+      items: action.items,
       isLoading: false
     };
   }
@@ -63,7 +63,7 @@ export const reducer = (state: any, action: any) => {
   if (action.type === addPositionType) {
     return {
       ...state,
-      positions: action.positions
+      items: action.items
     };
   }
 

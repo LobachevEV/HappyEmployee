@@ -5,7 +5,7 @@ const receiveEmployeesType = "RECEIVE_EMPLOYEES";
 const addEmployeeType = "ADD_EMPLOYEE";
 const editEmployeeType = "EDIT_EMPLOYEE";
 const removeEmployeeType = "REMOVE_EMPLOYEE";
-const initialState = {employees: [], isLoading: false};
+const initialState = {items: [], isLoading: false};
 
 export const actionCreators = {
   requestEmployees: (startIndex: number, rowsPerPage: number) => async (dispatch: any, getState: any) => {
@@ -17,9 +17,9 @@ export const actionCreators = {
     dispatch({type: requestEmployeesType, startIndex, rowsPerPage});
     const url = `api/Main/Employees?startIndex=${startIndex}&amount=${rowsPerPage}`;
     const response = await fetch(url);
-    const employees = await response.json();
+    const items = await response.json();
 
-    dispatch({type: receiveEmployeesType, startIndex, rowsPerPage, employees});
+    dispatch({type: receiveEmployeesType, startIndex, rowsPerPage, items});
     return Promise.resolve();
   },
 
@@ -29,19 +29,19 @@ export const actionCreators = {
     const headers = new Headers({"Content-Type": "application/json"});    
     const response = await fetch(url,{method:"POST", body: JSON.stringify(employee), headers:headers});
     const result = JSON.parse(await response.json());
-    const employees = getState().employees.employees;
-    employees.push(result);
-    dispatch({type: addEmployeeType, employees});
+    const items = getState().employees.items;
+    items.push(result);
+    dispatch({type: addEmployeeType, items});
   },
   editEmployee: (employee: any) => async (dispatch: any, getState: any) => {
-    const employees = getState().employees.employees;
-    employees.push(employees);
-    dispatch({type: editEmployeeType, employees});
+    const items = getState().employees.items;
+    items.push(items);
+    dispatch({type: editEmployeeType, items});
   },
   removeEmployee: (employee: any) => async (dispatch: any, getState: any) => {
-    const employees = getState().employees.employees;
-    employees.push(employees);
-    dispatch({type: removeEmployeeType, employees});
+    const items = getState().employees.items;
+    items.push(items);
+    dispatch({type: removeEmployeeType, items});
   },
 };
 
@@ -62,7 +62,7 @@ export const reducer = (state: any, action: any) => {
       ...state,
       startIndex: action.startIndex,
       rowsPerPage: action.rowsPerPage,
-      employees: action.employees,
+      employees: action.items,
       isLoading: false
     };
   }
@@ -70,7 +70,7 @@ export const reducer = (state: any, action: any) => {
   if (action.type === addEmployeeType) {
     return {
       ...state,
-      employees: action.employees
+      employees: action.items
     };
   }
 

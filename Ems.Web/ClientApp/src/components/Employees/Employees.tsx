@@ -4,9 +4,8 @@ import {connect} from "react-redux";
 import {Grid, Typography} from "@material-ui/core";
 import {createBrowserHistory} from "history";
 import RichTable, {IColumn} from "../core/RichTable";
-import EmployeeEditDialog from "./EmployeeEditDialog";
 import {actionCreators} from "../../store/Employees";
-import {IEmployee} from "../../Model/Api";
+import {Link} from "react-router-dom";
 
 const baseUrl = document.getElementsByTagName('base')[0].getAttribute('href') || undefined;
 const history = createBrowserHistory({basename: baseUrl});
@@ -33,11 +32,6 @@ class Employees extends Component<any> {
 
   render() {
     const {employees, startIndex, rowsPerPage, requestEmployees} = this.props;
-
-    const save = (employee:IEmployee) => {      
-      this.props.addEmployee(employee);
-    };
-
     return (
       <div>
         <Typography variant={"h4"}>Employees</Typography>        
@@ -55,7 +49,7 @@ class Employees extends Component<any> {
                        this.props.requestEmployees(startIndex, newRowsPerPage);
                        history.push(`/Employees/${startIndex}/${newRowsPerPage}`);
                      }}
-                     actions={[<EmployeeEditDialog save={save}/>]}/>
+                     actions={[<Link to={{pathname:"/employees/0" }}>Create Employee</Link>]}/>
         </Grid>
       </div>
     );

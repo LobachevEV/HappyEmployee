@@ -13,7 +13,8 @@ import InboxIcon from '@material-ui/icons/MoveToInbox';
 import MailIcon from '@material-ui/icons/Mail';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-import {Link as RouterLink, LinkProps as RouterLinkProps} from 'react-router-dom';
+import {Link, Link as RouterLink, LinkProps, LinkProps as RouterLinkProps} from 'react-router-dom';
+import * as H from "history";
 
 const drawerWidth = 240;
 
@@ -79,10 +80,9 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-interface ListItemLinkProps {
+interface ListItemLinkProps extends LinkProps{
   icon?: React.ReactElement;
-  primary: string;
-  to: string;
+  primary: string;  
 }
 
 
@@ -91,8 +91,8 @@ function ListItemLink(props: ListItemLinkProps) {
 
   const renderLink = React.useMemo(
     () =>
-      React.forwardRef<any, Omit<RouterLinkProps, 'to'>>((itemProps, ref) => (
-        <RouterLink to={to} ref={ref} {...itemProps} />
+      React.forwardRef<any, Omit<LinkProps, 'to'>>((itemProps, ref) => (
+        <Link to={to} ref={ref} {...itemProps} />
       )),
     [to],
   );
