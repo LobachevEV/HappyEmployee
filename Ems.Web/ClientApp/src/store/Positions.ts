@@ -6,14 +6,14 @@ const removePositionType = "REMOVE_POSITION";
 const initialState = {items: [], isLoading: false};
 
 export const actionCreators = {
-  requestPositions: (startIndex: number, rowsPerPage: number) => async (dispatch: any, getState: any) => {
-    if (startIndex === getState().positions.startIndex && rowsPerPage === getState().positions.rowsPerPage)
+  requestPositions: (startIndex?: number, rowsPerPage?: number) => async (dispatch: any, getState: any) => {
+    if (startIndex && startIndex === getState().positions.startIndex && rowsPerPage && rowsPerPage === getState().positions.rowsPerPage)
       // Don't issue a duplicate request (we already have or are loading the requested data)
       return;
 
 
     dispatch({type: requestPositionsType, startIndex, rowsPerPage});
-    const url = `api/Main/Positions?startIndex=${startIndex}&amount=${rowsPerPage}`;
+    const url = `api/Main/Positions?startIndex=${startIndex || 0}&amount=${rowsPerPage || 0}`;
     const response = await fetch(url);
     const items = await response.json();
 

@@ -29,7 +29,7 @@ class Positions extends Component<any> {
   ];
 
   render() {
-    const {positions, startIndex, rowsPerPage, requestPositions} = this.props;
+    const {items, startIndex, rowsPerPage, requestPositions} = this.props;
 
     function onEditCancel() {
 
@@ -43,7 +43,7 @@ class Positions extends Component<any> {
       <div>
         <Typography variant={"h4"}>Positions</Typography>        
         <Grid item xs={12}>
-          <RichTable columns={this.columns} items={positions} total={100} page={(startIndex || 0) / rowsPerPage}
+          <RichTable columns={this.columns} items={items} total={100} page={(startIndex || 0) / rowsPerPage}
                      rowsPerPage={(rowsPerPage || 5)}
                      onChangePage={(e, newPage) => {                       
                        const newStartIndex = newPage * rowsPerPage;

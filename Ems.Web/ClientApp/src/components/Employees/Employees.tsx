@@ -2,13 +2,9 @@ import React, {Component} from "react";
 import {bindActionCreators} from "redux";
 import {connect} from "react-redux";
 import {Grid, Typography} from "@material-ui/core";
-import {createBrowserHistory} from "history";
 import RichTable, {IColumn} from "../core/RichTable";
 import {actionCreators} from "../../store/Employees";
 import {Link} from "react-router-dom";
-
-const baseUrl = document.getElementsByTagName('base')[0].getAttribute('href') || undefined;
-const history = createBrowserHistory({basename: baseUrl});
 
 class Employees extends Component<any> {
   componentDidMount() {
@@ -31,7 +27,7 @@ class Employees extends Component<any> {
   ];
 
   render() {
-    const {employees, startIndex, rowsPerPage, requestEmployees} = this.props;
+    const {employees, startIndex, rowsPerPage, requestEmployees, history} = this.props;
     return (
       <div>
         <Typography variant={"h4"}>Employees</Typography>        
