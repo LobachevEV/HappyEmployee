@@ -18,7 +18,7 @@ interface IEmployeeEditDialogProps {
   requestPositions: any
 }
 
-class EmployeeEditDialog extends React.Component<IEmployeeEditDialogProps> {
+class EmployeeEditDialog extends React.Component<IEmployeeEditDialogProps, IEmployee> {
   readonly id: number = 0;
   name: string = "";
   gradeId: number = 0;
@@ -27,12 +27,9 @@ class EmployeeEditDialog extends React.Component<IEmployeeEditDialogProps> {
 
   constructor(props: IEmployeeEditDialogProps) {
     super(props);
+    this.state = {id: 0, name: "", gradeId: 0, positionId: 0, personalCostMultiplier: 1};
     if (this.props.employee) {
-      this.id = this.props.employee.id || 0;
-      this.name = this.props.employee.name;
-      this.gradeId = this.props.employee.gradeId;
-      this.positionId = this.props.employee.positionId;
-      this.personalCostMultiplier = this.props.employee.personalCostMultiplier;
+      this.setState(this.props.employee);      
     }
   }
 
@@ -48,21 +45,14 @@ class EmployeeEditDialog extends React.Component<IEmployeeEditDialogProps> {
 
   render() {
     const {grades, positions} = this.props;
+    const {personalCostMultiplier, name} = this.state;
 
-    const handleNameChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-      this.name = event.target.value as string;
-    };
-
-    const handleGradeChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-      this.gradeId = event.target.value as number;
-    };
-
-    const handlePositionChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-      this.positionId = event.target.value as number;
-    };
-
-    const handlePersonalCostMultiplierChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-      this.personalCostMultiplier = event.target.value as number;
+    const handleChange = (event: any) => {
+      const target = event.target;
+      const value = target.type === 'checkbox' ? target.checked : target.value;
+      const name = target.name;
+      // @ts-ignore
+      this.setState({[name]:value});      
     };
 
     const save = () => {
@@ -73,26 +63,24 @@ class EmployeeEditDialog extends React.Component<IEmployeeEditDialogProps> {
         positionId: this.positionId,
         personalCostMultiplier: this.personalCostMultiplier
       });
-
-    };
-    console.log(grades, positions);
+    };    
     return <EditFormDialog title={"New employee"} buttonCaption={"Add employee"} onSave={save}>
       <Grid container spacing={2}>
         <Grid item xs={12}>
-          <TextField id="emp_name" label="Employee name" value={this.name} onChange={handleNameChange}/>
+          <TextField id="emp_name" name={"name"} label="Employee name" value={name} onChange={handleChange}/>
         </Grid>
         <Grid item xs={6}>
-          <SelectCmp id={"position_id"} label="Position" onChange={handleGradeChange}
-                     items={positions.map((p:any)=>({value: p.id}))}/>
+          <SelectCmp id={"position_id"} name={"position"} label="Position" onChange={handleChange}
+                     items={positions.map((p: any) => ({value: p.id}))}/>
         </Grid>
         <Grid item xs={6}>
-          <SelectCmp id={"grade_id"} label="Grade" onChange={handlePositionChange}
-                     items={grades.map((g:any)=>({value: g.id, label: g.description}))}/>
+          <SelectCmp id={"grade_id"} name={"grade"} label="Grade" onChange={handleChange}
+                     items={grades.map((g: any) => ({value: g.id, label: g.description}))}/>
         </Grid>
         <Grid item xs={12}>
-          <TextField id="per_cost_mult" type="number" label="Personal cost multiplier"
-                     onChange={handlePersonalCostMultiplierChange}
-                     value={this.personalCostMultiplier} InputLabelProps={{shrink: true,}}/>
+          <TextField id="per_cost_mult" name={"personalCostMultiplier"} type="number" label="Personal cost multiplier"
+                     onChange={handleChange}
+                     value={personalCostMultiplier} InputLabelProps={{shrink: true,}}/>
         </Grid>
       </Grid>
     </EditFormDialog>;
@@ -105,6 +93,6 @@ export default connect<any>(
   dispatch => bindActionCreators({
     requestGrades: gradesActionCreators.requestGrades,
     requestPositions: positionsActionCreators.requestPositions,
-    adEmployee: employeesActionCreators.addEmployee
+    addEmployee: employeesActionCreators.addEmployee
   }, dispatch)
 )(EmployeeEditDialog);

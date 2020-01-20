@@ -34,11 +34,13 @@ namespace Ems.Web.Controllers
         [HttpPut("[action]")]
         public async Task<Employee> Employee(Employee employee)
         {
-            var result = _context.Employee.Add(employee);
+            var result = _context.Employee.Any(e => e.Id == employee.Id)
+                ? _context.Employee.Update(employee)
+                : _context.Employee.Add(employee);
             await _context.SaveChangesAsync();
             return result.Entity;
-        }  
-        
+        }
+
         [HttpGet("[action]")]
         public IEnumerable<Grade> Grades(int startIndex, int amount)
         {
@@ -51,7 +53,7 @@ namespace Ems.Web.Controllers
             var employees = result.ToList();
             return employees;
         }
-        
+
         [HttpGet("[action]")]
         public IEnumerable<Position> Positions(int startIndex, int amount)
         {
