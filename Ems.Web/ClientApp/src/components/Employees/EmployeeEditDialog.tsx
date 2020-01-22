@@ -46,12 +46,11 @@ class EmployeeEditDialog extends React.Component<IEmployeeEditDialogProps, IEmpl
     const handleChange = (event: any) => {
       const target = event.target;
       const value = target.type === 'checkbox' ? target.checked : target.value;
-      const name = target.name;
-      console.log({[name]:value});      
+      const name = target.name;            
       // @ts-ignore
       this.setState({[name]:value});      
     };
-    console.log(this.state);
+    
     return <EditFormDialog title={"New employee"} buttonCaption={"Add employee"} onSave={this.save}>
       <Grid container spacing={2}>
         <Grid item xs={12}>

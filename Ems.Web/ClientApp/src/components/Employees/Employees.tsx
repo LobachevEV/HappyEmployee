@@ -27,12 +27,12 @@ class Employees extends Component<any> {
   ];
 
   render() {
-    const {employees, startIndex, rowsPerPage, requestEmployees, history, total} = this.props;
+    const {items, startIndex, rowsPerPage, requestEmployees, history, total} = this.props;
     return (
       <div>
         <Typography variant={"h4"}>Employees</Typography>        
         <Grid item xs={12}>
-          <RichTable columns={this.columns} items={employees} total={total} page={(startIndex || 0) / rowsPerPage}
+          <RichTable columns={this.columns} items={items} total={total} page={(startIndex || 0) / rowsPerPage}
                      rowsPerPage={(rowsPerPage || 5)}
                      onChangePage={(e, newPage) => {
                        console.log(newPage);

@@ -13,7 +13,7 @@ export const actionCreators = {
 
 
     dispatch({type: requestGradesType, startIndex, rowsPerPage});
-    const url = `api/Main/Grades?startIndex=${startIndex || 0}&amount=${rowsPerPage || 0}`;
+    const url = `api/Grades?startIndex=${startIndex || 0}&amount=${rowsPerPage || 0}`;
     const response = await fetch(url);
     const items = await response.json();
 

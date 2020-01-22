@@ -15,7 +15,7 @@ export const actionCreators = {
 
 
     dispatch({type: requestEmployeesType, startIndex, rowsPerPage});
-    const url = `api/Main/Employees?startIndex=${startIndex}&amount=${rowsPerPage}`;
+    const url = `api/Employees?startIndex=${startIndex}&amount=${rowsPerPage}`;
     const response = await fetch(url);
     const {employees, total} = await response.json();
 
@@ -25,7 +25,7 @@ export const actionCreators = {
 
   addEmployee: (employee: IEmployee) => async (dispatch: any, getState: any) => {
     console.log("addEmployee");
-    const url = `api/Main/Employee`;
+    const url = `api/Employee`;
     const headers = new Headers({'Accept': 'application/json', "Content-Type": "application/json"});    
     const response = await fetch(url,{method:"POST", body: JSON.stringify(employee), headers:headers});
     const result = await response.json();
@@ -62,7 +62,7 @@ export const reducer = (state: any, action: any) => {
       ...state,
       startIndex: action.startIndex,
       rowsPerPage: action.rowsPerPage,
-      employees: action.items,
+      items: action.items,
       total:action.total,
       isLoading: false
     };
@@ -71,7 +71,7 @@ export const reducer = (state: any, action: any) => {
   if (action.type === addEmployeeType) {
     return {
       ...state,
-      employees: action.items
+      items: action.items
     };
   }
 
