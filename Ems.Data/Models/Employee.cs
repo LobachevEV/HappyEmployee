@@ -4,9 +4,9 @@ namespace Ems.Data.Models
 {
     public partial class Employee
     {
-        public int Id { get; set; }
+        public uint Id { get; set; }
         public string Name { get; set; }
-        public int GradeId { get; set; }
+        public uint GradeId { get; set; }
         public string PositionId { get; set; }
         public decimal PersonalCostMultiplier { get; set; }
 

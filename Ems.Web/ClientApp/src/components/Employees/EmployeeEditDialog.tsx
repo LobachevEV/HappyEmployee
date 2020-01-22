@@ -21,7 +21,7 @@ interface IEmployeeEditDialogProps {
 class EmployeeEditDialog extends React.Component<IEmployeeEditDialogProps, IEmployee> {
   constructor(props: IEmployeeEditDialogProps) {
     super(props);
-    this.state = {id: 0, name: "", gradeId: 0, positionId: 0, personalCostMultiplier: 1};
+    this.state = {id: 0, name: "", gradeId: 0, positionId: 0, personalCostMultiplier: 1.0};
     if (this.props.employee) {
       this.setState(this.props.employee);      
     }
@@ -66,7 +66,7 @@ class EmployeeEditDialog extends React.Component<IEmployeeEditDialogProps, IEmpl
                      items={grades.map((g: any) => ({value: g.id, label: g.description}))}/>
         </Grid>
         <Grid item xs={12}>
-          <TextField id="per_cost_mult" name={"personalCostMultiplier"} type="number" label="Personal cost multiplier"
+          <TextField id="per_cost_mult" name={"personalCostMultiplier"} type="number" InputProps={{inputProps :{step:0.01}}} label="Personal cost multiplier"
                      onChange={handleChange}
                      value={personalCostMultiplier} InputLabelProps={{shrink: true,}}/>
         </Grid>

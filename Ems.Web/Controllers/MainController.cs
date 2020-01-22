@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Ems.Web.Controllers
 {
-    [Route("api/[controller]")]
+    [ApiController, Route("api/[controller]")]
     public class MainController : Controller
     {
         private readonly EmployeesContext _context;
@@ -31,12 +31,9 @@ namespace Ems.Web.Controllers
         }
 
         [HttpPost("[action]")]
-        [HttpPut("[action]")]
-        public async Task<Employee> Employee(Employee employee)
+        public async Task<Employee> Employee([FromBody] Employee employee)
         {
-            var result = _context.Employee.Any(e => e.Id == employee.Id)
-                ? _context.Employee.Update(employee)
-                : _context.Employee.Add(employee);
+            var result = _context.Employee.Add(employee);
             await _context.SaveChangesAsync();
             return result.Entity;
         }

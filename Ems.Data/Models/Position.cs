@@ -1,18 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace Ems.Data.Models
 {
     public partial class Position
     {
-        public Position()
-        {
-            Employee = new HashSet<Employee>();
-        }
-
         public string Id { get; set; }
         public int CostRate { get; set; }
 
-        public virtual ICollection<Employee> Employee { get; set; }
+        [JsonIgnore]
+        public virtual ICollection<Employee> Employee { get; set; } = new HashSet<Employee>();
     }
 }

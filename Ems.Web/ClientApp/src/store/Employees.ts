@@ -26,7 +26,7 @@ export const actionCreators = {
   addEmployee: (employee: IEmployee) => async (dispatch: any, getState: any) => {
     console.log("addEmployee");
     const url = `api/Main/Employee`;
-    const headers = new Headers({"Content-Type": "application/json"});    
+    const headers = new Headers({'Accept': 'application/json', "Content-Type": "application/json"});    
     const response = await fetch(url,{method:"POST", body: JSON.stringify(employee), headers:headers});
     const result = JSON.parse(await response.json());
     const items = getState().employees.items;
