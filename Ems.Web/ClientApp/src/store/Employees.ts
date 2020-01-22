@@ -5,7 +5,7 @@ const receiveEmployeesType = "RECEIVE_EMPLOYEES";
 const addEmployeeType = "ADD_EMPLOYEE";
 const editEmployeeType = "EDIT_EMPLOYEE";
 const removeEmployeeType = "REMOVE_EMPLOYEE";
-const initialState = {items: [], isLoading: false};
+const initialState = {items: [], total: 0, isLoading: false};
 
 export const actionCreators = {
   requestEmployees: (startIndex: number, rowsPerPage: number) => async (dispatch: any, getState: any) => {
@@ -17,9 +17,9 @@ export const actionCreators = {
     dispatch({type: requestEmployeesType, startIndex, rowsPerPage});
     const url = `api/Main/Employees?startIndex=${startIndex}&amount=${rowsPerPage}`;
     const response = await fetch(url);
-    const items = await response.json();
+    const {employees, total} = await response.json();
 
-    dispatch({type: receiveEmployeesType, startIndex, rowsPerPage, items});
+    dispatch({type: receiveEmployeesType, startIndex, rowsPerPage, items:employees, total});
     return Promise.resolve();
   },
 
@@ -28,7 +28,7 @@ export const actionCreators = {
     const url = `api/Main/Employee`;
     const headers = new Headers({'Accept': 'application/json', "Content-Type": "application/json"});    
     const response = await fetch(url,{method:"POST", body: JSON.stringify(employee), headers:headers});
-    const result = JSON.parse(await response.json());
+    const result = await response.json();
     const items = getState().employees.items;
     items.push(result);
     dispatch({type: addEmployeeType, items});
@@ -63,6 +63,7 @@ export const reducer = (state: any, action: any) => {
       startIndex: action.startIndex,
       rowsPerPage: action.rowsPerPage,
       employees: action.items,
+      total:action.total,
       isLoading: false
     };
   }

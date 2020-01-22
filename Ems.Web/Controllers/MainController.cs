@@ -18,7 +18,7 @@ namespace Ems.Web.Controllers
         }
 
         [HttpGet("[action]")]
-        public IEnumerable<Employee> Employees(int startIndex, int amount)
+        public JsonResult Employees(int startIndex, int amount)
         {
             var result = _context.Employee.Skip(startIndex);
             if (amount != 0)
@@ -27,7 +27,7 @@ namespace Ems.Web.Controllers
             }
 
             var employees = result.ToList();
-            return employees;
+            return Json( new {employees, total = _context.Employee.Count() });
         }
 
         [HttpPost("[action]")]
