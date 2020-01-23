@@ -29,6 +29,7 @@
     <TypeScriptCompile Include="ClientApp\src\components\core\Blades\BladeElement.tsx" />
     <TypeScriptCompile Include="ClientApp\src\components\core\Blades\BladePanel.tsx" />
     <TypeScriptCompile Include="ClientApp\src\components\core\EditFormDialog.tsx" />
+    <TypeScriptCompile Include="ClientApp\src\components\core\EmsRichTable.tsx" />
     <TypeScriptCompile Include="ClientApp\src\components\core\FormDialog.tsx" />
     <TypeScriptCompile Include="ClientApp\src\components\core\NavMenu.tsx" />
     <TypeScriptCompile Include="ClientApp\src\components\core\RichTable.tsx" />

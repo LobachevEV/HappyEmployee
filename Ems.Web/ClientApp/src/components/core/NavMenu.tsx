@@ -13,8 +13,7 @@ import InboxIcon from '@material-ui/icons/MoveToInbox';
 import MailIcon from '@material-ui/icons/Mail';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-import {Link, Link as RouterLink, LinkProps, LinkProps as RouterLinkProps} from 'react-router-dom';
-import * as H from "history";
+import {Link, LinkProps} from 'react-router-dom';
 
 const drawerWidth = 240;
 

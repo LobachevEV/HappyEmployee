@@ -2,11 +2,23 @@ import React, {Component} from "react";
 import {bindActionCreators} from "redux";
 import {connect} from "react-redux";
 import {Button, Grid, Typography} from "@material-ui/core";
-import RichTable, {IColumn} from "../core/RichTable";
+import {IColumn} from "../core/RichTable";
 import {actionCreators} from "../../store/Employees";
 import {Link} from "react-router-dom";
+import EmsRichTable from "../core/EmsRichTable";
+import {IEmployee} from "../../Model/Api";
 
-class Employees extends Component<any> {
+interface IEmployeesPageProps {
+  items: Array<IEmployee>,
+  total: number,
+  startIndex: number,
+  rowsPerPage: number,
+  requestEmployees: (startIndex: number, rowsPerPage: number) => IEmployee[],
+  history: any,
+  match: any,
+}
+
+class Employees extends Component<IEmployeesPageProps> {
   componentDidMount() {
     // This method is called when the component is first added to the document
     this.ensureDataFetched();
@@ -27,24 +39,15 @@ class Employees extends Component<any> {
   ];
 
   render() {
-    const {items, startIndex, rowsPerPage, requestEmployees, history, total} = this.props;
+    const {requestEmployees, ...tableProps} = this.props;
     return (
       <div>
-        <Typography variant={"h4"}>Employees</Typography>        
+        <Typography variant={"h4"}>Employees</Typography>
         <Grid item xs={12}>
-          <RichTable columns={this.columns} items={items} total={total} page={(startIndex || 0) / rowsPerPage}
-                     rowsPerPage={(rowsPerPage || 5)}
-                     onChangePage={(e, newPage) => {                       
-                       const newStartIndex = Math.max(newPage,0) * rowsPerPage;
-                       requestEmployees(newStartIndex, rowsPerPage);
-                       history.push(`/Employees/${newStartIndex}/${rowsPerPage}`);
-                     }}
-                     onChangeRowsPage={newRowsPerPage => {
-                       const newStartIndex = 0;
-                       requestEmployees(newStartIndex, newRowsPerPage);
-                       history.push(`/Employees/${newStartIndex}/${newRowsPerPage}`);
-                     }}
-                     actions={[<Button color="primary" variant="outlined"><Link to={{pathname:"/employees/0" }}>Add Employee</Link></Button>]}/>
+          <EmsRichTable columns={this.columns} request={requestEmployees} resource={"Employees"}
+                        actions={[<Button color="primary" variant="outlined">
+                          <Link to={{pathname: "/employees/0"}}>Add Employee</Link>
+                        </Button>]} {...tableProps}/>
         </Grid>
       </div>
     );

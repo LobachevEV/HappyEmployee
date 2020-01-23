@@ -3,16 +3,22 @@ import {bindActionCreators} from "redux";
 import {connect} from "react-redux";
 import {actionCreators} from "../../store/Positions";
 import {Button, Grid, Typography} from "@material-ui/core";
-import {createBrowserHistory} from "history";
-import RichTable, {IColumn} from "../core/RichTable";
-import EditFormDialog from "../core/EditFormDialog";
-import PositionEditDialog from "./EmployeeEditDialog";
+import {IColumn} from "../core/RichTable";
 import {Link} from "react-router-dom";
+import EmsRichTable from "../core/EmsRichTable";
+import {IEmployee} from "../../Model/Api";
 
-const baseUrl = document.getElementsByTagName('base')[0].getAttribute('href') || undefined;
-const history = createBrowserHistory({basename: baseUrl});
+interface IPositionsPageProps {
+  items: Array<IEmployee>,
+  total: number,
+  startIndex: number,
+  rowsPerPage: number,
+  requestPositions: (startIndex: number, rowsPerPage: number) => IEmployee[],
+  history: any,
+  match: any,
+}
 
-class Positions extends Component<any> {
+class Positions extends Component<IPositionsPageProps> {
   componentDidMount() {
     // This method is called when the component is first added to the document
     this.ensureDataFetched();
@@ -30,33 +36,15 @@ class Positions extends Component<any> {
   ];
 
   render() {
-    const {items, total, startIndex, rowsPerPage, requestPositions} = this.props;
-
-    function onEditCancel() {
-
-    }
-
-    function onSave() {
-
-    }
-
+    const {requestPositions, ...tableProps} = this.props;
     return (
       <div>
         <Typography variant={"h4"}>Positions</Typography>        
         <Grid item xs={12}>
-          <RichTable columns={this.columns} items={items} total={total} page={(startIndex || 0) / rowsPerPage}
-                     rowsPerPage={(rowsPerPage || 5)}
-                     onChangePage={(e, newPage) => {
-                       const newStartIndex = Math.max(newPage,0) * rowsPerPage;
-                       requestPositions(newStartIndex, rowsPerPage);
-                       history.push(`/Positions/${newStartIndex}/${rowsPerPage}`);
-                     }}
-                     onChangeRowsPage={newRowsPerPage => {
-                       const newStartIndex = 0;
-                       requestPositions(newStartIndex, newRowsPerPage);
-                       history.push(`/Positions/${newStartIndex}/${newRowsPerPage}`);
-                     }}
-                     actions={[<Button color="primary" variant="outlined"><Link to={{pathname:"/positions/0" }}>Add Position</Link></Button>]}/>
+          <EmsRichTable columns={this.columns} request={requestPositions} resource={"Positions"}
+                        actions={[<Button color="primary" variant="outlined">
+                          <Link to={{pathname: "/positions/0"}}>Add Position</Link>
+                        </Button>]} {...tableProps}/>
         </Grid>
       </div>
     );
