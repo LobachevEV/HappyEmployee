@@ -4,10 +4,12 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import {ButtonGroup, PropTypes} from "@material-ui/core";
 
 interface IDialogAction {
   label: string,
-  action?: () => any
+  color?: PropTypes.Color,
+  action?: () => any,
 }
 
 interface IDialogProps {
@@ -28,15 +30,17 @@ const FormDialog = (props: IDialogProps) => {
           {children}
         </DialogContent>
         <DialogActions>
-          {actions && actions.length > 0 && actions.map(action => {
-            const handleAction = async () => {
-              await action.action?.();
-              window.history.back();
-            };
-            return <Button onClick={handleAction} color="primary">
-              {action.label}
-            </Button>;
-          })}
+          <ButtonGroup>
+            {actions && actions.length > 0 && actions.map(action => {
+              const handleAction = async () => {
+                await action.action?.();
+                window.history.back();
+              };
+              return <Button onClick={handleAction} color={action.color || "primary"} variant="outlined">
+                {action.label}
+              </Button>;
+            })}
+          </ButtonGroup>
         </DialogActions>
       </Dialog>
     </React.Fragment>

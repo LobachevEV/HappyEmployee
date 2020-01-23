@@ -15,7 +15,7 @@ interface IEditDialogProps {
 function EditFormDialog(props: IEditDialogProps) {
   let {buttonCaption, children, onCancel, onSave, title} = props;
   return <FormDialog title={title} buttonCaption={buttonCaption} onClose={onCancel}
-                     actions={[{label: "Cancel"}, {label: "Save", action: onSave}]}>
+                     actions={[{label: "Cancel", color: "secondary"}, {label: "Save", action: onSave}]}>
     <React.Fragment>
       {children}
     </React.Fragment>

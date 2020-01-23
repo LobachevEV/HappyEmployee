@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import {bindActionCreators} from "redux";
 import {connect} from "react-redux";
-import {Grid, Typography} from "@material-ui/core";
+import {Button, Grid, Typography} from "@material-ui/core";
 import RichTable, {IColumn} from "../core/RichTable";
 import {actionCreators} from "../../store/Employees";
 import {Link} from "react-router-dom";
@@ -37,15 +37,16 @@ class Employees extends Component<any> {
                      onChangePage={(e, newPage) => {
                        console.log(newPage);
                        console.log(rowsPerPage);
-                       const newStartIndex = newPage * rowsPerPage;
+                       const newStartIndex = Math.max(newPage,0) * rowsPerPage;
                        requestEmployees(newStartIndex, rowsPerPage);
                        history.push(`/Employees/${newStartIndex}/${rowsPerPage}`);
                      }}
                      onChangeRowsPage={newRowsPerPage => {
-                       this.props.requestEmployees(startIndex, newRowsPerPage);
-                       history.push(`/Employees/${startIndex}/${newRowsPerPage}`);
+                       const newStartIndex = 0;
+                       requestEmployees(newStartIndex, newRowsPerPage);
+                       history.push(`/Employees/${newStartIndex}/${newRowsPerPage}`);
                      }}
-                     actions={[<Link to={{pathname:"/employees/0" }}>Create Employee</Link>]}/>
+                     actions={[<Button color="primary" variant="outlined"><Link to={{pathname:"/employees/0" }}>Create Employee</Link></Button>]}/>
         </Grid>
       </div>
     );
