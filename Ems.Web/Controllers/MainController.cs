@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Ems.Data;
@@ -27,7 +26,8 @@ namespace Ems.Web.Controllers
             }
 
             var employees = result.ToList();
-            return Json( new {employees, total = _context.Employee.Count() });
+            var total = _context.Employee.Count();
+            return Json( new {employees, total });
         }
 
         [HttpPost("[action]")]
@@ -39,7 +39,7 @@ namespace Ems.Web.Controllers
         }
 
         [HttpGet("[action]")]
-        public IEnumerable<Grade> Grades(int startIndex, int amount)
+        public JsonResult Grades(int startIndex, int amount)
         {
             var result = _context.Grade.Skip(startIndex);
             if (amount != 0)
@@ -47,12 +47,13 @@ namespace Ems.Web.Controllers
                 result = result.Take(amount);
             }
 
-            var employees = result.ToList();
-            return employees;
+            var grades = result.ToList();
+            var total = _context.Grade.Count();
+            return Json( new {grades, total });
         }
 
         [HttpGet("[action]")]
-        public IEnumerable<Position> Positions(int startIndex, int amount)
+        public JsonResult Positions(int startIndex, int amount)
         {
             var result = _context.Position.Skip(startIndex);
             if (amount != 0)
@@ -60,8 +61,9 @@ namespace Ems.Web.Controllers
                 result = result.Take(amount);
             }
 
-            var employees = result.ToList();
-            return employees;
+            var positions = result.ToList();
+            var total = _context.Position.Count();
+            return Json( new {positions, total });
         }
     }
 }

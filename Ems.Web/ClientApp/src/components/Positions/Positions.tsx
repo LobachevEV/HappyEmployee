@@ -2,11 +2,12 @@ import React, {Component} from "react";
 import {bindActionCreators} from "redux";
 import {connect} from "react-redux";
 import {actionCreators} from "../../store/Positions";
-import {Grid, Typography} from "@material-ui/core";
+import {Button, Grid, Typography} from "@material-ui/core";
 import {createBrowserHistory} from "history";
 import RichTable, {IColumn} from "../core/RichTable";
 import EditFormDialog from "../core/EditFormDialog";
 import PositionEditDialog from "./EmployeeEditDialog";
+import {Link} from "react-router-dom";
 
 const baseUrl = document.getElementsByTagName('base')[0].getAttribute('href') || undefined;
 const history = createBrowserHistory({basename: baseUrl});
@@ -29,7 +30,7 @@ class Positions extends Component<any> {
   ];
 
   render() {
-    const {items, startIndex, rowsPerPage, requestPositions} = this.props;
+    const {items, total, startIndex, rowsPerPage, requestPositions} = this.props;
 
     function onEditCancel() {
 
@@ -43,18 +44,19 @@ class Positions extends Component<any> {
       <div>
         <Typography variant={"h4"}>Positions</Typography>        
         <Grid item xs={12}>
-          <RichTable columns={this.columns} items={items} total={100} page={(startIndex || 0) / rowsPerPage}
+          <RichTable columns={this.columns} items={items} total={total} page={(startIndex || 0) / rowsPerPage}
                      rowsPerPage={(rowsPerPage || 5)}
-                     onChangePage={(e, newPage) => {                       
-                       const newStartIndex = newPage * rowsPerPage;
+                     onChangePage={(e, newPage) => {
+                       const newStartIndex = Math.max(newPage,0) * rowsPerPage;
                        requestPositions(newStartIndex, rowsPerPage);
                        history.push(`/Positions/${newStartIndex}/${rowsPerPage}`);
                      }}
                      onChangeRowsPage={newRowsPerPage => {
-                       this.props.requestPositions(startIndex, newRowsPerPage);
-                       history.push(`/Positions/${startIndex}/${newRowsPerPage}`);
+                       const newStartIndex = 0;
+                       requestPositions(newStartIndex, newRowsPerPage);
+                       history.push(`/Positions/${newStartIndex}/${newRowsPerPage}`);
                      }}
-                     actions={[<PositionEditDialog/>]}/>
+                     actions={[<Button color="primary" variant="outlined"><Link to={{pathname:"/positions/0" }}>Add Position</Link></Button>]}/>
         </Grid>
       </div>
     );

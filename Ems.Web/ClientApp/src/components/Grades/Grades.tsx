@@ -2,10 +2,10 @@ import React, {Component} from "react";
 import {bindActionCreators} from "redux";
 import {connect} from "react-redux";
 import {actionCreators} from "../../store/Grades";
-import {Grid, Typography} from "@material-ui/core";
+import {Button, Grid, Typography} from "@material-ui/core";
 import {createBrowserHistory} from "history";
 import RichTable, {IColumn} from "../core/RichTable";
-import GradeEditDialog from "./GradeEditDialog";
+import {Link} from "react-router-dom";
 
 const baseUrl = document.getElementsByTagName('base')[0].getAttribute('href') || undefined;
 const history = createBrowserHistory({basename: baseUrl});
@@ -29,7 +29,7 @@ class Grades extends Component<any> {
   ];
 
   render() {
-    const {items, startIndex, rowsPerPage, requestGrades} = this.props;
+    const {items, total, startIndex, rowsPerPage, requestGrades} = this.props;
 
     function onEditCancel() {
 
@@ -43,18 +43,19 @@ class Grades extends Component<any> {
       <div>
         <Typography variant={"h4"}>Grades</Typography>        
         <Grid item xs={12}>
-          <RichTable columns={this.columns} items={items} total={100} page={(startIndex || 0) / rowsPerPage}
+          <RichTable columns={this.columns} items={items} total={total} page={(startIndex || 0) / rowsPerPage}
                      rowsPerPage={(rowsPerPage || 5)}
-                     onChangePage={(e, newPage) => {                       
-                       const newStartIndex = newPage * rowsPerPage;
+                     onChangePage={(e, newPage) => {
+                       const newStartIndex = Math.max(newPage,0) * rowsPerPage;
                        requestGrades(newStartIndex, rowsPerPage);
                        history.push(`/Grades/${newStartIndex}/${rowsPerPage}`);
                      }}
                      onChangeRowsPage={newRowsPerPage => {
-                       this.props.requestGrades(startIndex, newRowsPerPage);
-                       history.push(`/Grades/${startIndex}/${newRowsPerPage}`);
+                       const newStartIndex = 0;
+                       requestGrades(newStartIndex, newRowsPerPage);
+                       history.push(`/Grades/${newStartIndex}/${newRowsPerPage}`);
                      }}
-                     actions={[<GradeEditDialog/>]}/>
+                     actions={[<Button color="primary" variant="outlined"><Link to={{pathname:"/grades/0" }}>Add Grade</Link></Button>]}/>
         </Grid>
       </div>
     );

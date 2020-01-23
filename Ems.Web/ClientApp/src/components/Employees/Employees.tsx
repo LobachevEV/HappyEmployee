@@ -34,9 +34,7 @@ class Employees extends Component<any> {
         <Grid item xs={12}>
           <RichTable columns={this.columns} items={items} total={total} page={(startIndex || 0) / rowsPerPage}
                      rowsPerPage={(rowsPerPage || 5)}
-                     onChangePage={(e, newPage) => {
-                       console.log(newPage);
-                       console.log(rowsPerPage);
+                     onChangePage={(e, newPage) => {                       
                        const newStartIndex = Math.max(newPage,0) * rowsPerPage;
                        requestEmployees(newStartIndex, rowsPerPage);
                        history.push(`/Employees/${newStartIndex}/${rowsPerPage}`);
@@ -46,7 +44,7 @@ class Employees extends Component<any> {
                        requestEmployees(newStartIndex, newRowsPerPage);
                        history.push(`/Employees/${newStartIndex}/${newRowsPerPage}`);
                      }}
-                     actions={[<Button color="primary" variant="outlined"><Link to={{pathname:"/employees/0" }}>Create Employee</Link></Button>]}/>
+                     actions={[<Button color="primary" variant="outlined"><Link to={{pathname:"/employees/0" }}>Add Employee</Link></Button>]}/>
         </Grid>
       </div>
     );

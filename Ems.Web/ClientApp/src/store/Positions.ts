@@ -3,7 +3,7 @@ const receivePositionsType = "RECEIVE_POSITIONS";
 const addPositionType = "ADD_POSITION";
 const editPositionType = "EDIT_POSITION";
 const removePositionType = "REMOVE_POSITION";
-const initialState = {items: [], isLoading: false};
+const initialState = {items: [],total:0, isLoading: false};
 
 export const actionCreators = {
   requestPositions: (startIndex?: number, rowsPerPage?: number) => async (dispatch: any, getState: any) => {
@@ -15,9 +15,9 @@ export const actionCreators = {
     dispatch({type: requestPositionsType, startIndex, rowsPerPage});
     const url = `api/Positions?startIndex=${startIndex || 0}&amount=${rowsPerPage || 0}`;
     const response = await fetch(url);
-    const items = await response.json();
+    const {positions, total} = await response.json();
 
-    dispatch({type: receivePositionsType, startIndex, rowsPerPage, items});
+    dispatch({type: receivePositionsType, startIndex, rowsPerPage, items:positions, total});
     return Promise.resolve();
   },
 
@@ -56,6 +56,7 @@ export const reducer = (state: any, action: any) => {
       startIndex: action.startIndex,
       rowsPerPage: action.rowsPerPage,
       items: action.items,
+      total: action.total,
       isLoading: false
     };
   }

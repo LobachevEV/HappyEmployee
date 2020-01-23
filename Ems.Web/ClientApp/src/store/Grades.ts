@@ -3,7 +3,7 @@ const receiveGradesType = "RECEIVE_GRADES";
 const addGradeType = "ADD_GRADE";
 const editGradeType = "EDIT_GRADE";
 const removeGradeType = "REMOVE_GRADE";
-const initialState = {items: [], isLoading: false};
+const initialState = {items: [],total:0, isLoading: false};
 
 export const actionCreators = {
   requestGrades: (startIndex?: number, rowsPerPage?: number) => async (dispatch: any, getState: any) => {    
@@ -15,9 +15,9 @@ export const actionCreators = {
     dispatch({type: requestGradesType, startIndex, rowsPerPage});
     const url = `api/Grades?startIndex=${startIndex || 0}&amount=${rowsPerPage || 0}`;
     const response = await fetch(url);
-    const items = await response.json();
+    const {grades, total} = await response.json();
 
-    dispatch({type: receiveGradesType, startIndex, rowsPerPage, items});
+    dispatch({type: receiveGradesType, startIndex, rowsPerPage, items:grades, total});
     return Promise.resolve();
   },
 
@@ -56,6 +56,7 @@ export const reducer = (state: any, action: any) => {
       startIndex: action.startIndex,
       rowsPerPage: action.rowsPerPage,
       items: action.items,
+      total: action.total,
       isLoading: false
     };
   }
