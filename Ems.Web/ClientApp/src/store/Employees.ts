@@ -23,9 +23,8 @@ export const actionCreators = {
     return Promise.resolve();
   },
 
-  addEmployee: (employee: IEmployee) => async (dispatch: any, getState: any) => {
-    console.log("addEmployee");
-    const url = `api/Employee`;
+  addEmployee: (employee: IEmployee) => async (dispatch: any, getState: any) => {    
+    const url = `api/Save?type=Employee`;
     const headers = new Headers({'Accept': 'application/json', "Content-Type": "application/json"});    
     const response = await fetch(url,{method:"POST", body: JSON.stringify(employee), headers:headers});
     const result = await response.json();

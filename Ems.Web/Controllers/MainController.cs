@@ -1,8 +1,11 @@
+using System;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using Ems.Data;
 using Ems.Data.Models;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json.Linq;
 
 namespace Ems.Web.Controllers
 {
@@ -27,13 +30,17 @@ namespace Ems.Web.Controllers
 
             var employees = result.ToList();
             var total = _context.Employee.Count();
-            return Json( new {employees, total });
+            return Json(new {employees, total});
         }
 
         [HttpPost("[action]")]
-        public async Task<Employee> Employee([FromBody] Employee employee)
+        public async Task<object> Save([FromBody] JObject o, [FromQuery] string type)
         {
-            var result = _context.Employee.Add(employee);
+            var assembly = _context.GetType().Assembly;
+            var assemblyName = assembly.GetName().Name;
+            var objectType = assembly.GetType($"{assemblyName}.Models.{type}");
+            var entity = o.ToObject(objectType);
+            var result = await _context.AddAsync(entity);
             await _context.SaveChangesAsync();
             return result.Entity;
         }
@@ -49,7 +56,7 @@ namespace Ems.Web.Controllers
 
             var grades = result.ToList();
             var total = _context.Grade.Count();
-            return Json( new {grades, total });
+            return Json(new {grades, total});
         }
 
         [HttpGet("[action]")]
@@ -63,7 +70,7 @@ namespace Ems.Web.Controllers
 
             var positions = result.ToList();
             var total = _context.Position.Count();
-            return Json( new {positions, total });
+            return Json(new {positions, total});
         }
     }
 }

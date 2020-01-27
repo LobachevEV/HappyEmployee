@@ -22,8 +22,12 @@ export const actionCreators = {
   },
 
   addGrade: (grade: any) => async (dispatch: any, getState: any) => {
-    const items = getState().grades.items;
-    items.push(items);
+    const url = `api/Save?type=Grade`;
+    const headers = new Headers({'Accept': 'application/json', "Content-Type": "application/json"});
+    const response = await fetch(url,{method:"POST", body: JSON.stringify(grade), headers:headers});
+    const result = await response.json();
+    const items = getState().grade.items;
+    items.push(result);
     dispatch({type: addGradeType, items});
   },
   editGrade: (grade: any) => async (dispatch: any, getState: any) => {

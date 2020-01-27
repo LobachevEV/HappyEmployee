@@ -22,8 +22,12 @@ export const actionCreators = {
   },
 
   addPosition: (position: any) => async (dispatch: any, getState: any) => {
-    const items = getState().positions.items;
-    items.push(items);
+    const url = `api/Save?type=Position`;
+    const headers = new Headers({'Accept': 'application/json', "Content-Type": "application/json"});
+    const response = await fetch(url,{method:"POST", body: JSON.stringify(position), headers:headers});
+    const result = await response.json();
+    const items = getState().grade.items;
+    items.push(result);
     dispatch({type: addPositionType, items});
   },
   editPosition: (position: any) => async (dispatch: any, getState: any) => {
