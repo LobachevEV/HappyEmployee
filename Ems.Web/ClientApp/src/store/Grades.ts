@@ -1,3 +1,5 @@
+import {IGrade} from "../Model/Api";
+
 const requestGradesType = "REQUEST_GRADES";
 const receiveGradesType = "RECEIVE_GRADES";
 const addGradeType = "ADD_GRADE";
@@ -21,12 +23,12 @@ export const actionCreators = {
     return Promise.resolve();
   },
 
-  addGrade: (grade: any) => async (dispatch: any, getState: any) => {
+  addGrade: (grade: IGrade) => async (dispatch: any, getState: any) => {    
     const url = `api/Save?type=Grade`;
     const headers = new Headers({'Accept': 'application/json', "Content-Type": "application/json"});
     const response = await fetch(url,{method:"POST", body: JSON.stringify(grade), headers:headers});
     const result = await response.json();
-    const items = getState().grade.items;
+    const items = getState().grades.items;
     items.push(result);
     dispatch({type: addGradeType, items});
   },

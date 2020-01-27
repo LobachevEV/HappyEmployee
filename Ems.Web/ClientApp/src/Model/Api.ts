@@ -5,3 +5,14 @@ export interface IEmployee {
   positionId: number,
   personalCostMultiplier: number,
 }
+
+export interface IGrade {
+  id?:number,
+  description:string,
+  costMultiplier:number
+}
+
+export interface IPosition {
+  id:string,
+  costRate:number
+}

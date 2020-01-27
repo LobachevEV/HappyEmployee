@@ -6,7 +6,7 @@ import Grades from "./components/Grades/Grades";
 import Positions from "./components/Positions/Positions";
 import EmployeeEditDialog from "./components/Employees/EmployeeEditDialog";
 import GradeEditDialog from "./components/Grades/GradeEditDialog";
-import PositionEditDialog from "./components/Positions/EmployeeEditDialog";
+import PositionEditDialog from "./components/Positions/PositionEditDialog";
 
 export default () => (
   <Container>

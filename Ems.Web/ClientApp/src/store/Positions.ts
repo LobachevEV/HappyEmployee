@@ -1,3 +1,5 @@
+import {IPosition} from "../Model/Api";
+
 const requestPositionsType = "REQUEST_POSITIONS";
 const receivePositionsType = "RECEIVE_POSITIONS";
 const addPositionType = "ADD_POSITION";
@@ -21,12 +23,12 @@ export const actionCreators = {
     return Promise.resolve();
   },
 
-  addPosition: (position: any) => async (dispatch: any, getState: any) => {
+  addPosition: (position: IPosition) => async (dispatch: any, getState: any) => {
     const url = `api/Save?type=Position`;
     const headers = new Headers({'Accept': 'application/json', "Content-Type": "application/json"});
     const response = await fetch(url,{method:"POST", body: JSON.stringify(position), headers:headers});
     const result = await response.json();
-    const items = getState().grade.items;
+    const items = getState().positions.items;
     items.push(result);
     dispatch({type: addPositionType, items});
   },

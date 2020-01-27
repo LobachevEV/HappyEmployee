@@ -5,6 +5,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import {ButtonGroup, PropTypes} from "@material-ui/core";
+import {useStore} from "react-redux";
 
 interface IDialogAction {
   label: string,
@@ -22,6 +23,7 @@ interface IDialogProps {
 
 const FormDialog = (props: IDialogProps) => {
   const {onClose, title, children, actions} = props;
+  const store = useStore();
   return (
     <React.Fragment>
       <Dialog open={true} onClose={onClose} aria-labelledby="form-dialog-title">

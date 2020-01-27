@@ -65,7 +65,7 @@ class EmployeeEditDialog extends React.Component<IEmployeeEditDialogProps, IEmpl
                      items={grades.map((g: any) => ({value: g.id, label: g.description}))}/>
         </Grid>
         <Grid item xs={12}>
-          <TextField id="per_cost_mult" name={"personalCostMultiplier"} type="number" InputProps={{inputProps :{step:0.01}}} label="Personal cost multiplier"
+          <TextField id="per_cost_mult" name={"personalCostMultiplier"} type="number" InputProps={{inputProps :{step:0.1}}} label="Personal cost multiplier"
                      onChange={handleChange}
                      value={personalCostMultiplier} InputLabelProps={{shrink: true,}}/>
         </Grid>

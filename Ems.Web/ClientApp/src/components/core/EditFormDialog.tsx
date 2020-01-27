@@ -12,7 +12,7 @@ interface IEditDialogProps {
   onSave: () => void
 }
 
-function EditFormDialog(props: IEditDialogProps) {
+const EditFormDialog = (props: IEditDialogProps) => {
   let {buttonCaption, children, onCancel, onSave, title} = props;
   return <FormDialog title={title} buttonCaption={buttonCaption} onClose={onCancel}
                      actions={[{label: "Cancel", color: "secondary"}, {label: "Save", action: onSave}]}>
@@ -20,9 +20,6 @@ function EditFormDialog(props: IEditDialogProps) {
       {children}
     </React.Fragment>
   </FormDialog>
-}
+};
 
-export default connect<any>(
-  (state: any) => state.dialogActions,
-  dispatch => bindActionCreators(actionCreators, dispatch)
-)(EditFormDialog);
+export default EditFormDialog;
