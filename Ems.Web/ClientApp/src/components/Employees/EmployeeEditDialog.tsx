@@ -1,97 +1,78 @@
-import React from "react";
+import React, {FunctionComponent, useEffect, useState} from "react";
 import {Grid, TextField} from "@material-ui/core";
 import EditFormDialog from "../core/EditFormDialog";
 import SelectCmp from "../core/SelectCmp";
 import {IEmployee} from "../../Model/Api";
-import {connect} from "react-redux";
-import {bindActionCreators} from "redux";
+import {useDispatch, useSelector} from "react-redux";
 import {actionCreators as gradesActionCreators} from "../../store/Grades";
 import {actionCreators as positionsActionCreators} from "../../store/Positions";
 import {actionCreators as employeesActionCreators} from "../../store/Employees";
 
-interface IEmployeeEditDialogProps {
-  employee?: IEmployee,
-  addEmployee: (employee: IEmployee) => any,
-  grades: any,
-  requestGrades: any,
-  positions: any,
-  requestPositions: any
-}
+const EmployeeEditDialog: FunctionComponent<IEmployee> = (employee) => {
+  const [id] = useState(employee?.id || 0);
+  const [name, setName] = useState(employee?.name || "");
+  const [gradeId, setGradeId] = useState(employee?.gradeId || 0);
+  const [positionId, setPositionId] = useState(employee?.positionId || 0);
+  const [personalCostMultiplier, setPersonalCostMultiplier] = useState(employee?.personalCostMultiplier || 1);
 
-class EmployeeEditDialog extends React.Component<IEmployeeEditDialogProps, IEmployee> {
-  constructor(props: IEmployeeEditDialogProps) {
-    super(props);
-    this.state = {id: 0, name: "", gradeId: 0, positionId: 0, personalCostMultiplier: 1.0};
-    if (this.props.employee) {
-      this.setState(this.props.employee);      
-    }
-    
-    this.save = this.save.bind(this);
-  }
+  const positions = useSelector((state: any) => state.positions.items);
+  const grades = useSelector((state: any) => state.grades.items);
 
-  componentDidMount() {
-    // This method is called when the component is first added to the document
-    this.ensureDataFetched();
-  }
+  const dispatch = useDispatch();
 
-  ensureDataFetched() {
-    this.props.requestGrades();
-    this.props.requestPositions();
-  }
+  useEffect(() => {
+    dispatch(gradesActionCreators.requestGrades());
+    dispatch(positionsActionCreators.requestPositions());
+  }, [id]);
 
-  render() {
-    const {grades, positions} = this.props;
-    const { name, personalCostMultiplier} = this.state;
+  const handleNameChange = (event: any) => {
+    const value = event.target.value as string;
+    setName(value);
+  };
 
-    const handleChange = (event: any) => {
-      const target = event.target;
-      const value = target.type === 'checkbox' ? target.checked : target.value;
-      const name = target.name;            
-      // @ts-ignore
-      this.setState({[name]:value});      
-    };
-    
-    return <EditFormDialog title={"New employee"} buttonCaption={"Add employee"} onSave={this.save}>
-      <Grid container spacing={2}>
-        <Grid item xs={12}>
-          <TextField id="emp_name" name={"name"} label="Employee name" value={name} onChange={handleChange}/>
-        </Grid>
-        <Grid item xs={6}>
-          <SelectCmp id={"position_id"} name={"positionId"} label="Position" onChange={handleChange}
-                     items={positions.map((p: any) => ({value: p.id}))}/>
-        </Grid>
-        <Grid item xs={6}>
-          <SelectCmp id={"grade_id"} name={"gradeId"} label="Grade" onChange={handleChange}
-                     items={grades.map((g: any) => ({value: g.id, label: g.description}))}/>
-        </Grid>
-        <Grid item xs={12}>
-          <TextField id="per_cost_mult" name={"personalCostMultiplier"} type="number" InputProps={{inputProps :{step:0.1}}} label="Personal cost multiplier"
-                     onChange={handleChange}
-                     value={personalCostMultiplier} InputLabelProps={{shrink: true,}}/>
-        </Grid>
+  const handleGradeIdChange = (event: any) => {
+    const value = event.target.value as number;
+    setGradeId(value);
+  };
+  const handlePositionIdChange = (event: any) => {
+    const value = event.target.value as number;
+    setPositionId(value);
+  };
+  const handlePersonalCostMultiplierChange = (event: any) => {
+    const value = event.target.value as number;
+    setPersonalCostMultiplier(value);
+  };
+
+
+  const save = () => dispatch(employeesActionCreators.addEmployee({
+    id,
+    name,
+    gradeId,
+    positionId,
+    personalCostMultiplier
+  }));
+
+  return <EditFormDialog title={"New employee"} buttonCaption={"Add employee"} onSave={save}>
+    <Grid container spacing={2}>
+      <Grid item xs={12}>
+        <TextField id="emp_name" name={"name"} label="Employee name" value={name} onChange={handleNameChange}/>
       </Grid>
-    </EditFormDialog>;
-  }
-  
-  private save () {
-    const {id, name, gradeId, positionId, personalCostMultiplier} = this.state;
-    this.props.addEmployee({
-      id: id,
-      name: name,
-      gradeId: gradeId,
-      positionId: positionId,
-      personalCostMultiplier: personalCostMultiplier
-    });
-  }
-  
-}
+      <Grid item xs={6}>
+        <SelectCmp id={"position_id"} name={"positionId"} label="Position" onChange={handlePositionIdChange}
+                   value={positionId}
+                   items={positions.map((p: any) => ({value: p.id}))}/>
+      </Grid>
+      <Grid item xs={6}>
+        <SelectCmp id={"grade_id"} name={"gradeId"} label="Grade" onChange={handleGradeIdChange} value={gradeId}
+                   items={grades.map((g: any) => ({value: g.id, label: g.description}))}/>
+      </Grid>
+      <Grid item xs={12}>
+        <TextField id="per_cost_mult" type="number" InputProps={{inputProps: {step: 0.1}}}
+                   label="Personal cost multiplier" onChange={handlePersonalCostMultiplierChange}
+                   value={personalCostMultiplier} InputLabelProps={{shrink: true,}}/>
+      </Grid>
+    </Grid>
+  </EditFormDialog>;
+};
 
-
-export default connect<any>(
-  (state: any) => ({grades: state.grades.items, positions: state.positions.items}),
-  dispatch => bindActionCreators({
-    requestGrades: gradesActionCreators.requestGrades,
-    requestPositions: positionsActionCreators.requestPositions,
-    addEmployee: employeesActionCreators.addEmployee
-  }, dispatch)
-)(EmployeeEditDialog);
+export default EmployeeEditDialog;
