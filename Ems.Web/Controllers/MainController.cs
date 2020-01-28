@@ -18,21 +18,7 @@ namespace Ems.Web.Controllers
         {
             _context = context;
         }
-
-        [HttpGet("[action]")]
-        public JsonResult Employees(int startIndex, int amount)
-        {
-            var result = _context.Employee.Skip(startIndex);
-            if (amount != 0)
-            {
-                result = result.Take(amount);
-            }
-
-            var employees = result.ToList();
-            var total = _context.Employee.Count();
-            return Json(new {employees, total});
-        }
-
+        
         [HttpPost("[action]")]
         public async Task<object> Save([FromBody] JObject o, [FromQuery] string type)
         {
@@ -46,31 +32,39 @@ namespace Ems.Web.Controllers
         }
 
         [HttpGet("[action]")]
+        public JsonResult Employees(int startIndex, int amount)
+        {
+            var employees = _context.Employee.Skip(startIndex);
+            var result = new
+            {
+                employees = amount == 0 ? employees: employees.Take(amount),
+                total = _context.Employee.Count()
+            };
+            return Json(result);
+        }
+
+        [HttpGet("[action]")]
         public JsonResult Grades(int startIndex, int amount)
         {
-            var result = _context.Grade.Skip(startIndex);
-            if (amount != 0)
+            var grades = _context.Grade.Skip(startIndex);
+            var result = new
             {
-                result = result.Take(amount);
-            }
-
-            var grades = result.ToList();
-            var total = _context.Grade.Count();
-            return Json(new {grades, total});
+                employees = amount == 0 ? grades: grades.Take(amount),
+                total = _context.Grade.Count()
+            };
+            return Json(result);
         }
 
         [HttpGet("[action]")]
         public JsonResult Positions(int startIndex, int amount)
         {
-            var result = _context.Position.Skip(startIndex);
-            if (amount != 0)
+            var positions = _context.Position.Skip(startIndex);
+            var result = new
             {
-                result = result.Take(amount);
-            }
-
-            var positions = result.ToList();
-            var total = _context.Position.Count();
-            return Json(new {positions, total});
+                employees = amount == 0 ? positions: positions.Take(amount),
+                total = _context.Position.Count()
+            };
+            return Json(result);
         }
     }
 }
