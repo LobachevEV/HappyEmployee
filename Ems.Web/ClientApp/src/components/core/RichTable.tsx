@@ -1,6 +1,7 @@
 import React from "react";
 import {
   createStyles,
+  IconButton,
   makeStyles,
   Paper,
   Table,
@@ -14,17 +15,22 @@ import {
   Toolbar,
   Typography
 } from "@material-ui/core";
+import DeleteIcon from '@material-ui/icons/Delete';
+import EditIcon from '@material-ui/icons/Edit';
 import {lighten} from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    root: {}
-  }),
+    root: {},
+    margin: {
+      margin: theme.spacing(1),
+    },
+  }),  
 );
 
 export interface IColumn {
   title: string,
-  format: (item: any) => any;  
+  format: (item: any) => any;
 }
 
 interface ITableProps {
@@ -37,11 +43,13 @@ interface ITableProps {
   onChangePage: (event: React.MouseEvent<HTMLButtonElement, MouseEvent> | null, newPage: number) => void
   onChangeRowsPage: (newRowsPerPage: number) => void
   actions?: React.ReactNode[]
+  onEditRow?: (item: any) => any
+  onDeleteRow?: (item: any) => any
 }
 
 const RichTable = (props: ITableProps) => {
-  const {title, items, rowsPerPage, onChangeRowsPage, columns, page, onChangePage, total, actions} = props;
-  const classes = useStyles();
+  const {title, items, rowsPerPage, onChangeRowsPage, columns, page, onChangePage, total, actions, onEditRow, onDeleteRow} = props;
+  const classes = useStyles();  
   return (
     <Paper className={classes.root}>
       <TableTitle title={title || ""}>
@@ -51,17 +59,27 @@ const RichTable = (props: ITableProps) => {
         <TableHead>
           <TableRow>
             {columns && columns.map(col => <TableCell>{col.title}</TableCell>)}
+            {(onEditRow || onDeleteRow) && <TableCell>Actions</TableCell>}
           </TableRow>
         </TableHead>
         <TableBody>
           {items && items.map(item => <TableRow key={item.id}>
-              {columns.map(col =>
-                <TableCell>{col.format(item)}</TableCell>)}
+              {columns.map(col => <TableCell>{col.format(item)}</TableCell>)}
+              {onEditRow && <TableCell>
+                  <IconButton aria-label="edit" className={classes.margin} onClick={()=>onEditRow(item)}>
+                      <EditIcon fontSize="small"/>
+                  </IconButton>
+              </TableCell>}
+              {onDeleteRow && <TableCell>
+                  <IconButton aria-label="delete" className={classes.margin} onClick={()=>onDeleteRow(item)}>
+                      <DeleteIcon fontSize="small"/>
+                  </IconButton>
+              </TableCell>}
             </TableRow>
           )}
         </TableBody>
         <TableFooter>
-          <TableRow>
+         
             <TablePagination
               rowsPerPageOptions={[5, 10, 25]}
               component="div"
@@ -76,7 +94,7 @@ const RichTable = (props: ITableProps) => {
               }}
               onChangePage={handleChangePage}
               onChangeRowsPerPage={handleChangeRowsPerPage}/>
-          </TableRow>
+         
         </TableFooter>
       </Table>
     </Paper>

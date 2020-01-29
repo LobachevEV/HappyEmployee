@@ -8,14 +8,14 @@ const removeEmployeeType = "REMOVE_EMPLOYEE";
 const initialState = {items: [], total: 0, isLoading: false};
 
 export const actionCreators = {
-  requestEmployees: (startIndex: number, rowsPerPage: number) => async (dispatch: any, getState: any) => {
+  requestEmployees: (startIndex?: number, rowsPerPage?: number) => async (dispatch: any, getState: any) => {
     if (startIndex === getState().employees.startIndex && rowsPerPage === getState().employees.rowsPerPage)
       // Don't issue a duplicate request (we already have or are loading the requested data)
       return;
 
 
     dispatch({type: requestEmployeesType, startIndex, rowsPerPage});
-    const url = `api/Employees?startIndex=${startIndex}&amount=${rowsPerPage}`;
+    const url = `api/Employees?startIndex=${startIndex || 0}&amount=${rowsPerPage || 0}`;
     const response = await fetch(url);
     const {employees, total} = await response.json();
 

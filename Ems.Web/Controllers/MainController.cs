@@ -1,9 +1,6 @@
-using System;
 using System.Linq;
-using System.Reflection;
 using System.Threading.Tasks;
 using Ems.Data;
-using Ems.Data.Models;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
 
@@ -49,7 +46,7 @@ namespace Ems.Web.Controllers
             var grades = _context.Grade.Skip(startIndex);
             var result = new
             {
-                employees = amount == 0 ? grades: grades.Take(amount),
+                grades = amount == 0 ? grades: grades.Take(amount),
                 total = _context.Grade.Count()
             };
             return Json(result);
@@ -61,7 +58,7 @@ namespace Ems.Web.Controllers
             var positions = _context.Position.Skip(startIndex);
             var result = new
             {
-                employees = amount == 0 ? positions: positions.Take(amount),
+                positions = amount == 0 ? positions: positions.Take(amount),
                 total = _context.Position.Count()
             };
             return Json(result);

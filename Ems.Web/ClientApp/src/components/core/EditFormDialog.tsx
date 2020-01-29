@@ -1,8 +1,5 @@
 import React from "react";
-import {connect} from "react-redux";
-import {bindActionCreators} from "redux";
 import FormDialog from "../core/FormDialog";
-import {actionCreators} from "../../store/Employees";
 
 interface IEditDialogProps {
   title: string
