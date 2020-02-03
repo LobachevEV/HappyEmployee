@@ -14,17 +14,20 @@ interface IEmployeeEditDialog {
 
 const EmployeeEditDialog: FunctionComponent<IEmployeeEditDialog> = (props) => {
   const [id] = useState(parseInt(props.match.params.id, 10));
-  
+
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(gradesActionCreators.requestGrades());
     dispatch(positionsActionCreators.requestPositions());
   }, [id]);
-  
+
   const store = useStore();
-  const [employee, dispatchLocal] = useReducer((state: IEmployee, {type, value}: any) => ({[type]: value, ...state} as IEmployee),
+  const [employee, dispatchLocal] = useReducer((state: IEmployee, {type, value}: any) => ({
+      ...state,
+      [type]: value
+    } as IEmployee),
     {id: parseInt(props.match.params.id, 10), gradeId: 0, positionId: 0, personalCostMultiplier: 1},
-    arg => {      
+    () => {
       return store.getState().employees.items.find((e: IEmployee) => e.id === id);
     });
   const positions = useSelector((state: any) => state.positions.items);
@@ -38,7 +41,7 @@ const EmployeeEditDialog: FunctionComponent<IEmployeeEditDialog> = (props) => {
     dispatchLocal({type: name, value});
   };
 
-  const save = () => dispatch(employeesActionCreators.addEmployee(employee));
+  const save = () => dispatch(employeesActionCreators.saveEmployee(employee));
 
   return <EditFormDialog title={"New employee"} buttonCaption={"Add employee"} onSave={save}>
     <Grid container spacing={2}>

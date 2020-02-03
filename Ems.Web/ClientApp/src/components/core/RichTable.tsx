@@ -9,14 +9,12 @@ import {
   TableCell,
   TableFooter,
   TableHead,
-  TablePagination,
   TableRow,
   Theme,
   Toolbar,
   Typography
 } from "@material-ui/core";
 import DeleteIcon from '@material-ui/icons/Delete';
-import EditIcon from '@material-ui/icons/Edit';
 import {lighten} from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -36,19 +34,14 @@ export interface IColumn {
 interface ITableProps {
   title?: string
   columns: IColumn[],
-  items: any[],
-  total: number,
-  page: number,
-  rowsPerPage: number,
-  onChangePage: (event: React.MouseEvent<HTMLButtonElement, MouseEvent> | null, newPage: number) => void
-  onChangeRowsPage: (newRowsPerPage: number) => void
+  items: any[],  
   actions?: React.ReactNode[]
   onEditRow?: (item: any) => any
   onDeleteRow?: (item: any) => any
 }
 
 const RichTable = (props: ITableProps) => {
-  const {title, items, rowsPerPage, onChangeRowsPage, columns, page, onChangePage, total, actions, onEditRow, onDeleteRow} = props;
+  const {title, items, columns, actions, onEditRow, onDeleteRow} = props;
   const classes = useStyles();  
   return (
     <Paper className={classes.root}>
@@ -58,18 +51,12 @@ const RichTable = (props: ITableProps) => {
       <Table className='table table-striped'>
         <TableHead>
           <TableRow>
-            {columns && columns.map(col => <TableCell>{col.title}</TableCell>)}
-            {(onEditRow || onDeleteRow) && <TableCell>Actions</TableCell>}
+            {columns && columns.map(col => <TableCell>{col.title}</TableCell>)}            
           </TableRow>
         </TableHead>
         <TableBody>
-          {items && items.map(item => <TableRow key={item.id}>
-              {columns.map(col => <TableCell>{col.format(item)}</TableCell>)}
-              {onEditRow && <TableCell>
-                  <IconButton aria-label="edit" className={classes.margin} onClick={()=>onEditRow(item)}>
-                      <EditIcon fontSize="small"/>
-                  </IconButton>
-              </TableCell>}
+          {items && items.map(item => <TableRow key={item.id} hover >
+              {columns.map(col => <TableCell key={col.title} onClick={()=>onEditRow && onEditRow(item)}>{col.format(item)}</TableCell>)}              
               {onDeleteRow && <TableCell>
                   <IconButton aria-label="delete" className={classes.margin} onClick={()=>onDeleteRow(item)}>
                       <DeleteIcon fontSize="small"/>
@@ -79,35 +66,10 @@ const RichTable = (props: ITableProps) => {
           )}
         </TableBody>
         <TableFooter>
-         
-            <TablePagination
-              rowsPerPageOptions={[5, 10, 25]}
-              component="div"
-              count={total}
-              page={page}
-              rowsPerPage={rowsPerPage}
-              backIconButtonProps={{
-                'aria-label': 'Previous Page',
-              }}
-              nextIconButtonProps={{
-                'aria-label': 'Next Page',
-              }}
-              onChangePage={handleChangePage}
-              onChangeRowsPerPage={handleChangeRowsPerPage}/>
-         
         </TableFooter>
       </Table>
     </Paper>
-  );
-
-  function handleChangePage(event: React.MouseEvent<HTMLButtonElement, MouseEvent> | null, newPage: number) {
-    onChangePage && onChangePage(event, newPage);
-  }
-
-  function handleChangeRowsPerPage(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
-    const newValue = parseInt(event.target.value, 10);
-    onChangeRowsPage && onChangeRowsPage(newValue);
-  }
+  ); 
 };
 
 const toolbarStyles = makeStyles(theme => ({

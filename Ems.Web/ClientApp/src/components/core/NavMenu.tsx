@@ -136,7 +136,7 @@ function ButtonAppBar() {
             <MenuIcon/>
           </IconButton>
           <Typography variant="h6" noWrap>
-            Mini variant drawer
+            Employee management system
           </Typography>
         </Toolbar>
       </AppBar>

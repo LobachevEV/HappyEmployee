@@ -8,18 +8,13 @@ const removePositionType = "REMOVE_POSITION";
 const initialState = {items: [],total:0, isLoading: false};
 
 export const actionCreators = {
-  requestPositions: (startIndex?: number, rowsPerPage?: number) => async (dispatch: any, getState: any) => {
-    if (startIndex && startIndex === getState().positions.startIndex && rowsPerPage && rowsPerPage === getState().positions.rowsPerPage)
-      // Don't issue a duplicate request (we already have or are loading the requested data)
-      return;
-
-
-    dispatch({type: requestPositionsType, startIndex, rowsPerPage});
-    const url = `api/Positions?startIndex=${startIndex || 0}&amount=${rowsPerPage || 0}`;
+  requestPositions: () => async (dispatch: any, getState: any) => {   
+    dispatch({type: requestPositionsType});
+    const url = `api/Positions`;
     const response = await fetch(url);
     const {positions, total} = await response.json();
 
-    dispatch({type: receivePositionsType, startIndex, rowsPerPage, items:positions, total});
+    dispatch({type: receivePositionsType, items:positions, total});
     return Promise.resolve();
   },
 
@@ -50,17 +45,13 @@ export const reducer = (state: any, action: any) => {
   if (action.type === requestPositionsType) {
     return {
       ...state,
-      startIndex: action.startIndex,
-      rowsPerPage: action.rowsPerPage,
       isLoading: true
     };
   }
 
   if (action.type === receivePositionsType) {
     return {
-      ...state,
-      startIndex: action.startIndex,
-      rowsPerPage: action.rowsPerPage,
+      ...state,      
       items: action.items,
       total: action.total,
       isLoading: false

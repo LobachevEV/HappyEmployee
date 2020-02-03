@@ -8,28 +8,21 @@ const removeEmployeeType = "REMOVE_EMPLOYEE";
 const initialState = {items: [], total: 0, isLoading: false};
 
 export const actionCreators = {
-  requestEmployees: (startIndex?: number, rowsPerPage?: number) => async (dispatch: any, getState: any) => {
-    if (startIndex === getState().employees.startIndex && rowsPerPage === getState().employees.rowsPerPage)
-      // Don't issue a duplicate request (we already have or are loading the requested data)
-      return;
-
-    dispatch({type: requestEmployeesType, startIndex, rowsPerPage});
-    const url = `api/Employees?startIndex=${startIndex || 0}&amount=${rowsPerPage || 0}`;
+  requestEmployees: () => async (dispatch: any, getState: any) => {
+    dispatch({type: requestEmployeesType});
+    const url = `api/Employees`;
     const response = await fetch(url);
     const {employees, total} = await response.json();
 
-    dispatch({type: receiveEmployeesType, startIndex, rowsPerPage, items:employees, total});
+    dispatch({type: receiveEmployeesType, items:employees, total});
     return Promise.resolve();
   },
 
-  addEmployee: (employee: IEmployee) => async (dispatch: any, getState: any) => {    
+  saveEmployee: (employee: IEmployee) => async (dispatch: any, getState: any) => {    
     const url = `api/Save?type=Employee`;
     const headers = new Headers({'Accept': 'application/json', "Content-Type": "application/json"});    
     const response = await fetch(url,{method:"POST", body: JSON.stringify(employee), headers:headers});
     const result = await response.json();
-    const items = getState().employees.items;
-    items.push(result);
-    dispatch({type: addEmployeeType, items});
   },
   editEmployee: (employee: any) => async (dispatch: any, getState: any) => {
     const items = getState().employees.items;
@@ -48,18 +41,14 @@ export const reducer = (state: any, action: any) => {
 
   if (action.type === requestEmployeesType) {
     return {
-      ...state,
-      startIndex: action.startIndex,
-      rowsPerPage: action.rowsPerPage,
+      ...state,      
       isLoading: true
     };
   }
 
   if (action.type === receiveEmployeesType) {
     return {
-      ...state,
-      startIndex: action.startIndex,
-      rowsPerPage: action.rowsPerPage,
+      ...state,      
       items: action.items,
       total:action.total,
       isLoading: false

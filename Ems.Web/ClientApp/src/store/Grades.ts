@@ -8,18 +8,13 @@ const removeGradeType = "REMOVE_GRADE";
 const initialState = {items: [],total:0, isLoading: false};
 
 export const actionCreators = {
-  requestGrades: (startIndex?: number, rowsPerPage?: number) => async (dispatch: any, getState: any) => {    
-    if (startIndex && startIndex === getState().grades.startIndex && rowsPerPage && rowsPerPage === getState().grades.rowsPerPage)
-      // Don't issue a duplicate request (we already have or are loading the requested data)
-      return;
-
-
-    dispatch({type: requestGradesType, startIndex, rowsPerPage});
-    const url = `api/Grades?startIndex=${startIndex || 0}&amount=${rowsPerPage || 0}`;
+  requestGrades: () => async (dispatch: any, getState: any) => {
+    dispatch({type: requestGradesType,});
+    const url = `api/Grades`;
     const response = await fetch(url);
     const {grades, total} = await response.json();
 
-    dispatch({type: receiveGradesType, startIndex, rowsPerPage, items:grades, total});
+    dispatch({type: receiveGradesType, items:grades, total});
     return Promise.resolve();
   },
 
@@ -49,18 +44,14 @@ export const reducer = (state: any, action: any) => {
 
   if (action.type === requestGradesType) {
     return {
-      ...state,
-      startIndex: action.startIndex,
-      rowsPerPage: action.rowsPerPage,
+      ...state,      
       isLoading: true
     };
   }
 
   if (action.type === receiveGradesType) {
     return {
-      ...state,
-      startIndex: action.startIndex,
-      rowsPerPage: action.rowsPerPage,
+      ...state,      
       items: action.items,
       total: action.total,
       isLoading: false

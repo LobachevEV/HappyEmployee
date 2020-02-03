@@ -1,11 +1,10 @@
 import React from 'react';
 import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import {ButtonGroup, PropTypes} from "@material-ui/core";
-import {useStore} from "react-redux";
+import {ButtonGroup, createStyles, makeStyles, Paper, PropTypes, Theme} from "@material-ui/core";
+import Grid from "@material-ui/core/Grid";
 
 interface IDialogAction {
   label: string,
@@ -21,12 +20,20 @@ interface IDialogProps {
   actions?: IDialogAction[]
 }
 
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    root: {
+      height:"100%"
+    },
+  })
+);
+
 const FormDialog = (props: IDialogProps) => {
-  const {onClose, title, children, actions} = props;
-  const store = useStore();
+  const {title, children, actions} = props;
+  const classes = useStyles();
   return (
-    <React.Fragment>
-      <Dialog open={true} onClose={onClose} aria-labelledby="form-dialog-title">
+    <Grid item xs={4}>
+      <Paper className={classes.root}>
         <DialogTitle id="form-dialog-title">{title}</DialogTitle>
         <DialogContent>
           {children}
@@ -44,8 +51,8 @@ const FormDialog = (props: IDialogProps) => {
             })}
           </ButtonGroup>
         </DialogActions>
-      </Dialog>
-    </React.Fragment>
+      </Paper>
+    </Grid>
   );
 };
 
