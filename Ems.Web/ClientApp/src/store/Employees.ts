@@ -13,7 +13,6 @@ export const actionCreators = {
       // Don't issue a duplicate request (we already have or are loading the requested data)
       return;
 
-
     dispatch({type: requestEmployeesType, startIndex, rowsPerPage});
     const url = `api/Employees?startIndex=${startIndex || 0}&amount=${rowsPerPage || 0}`;
     const response = await fetch(url);
