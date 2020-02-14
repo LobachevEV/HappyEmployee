@@ -14,19 +14,14 @@ import MailIcon from '@material-ui/icons/Mail';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import {Link, LinkProps} from 'react-router-dom';
+import CssBaseline from "@material-ui/core/CssBaseline";
 
-const drawerWidth = 240;
+export const drawerWidth = 240;
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       display: 'flex',
-    },
-    menuButton: {
-      marginRight: theme.spacing(2),
-    },
-    title: {
-      flexGrow: 1,
     },
     appBar: {
       zIndex: theme.zIndex.drawer + 1,
@@ -42,6 +37,12 @@ const useStyles = makeStyles((theme: Theme) =>
         easing: theme.transitions.easing.sharp,
         duration: theme.transitions.duration.enteringScreen,
       }),
+    },
+    menuButton: {
+      marginRight: 36,
+    },
+    hide: {
+      display: 'none',
     },
     drawer: {
       width: drawerWidth,
@@ -73,20 +74,20 @@ const useStyles = makeStyles((theme: Theme) =>
       padding: theme.spacing(0, 1),
       ...theme.mixins.toolbar,
     },
-    hide: {
-      display: 'none',
+    content: {
+      flexGrow: 1,      
     },
   }),
 );
 
-interface ListItemLinkProps extends LinkProps{
+interface ListItemLinkProps extends LinkProps {
   icon?: React.ReactElement;
-  primary: string;  
+  primary: string;
 }
 
 
-function ListItemLink(props: ListItemLinkProps) {
-  const { icon, primary, to } = props;
+const ListItemLink = (props: ListItemLinkProps) => {
+  const {icon, primary, to} = props;
 
   const renderLink = React.useMemo(
     () =>
@@ -100,13 +101,13 @@ function ListItemLink(props: ListItemLinkProps) {
     <li>
       <ListItem button component={renderLink}>
         {icon ? <ListItemIcon>{icon}</ListItemIcon> : null}
-        <ListItemText primary={primary} />
+        <ListItemText primary={primary}/>
       </ListItem>
     </li>
   );
-}
+};
 
-function ButtonAppBar() {
+const ButtonAppBar = (props: { children?: React.ReactNode, }) => {
   const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
@@ -116,11 +117,12 @@ function ButtonAppBar() {
 
   const handleDrawerClose = () => {
     setOpen(false);
-  };  
+  };
 
   return (
     <div className={classes.root}>
-      <AppBar position="static" className={clsx(classes.appBar, {
+      <CssBaseline />
+      <AppBar position="fixed" className={clsx(classes.appBar, {
         [classes.appBarShift]: open,
       })}>
         <Toolbar>
@@ -160,16 +162,17 @@ function ButtonAppBar() {
         </div>
         <Divider/>
         <List>
-          <ListItemLink to="/employees" primary="Employees" icon={<InboxIcon />} />
-          <ListItemLink to="/positions" primary="Positions" icon={<MailIcon />} />
-          <ListItemLink to="/grades" primary="Grades" icon={<InboxIcon />} />          
+          <ListItemLink to="/employees" primary="Employees" icon={<InboxIcon/>}/>
+          <ListItemLink to="/positions" primary="Positions" icon={<MailIcon/>}/>
+          <ListItemLink to="/grades" primary="Grades" icon={<InboxIcon/>}/>
         </List>
       </Drawer>
+      <main className={classes.content}>
+        <div className={classes.toolbar} />
+        {props.children}
+      </main>
     </div>
   );
-}
+};
 
 export default ButtonAppBar;
-// <Button color="inherit" href="/Employees">Employees</Button>
-// <Button color="inherit" href="/Grades">Grades</Button>
-//   <Button color="inherit" href="/Positions">Positions</Button>

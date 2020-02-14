@@ -26,7 +26,7 @@ const Grades = function (props: IGradesPageProps) {
     const startIndex = parseInt(match.params.startIndex, 10) || 0;
     const rowsPerPage = parseInt(match.params.rowsPerPage, 10) || 5;
     props.requestGrades(startIndex, rowsPerPage);
-  });
+  }, [match.params.startIndex, match.params.rowsPerPage]);
 
   const columns: IColumn[] = [
     {title: "Description", format: (item) => item.description},

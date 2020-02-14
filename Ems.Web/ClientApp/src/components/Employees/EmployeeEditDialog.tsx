@@ -27,9 +27,7 @@ const EmployeeEditDialog: FunctionComponent<IEmployeeEditDialog> = (props) => {
       [type]: value
     } as IEmployee),
     {id: parseInt(props.match.params.id, 10), gradeId: 0, positionId: 0, personalCostMultiplier: 1},
-    () => {
-      return store.getState().employees.items.find((e: IEmployee) => e.id === id);
-    });
+    () => store.getState().employees.items.find((e: IEmployee) => e.id === id));
   const positions = useSelector((state: any) => state.positions.items);
   const grades = useSelector((state: any) => state.grades.items);
 

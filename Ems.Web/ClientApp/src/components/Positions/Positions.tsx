@@ -5,7 +5,6 @@ import {actionCreators} from "../../store/Positions";
 import {Button, Grid, Typography} from "@material-ui/core";
 import RichTable, {IColumn} from "../core/RichTable";
 import {Link} from "react-router-dom";
-import EmsRichTable from "../core/EmsRichTable";
 import {IEmployee} from "../../Model/Api";
 
 interface IPositionsPageProps {
@@ -20,13 +19,11 @@ interface IPositionsPageProps {
 
 const Positions = function (props: IPositionsPageProps) {
   const {requestPositions, items, match, history} = props;
-
-
   useEffect(() => {
     const startIndex = parseInt(match.params.startIndex, 10) || 0;
     const rowsPerPage = parseInt(match.params.rowsPerPage, 10) || 5;
     requestPositions(startIndex, rowsPerPage);
-  });
+  }, [match.params.startIndex, match.params.rowsPerPage]);
 
   const columns: IColumn[] = [
     {title: "Id", format: (item) => item.id},
