@@ -1,4 +1,4 @@
-import React, {FunctionComponent, useEffect, useReducer, useState} from "react";
+import React, {FunctionComponent, useEffect, useReducer} from "react";
 import {Grid, TextField} from "@material-ui/core";
 import EditFormDialog from "../core/EditFormDialog";
 import SelectCmp from "../core/SelectCmp";
@@ -13,21 +13,29 @@ interface IEmployeeEditDialog {
 }
 
 const EmployeeEditDialog: FunctionComponent<IEmployeeEditDialog> = (props) => {
-  const [id] = useState(parseInt(props.match.params.id, 10));
+  const store = useStore();
+  const [employee, dispatchLocal] = useReducer((state: IEmployee, {type, value}: any) => {
+      switch (type) {
+        case "SET_EMPLOYEE":
+          return value as IEmployee;
+        case "UPDATE_PROP":
+          return {
+            ...state,
+            [value.name]: value.value
+          } as IEmployee
+      }
+      return state;
+    },
+    {id: parseInt(props.match.params.id, 10), gradeId: 0, positionId: 0, personalCostMultiplier: 1} as IEmployee);
 
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(gradesActionCreators.requestGrades());
     dispatch(positionsActionCreators.requestPositions());
-  }, [id]);
+    const employee = store.getState().employees.items.find((e: IEmployee) => e.id === parseInt(props.match.params.id, 10));
+    dispatchLocal({type: "SET_EMPLOYEE", value: employee})
+  }, [props.match.params.id]);
 
-  const store = useStore();
-  const [employee, dispatchLocal] = useReducer((state: IEmployee, {type, value}: any) => ({
-      ...state,
-      [type]: value
-    } as IEmployee),
-    {id: parseInt(props.match.params.id, 10), gradeId: 0, positionId: 0, personalCostMultiplier: 1},
-    () => store.getState().employees.items.find((e: IEmployee) => e.id === id));
   const positions = useSelector((state: any) => state.positions.items);
   const grades = useSelector((state: any) => state.grades.items);
 
@@ -36,12 +44,12 @@ const EmployeeEditDialog: FunctionComponent<IEmployeeEditDialog> = (props) => {
     const value = target.type === 'checkbox' ? target.checked : target.value;
     const name = target.name;
     // @ts-ignore
-    dispatchLocal({type: name, value});
+    dispatchLocal({type: "UPDATE_PROP", value:{name, value}});
   };
 
   const save = () => dispatch(employeesActionCreators.saveEmployee(employee));
 
-  return <EditFormDialog title={"New employee"} buttonCaption={"Add employee"} onSave={save}>
+  return <EditFormDialog title={employee?.name ?? "New employee"} buttonCaption={"Add employee"} onSave={save}>
     <Grid container spacing={2}>
       <Grid item xs={12}>
         <TextField id="emp_name" name={"name"} label="Employee name" value={employee?.name}

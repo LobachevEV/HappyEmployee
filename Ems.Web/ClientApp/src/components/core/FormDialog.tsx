@@ -5,6 +5,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import {ButtonGroup, createStyles, makeStyles, Paper, PropTypes, Theme} from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
+import {History, LocationState} from "history";
 
 interface IDialogAction {
   label: string,
