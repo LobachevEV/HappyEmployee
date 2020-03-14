@@ -6,6 +6,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import {ButtonGroup, createStyles, makeStyles, Paper, PropTypes, Theme} from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
 import {History, LocationState} from "history";
+import {useHistory} from "react-router";
 
 interface IDialogAction {
   label: string,
@@ -13,9 +14,10 @@ interface IDialogAction {
   action?: () => any,
 }
 
-interface IDialogProps {
-  title: string
+export interface IDialogProps {
+  title: string,
   buttonCaption: string,
+  parentLink?: string,
   onClose?: () => void
   children?: React.ReactNode,
   actions?: IDialogAction[]
@@ -30,8 +32,9 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 const FormDialog = (props: IDialogProps) => {
-  const {title, children, actions} = props;
+  const {title, children, actions, parentLink} = props;
   const classes = useStyles();
+  const history =useHistory();
   return (
     <Grid item xs={4}>
       <Paper className={classes.root}>
@@ -43,8 +46,11 @@ const FormDialog = (props: IDialogProps) => {
           <ButtonGroup>
             {actions && actions.length > 0 && actions.map(action => {
               const handleAction = async () => {
+                console.log("handleAction: " + action.action);
                 await action.action?.();
-                window.history.back();
+                console.log("parentLink: " + parentLink);
+                if (parentLink)
+                  history.replace(parentLink);
               };
               return <Button onClick={handleAction} color={action.color || "primary"} variant="outlined">
                 {action.label}

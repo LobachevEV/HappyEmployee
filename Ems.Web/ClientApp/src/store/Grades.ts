@@ -18,7 +18,7 @@ export const actionCreators = {
     return Promise.resolve();
   },
 
-  addGrade: (grade: IGrade) => async (dispatch: any, getState: any) => {    
+  saveGrade: (grade: IGrade) => async (dispatch: any, getState: any) => {    
     const url = `api/Save?type=Grade`;
     const headers = new Headers({'Accept': 'application/json', "Content-Type": "application/json"});
     const response = await fetch(url,{method:"POST", body: JSON.stringify(grade), headers:headers});
