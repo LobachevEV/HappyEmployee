@@ -18,8 +18,7 @@ interface IEditDialogConfigs {
   entityName: string,
   getTitle: (entity: any) => string,  
   getById: (state: any, id: any) => any,
-  save: (entity: any) => void,
-  ensureLoaded: () => void,
+  save: (entity: any) => void, 
 }
 
 const createEditDialog = (cfg: IEditDialogConfigs) => (props: IEditDialogProps) => {
