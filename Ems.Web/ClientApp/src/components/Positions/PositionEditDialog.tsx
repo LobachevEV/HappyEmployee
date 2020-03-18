@@ -1,37 +1,42 @@
-import React, {FunctionComponent, useState} from "react";
+import React, {FunctionComponent} from "react";
 import {Grid, TextField} from "@material-ui/core";
-import EditFormDialog from "../core/EditFormDialog";
+import createEditDialog, {IChildComponentProps} from "../core/EditFormDialog";
 import {actionCreators} from "../../store/Positions";
 import {IPosition} from "../../Model/Api";
-import {useDispatch} from "react-redux";
 
-const PositionEditDialog:FunctionComponent<IPosition> = ()=>{
-  const [id, setId] = useState();
-  const [costRate, setCostRate] = useState();
-  const dispatch = useDispatch();
 
-  const handleIdChange = (event: any) => {
-    const value = event.target.value as string;
-    setId(value);
-  };
+interface IPositionEditDialog extends IChildComponentProps {
 
-  const handleCostRateChange = (event: any) => {
-    const value = event.target.value as number;
-    setCostRate(value);
-  };
-  
-  const save = () => dispatch(actionCreators.addPosition({id, costRate}));
-  
-  return <EditFormDialog title={"New position"} buttonCaption={"Add position"} onSave={save}>
-    <Grid container spacing={2}>
-      <Grid item xs={12}>
-        <TextField id="position_id" label="Position name" value={id} onChange={handleIdChange}/>
-      </Grid>
-      <Grid item xs={12}>
-        <TextField id="cost_rate" type="number" label="Cost rate" InputProps={{inputProps :{step:0.1}}} value={costRate} onChange={handleCostRateChange}/>
-      </Grid>
+}
+
+const ChildComp: FunctionComponent<IPositionEditDialog> = (props) => {
+  const position = props.entity as IPosition;
+  const handleChange = props.handleChange;
+
+  console.log(position);
+  return <Grid container spacing={2}>
+    <Grid item xs={12}>
+      <TextField id="position_id" name="id" label="Position name" value={position?.id || ""} onChange={handleChange}/>
     </Grid>
-  </EditFormDialog>;
+    <Grid item xs={12}>
+      <TextField id="cost_rate" name="constRate" type="number" label="Cost rate" InputProps={{inputProps: {step: 0.1}}}
+                 value={position?.costRate || 1} onChange={handleChange}/>
+    </Grid>
+  </Grid>;
+};
+
+const PositionEditDialog: FunctionComponent<{ match: any }> = ({match}) => {
+  const EditDialog = createEditDialog({
+    ChildComponent: ChildComp,
+    save: actionCreators.savePosition,
+    getById: (state, id) => {
+      console.log(id);
+      return state.positions.items.find((e: IPosition) => e.id === id);
+    },
+    entityName: "Position",
+    getTitle: entity => entity?.Id
+  });
+  return <EditDialog match={match}/>
 };
 
 export default PositionEditDialog;

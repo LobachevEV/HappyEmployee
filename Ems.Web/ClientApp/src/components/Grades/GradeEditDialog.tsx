@@ -1,39 +1,40 @@
 import React, {FunctionComponent} from "react";
 import {Grid, TextField} from "@material-ui/core";
-import EditFormDialog from "../core/EditFormDialog";
-import {actionCreators as gradesActionCreators} from "../../store/Grades";
+import createEditDialog, {IChildComponentProps} from "../core/EditFormDialog";
+import {actionCreators} from "../../store/Grades";
 import {IGrade} from "../../Model/Api";
-import {useDispatch} from "react-redux";
 
-const GradeEditDialog:FunctionComponent<IGrade> = () => {
-  const [description, setDescription] = React.useState("");
-  const [costMultiplier, setCostMultiplier] = React.useState(0);
-  const dispatch = useDispatch();
+interface IGradeEditDialog extends IChildComponentProps {
 
-  const handleDescriptionChange = (event: any) => {
-    const value = event.target.value as string;
-    setDescription(value);
-  };
+}
 
-  const handleCostMultiplierChange = (event: any) => {
-    const value = event.target.value as number;
-    setCostMultiplier(value);
-  };
+const ChildComp: FunctionComponent<IGradeEditDialog> = (props) => {
+  const grade = props.entity as IGrade;
+  const handleChange = props.handleChange;
 
-  const save = () => dispatch(gradesActionCreators.addGrade({id: 0, description, costMultiplier}));
-
-
-  return <EditFormDialog title={"New grade"} buttonCaption={"Add grade"} onSave={save}>
-    <Grid container spacing={2}>
-      <Grid item xs={12}>
-        <TextField id="grade_desc" label="Description" value={description} onChange={handleDescriptionChange}/>
-      </Grid>
-      <Grid item xs={12}>
-        <TextField id="cost_mult" type="number" label="Cost multiplier" InputProps={{inputProps: {step: 0.1}}}
-                   value={costMultiplier} onChange={handleCostMultiplierChange}/>
-      </Grid>
+  return <Grid container spacing={2}>
+    <Grid item xs={12}>
+      <TextField id="grade_desc" name="description" label="Description" value={grade?.description || ''}
+                 onChange={handleChange}/>
     </Grid>
-  </EditFormDialog>;
+    <Grid item xs={12}>
+      <TextField id="cost_mult" name="costMultiplier" type="number" label="Cost multiplier"
+                 InputProps={{inputProps: {step: 0.1}}}
+                 value={grade?.costMultiplier} onChange={handleChange}/>
+    </Grid>
+  </Grid>;
 };
+
+const GradeEditDialog: FunctionComponent<{ match: any }> = ({ match}) => {
+  const EditDialog = createEditDialog({
+    ChildComponent: ChildComp,
+    save: actionCreators.saveGrade,
+    getById: (state, id) => state.grades.items.find((e: IGrade) => e.id === id),
+    entityName: "Grade",
+    getTitle: entity => entity?.Id
+  });
+  return <EditDialog match={match}/>
+};
+
 
 export default GradeEditDialog;

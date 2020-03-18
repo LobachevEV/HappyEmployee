@@ -18,7 +18,7 @@ export const actionCreators = {
     return Promise.resolve();
   },
 
-  addPosition: (position: IPosition) => async (dispatch: any, getState: any) => {
+  savePosition: (position: IPosition) => async (dispatch: any, getState: any) => {
     const url = `api/Save?type=Position`;
     const headers = new Headers({'Accept': 'application/json', "Content-Type": "application/json"});
     const response = await fetch(url,{method:"POST", body: JSON.stringify(position), headers:headers});
