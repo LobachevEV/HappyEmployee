@@ -15,6 +15,7 @@ export interface IGrade extends WithId<number>{
   costMultiplier:number
 }
 
-export interface IPosition extends WithId<string>{  
+export interface IPosition extends WithId<number>{
+  title:string,
   costRate:number
 }

@@ -9,7 +9,7 @@ interface IEditDialogProps {
 export interface IChildComponentProps {
   entityId: any,
   entity: any,
-  handleChange: (event: any) => void
+  handleChange: (event: any) => void,
 }
 
 interface IEditDialogConfigs {
@@ -39,7 +39,6 @@ const createEditDialog = (cfg: IEditDialogConfigs) => (props: IEditDialogProps) 
   const {id} = useParams();
   const store = useStore();
   useEffect(() => {
-    console.log("set entity: " + id);
     const entity = getById(store.getState(), id);
     dispatchLocal({type: "SET_ENTITY", value: entity});
   }, [id]);

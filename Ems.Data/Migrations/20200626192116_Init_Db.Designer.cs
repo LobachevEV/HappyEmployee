@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Ems.Data.Migrations
 {
     [DbContext(typeof(EmployeesContext))]
-    [Migration("20200122113333_Employee_Id_Autogenerate")]
-    partial class Employee_Id_Autogenerate
+    [Migration("20200626192116_Init_Db")]
+    partial class Init_Db
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -23,80 +23,75 @@ namespace Ems.Data.Migrations
                 {
                     b.Property<uint>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("id")
                         .HasColumnType("int(10) unsigned");
 
+                    b.Property<DateTimeOffset>("EmploymentDate")
+                        .HasColumnType("datetime(6)")
+                        .IsUnicode(false);
+
                     b.Property<uint>("GradeId")
-                        .HasColumnName("grade_id")
                         .HasColumnType("int(10) unsigned");
 
                     b.Property<string>("Name")
-                        .HasColumnName("name")
                         .HasColumnType("varchar(150) CHARACTER SET utf8mb4")
                         .HasMaxLength(150)
                         .IsUnicode(false);
 
                     b.Property<decimal>("PersonalCostMultiplier")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("personal_cost_multiplier")
                         .HasColumnType("decimal(5,3)")
                         .HasDefaultValueSql("1.000");
 
-                    b.Property<string>("PositionId")
-                        .IsRequired()
-                        .HasColumnName("position_id")
-                        .HasColumnType("varchar(50) CHARACTER SET utf8mb4")
+                    b.Property<uint>("PositionId")
+                        .HasColumnType("int(10) unsigned")
                         .HasMaxLength(50)
                         .IsUnicode(false);
 
                     b.HasKey("Id");
 
-                    b.HasIndex("GradeId")
-                        .HasName("grade_id");
+                    b.HasIndex("GradeId");
 
-                    b.HasIndex("PositionId")
-                        .HasName("position_id");
+                    b.HasIndex("PositionId");
 
-                    b.ToTable("employee");
+                    b.ToTable("Employee");
                 });
 
             modelBuilder.Entity("Ems.Data.Models.Grade", b =>
                 {
                     b.Property<uint>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("id")
                         .HasColumnType("int(10) unsigned");
 
                     b.Property<decimal?>("CostMultiplier")
-                        .HasColumnName("cost_multiplier")
                         .HasColumnType("decimal(5,2)");
 
                     b.Property<string>("Description")
-                        .HasColumnName("description")
                         .HasColumnType("varchar(150) CHARACTER SET utf8mb4")
                         .HasMaxLength(150)
                         .IsUnicode(false);
 
                     b.HasKey("Id");
 
-                    b.ToTable("grade");
+                    b.ToTable("Grade");
                 });
 
             modelBuilder.Entity("Ems.Data.Models.Position", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnName("id")
+                    b.Property<uint>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int(10) unsigned");
+
+                    b.Property<int>("CostRate")
+                        .HasColumnType("int(11)");
+
+                    b.Property<string>("Title")
                         .HasColumnType("varchar(50) CHARACTER SET utf8mb4")
                         .HasMaxLength(50)
                         .IsUnicode(false);
 
-                    b.Property<int>("CostRate")
-                        .HasColumnName("cost_rate")
-                        .HasColumnType("int(11)");
-
                     b.HasKey("Id");
 
-                    b.ToTable("position");
+                    b.ToTable("Position");
                 });
 
             modelBuilder.Entity("Ems.Data.Models.Employee", b =>

@@ -26,13 +26,13 @@ const Positions = function (props: IPositionsPageProps) {
   }, [match.params.startIndex, match.params.rowsPerPage]);
 
   const columns: IColumn[] = [
-    {title: "Id", format: (item) => item.id},
+    {title: "Title", format: (item) => item.title},
     {title: "Cost rate", format: (item) => item.costRate},
   ];
   return (
     <RichTable title={"Positions"} columns={columns} items={items} onEditRow={handleEditRow}
                actions={[<Button component={Link} to={{pathname: "/positions/0"}} color="primary" variant="outlined">
-                 Add Grade
+                 Add Position
                </Button>]}/>
   );
 

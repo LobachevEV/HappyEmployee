@@ -6,7 +6,8 @@ import configureStore from './store/configureStore';
 import App from './App';
 import registerServiceWorker from './registerServiceWorker';
 import {Router} from "react-router";
-import NavMenu from "./components/core/NavMenu";
+import MomentUtils from "@date-io/moment";
+import {MuiPickersUtilsProvider} from "@material-ui/pickers";
 
 declare global {
   interface Window {
@@ -27,9 +28,11 @@ const rootElement = document.getElementById('root');
 
 ReactDOM.render(
   <Provider store={store}>
-    <Router history={history}>
-      <App/>      
-    </Router>
+    <MuiPickersUtilsProvider utils={MomentUtils}>
+      <Router history={history}>
+        <App/>
+      </Router>
+    </MuiPickersUtilsProvider>
   </Provider>,
   rootElement);
 

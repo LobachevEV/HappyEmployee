@@ -26,7 +26,7 @@ namespace Ems.Web.Controllers
             var id = objectType.GetProperty("Id")?.GetValue(entity);
             var result = id == null || (uint) id == 0 ? await _context.AddAsync(entity) : _context.Update(entity);
             await _context.SaveChangesAsync();
-            return result.Entity;
+            return result?.Entity;
         }
 
         [HttpGet("[action]")]

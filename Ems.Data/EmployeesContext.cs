@@ -11,12 +11,13 @@ namespace Ems.Data
     {
         public EmployeesContext CreateDbContext(string[] args)
         {
-            var configuration = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile(@Directory.GetCurrentDirectory() + "/../Ems.Web/appsettings.Development.json")
-                .AddJsonFile(@Directory.GetCurrentDirectory() + "/../Ems.Web/appsettings.json")
+            var currentDirectory = Directory.GetCurrentDirectory();
+            var configuration = new ConfigurationBuilder().SetBasePath(currentDirectory)
+                .AddJsonFile($"{currentDirectory}/../Ems.Web/appsettings.Development.json")
+                .AddJsonFile($"{currentDirectory}/../Ems.Web/appsettings.json")
                 .Build();
-            var builder = new DbContextOptionsBuilder<EmployeesContext>();
             var connectionString = configuration.GetConnectionString("EmsDb");
+            var builder = new DbContextOptionsBuilder<EmployeesContext>();
             builder.UseMySql(connectionString);
             return new EmployeesContext(builder.Options);
         }
@@ -47,37 +48,32 @@ namespace Ems.Data
 
             modelBuilder.Entity<Employee>(entity =>
             {
-                entity.ToTable("employee", null);
+                entity.HasIndex(e => e.GradeId);
 
-                entity.HasIndex(e => e.GradeId)
-                    .HasName("grade_id");
-
-                entity.HasIndex(e => e.PositionId)
-                    .HasName("position_id");
+                entity.HasIndex(e => e.PositionId);
 
                 entity.Property(e => e.Id)
-                    .HasColumnName("id")
                     .HasColumnType("int(10) unsigned")
                     .ValueGeneratedOnAdd();
 
                 entity.Property(e => e.GradeId)
-                    .HasColumnName("grade_id")
                     .HasColumnType("int(10) unsigned");
 
                 entity.Property(e => e.Name)
-                    .HasColumnName("name")
                     .HasMaxLength(150)
                     .IsUnicode(false);
 
                 entity.Property(e => e.PersonalCostMultiplier)
-                    .HasColumnName("personal_cost_multiplier")
                     .HasColumnType("decimal(5,3)")
                     .HasDefaultValueSql("1.000");
 
                 entity.Property(e => e.PositionId)
                     .IsRequired()
-                    .HasColumnName("position_id")
                     .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.EmploymentDate)
+                    .IsRequired()
                     .IsUnicode(false);
 
                 entity.HasOne(d => d.Grade)
@@ -95,34 +91,30 @@ namespace Ems.Data
 
             modelBuilder.Entity<Grade>(entity =>
             {
-                entity.ToTable("grade", null);
-
                 entity.Property(e => e.Id)
-                    .HasColumnName("id")
-                    .HasColumnType("int(10) unsigned");
+                    .HasColumnType("int(10) unsigned").
+                    ValueGeneratedOnAdd();
 
                 entity.Property(e => e.CostMultiplier)
-                    .HasColumnName("cost_multiplier")
                     .HasColumnType("decimal(5,2)");
 
                 entity.Property(e => e.Description)
-                    .HasColumnName("description")
                     .HasMaxLength(150)
                     .IsUnicode(false);
             });
 
             modelBuilder.Entity<Position>(entity =>
             {
-                entity.ToTable("position", null);
-
                 entity.Property(e => e.Id)
-                    .HasColumnName("id")
+                    .HasColumnType("int(10) unsigned")
+                    .ValueGeneratedOnAdd();
+
+                entity.Property(e => e.Title)
                     .HasMaxLength(50)
                     .IsUnicode(false)
                     .ValueGeneratedNever();
 
                 entity.Property(e => e.CostRate)
-                    .HasColumnName("cost_rate")
                     .HasColumnType("int(11)");
             });
         }

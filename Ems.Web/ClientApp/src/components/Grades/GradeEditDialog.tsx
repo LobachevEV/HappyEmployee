@@ -3,6 +3,7 @@ import {Grid, TextField} from "@material-ui/core";
 import createEditDialog, {IChildComponentProps} from "../core/EditFormDialog";
 import {actionCreators} from "../../store/Grades";
 import {IGrade} from "../../Model/Api";
+import {useDispatch} from "react-redux";
 
 interface IGradeEditDialog extends IChildComponentProps {
 
@@ -26,14 +27,15 @@ const ChildComp: FunctionComponent<IGradeEditDialog> = (props) => {
 };
 
 const GradeEditDialog: FunctionComponent = () => {
+  const dispatch = useDispatch();
   const EditDialog = createEditDialog({
     ChildComponent: ChildComp,
-    save: actionCreators.saveGrade,
+    save: entity => dispatch(actionCreators.saveGrade(entity)),
     getById: (state, id) => state.grades.items.find((e: IGrade) => e.id === id),
     entityName: "Grade",
     getTitle: entity => entity?.Id
   });
-  return <EditDialog />
+  return <EditDialog/>
 };
 
 

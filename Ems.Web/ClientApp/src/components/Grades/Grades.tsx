@@ -30,7 +30,6 @@ const Grades = function (props: IGradesPageProps) {
 
   const columns: IColumn[] = [
     {title: "Description", format: (item) => item.description},
-    {title: "Id", format: (item) => item.id},
     {title: "Cost multiplier", format: (item) => item.costMultiplier},
   ];
   return (    

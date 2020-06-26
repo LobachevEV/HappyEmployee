@@ -3,7 +3,7 @@ import Button from '@material-ui/core/Button';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import {ButtonGroup, createStyles, Dialog, makeStyles, Paper, PropTypes, Theme, Zoom} from "@material-ui/core";
+import {ButtonGroup, createStyles, Dialog, makeStyles, Paper, PropTypes, Theme} from "@material-ui/core";
 import {useHistory} from "react-router";
 
 interface IDialogAction {

@@ -5,7 +5,8 @@ namespace Ems.Data.Models
 {
     public partial class Position
     {
-        public string Id { get; set; }
+        public uint Id { get; set; }
+        public string Title { get; set; }
         public int CostRate { get; set; }
 
         [JsonIgnore]
