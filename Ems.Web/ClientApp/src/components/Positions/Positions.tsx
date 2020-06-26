@@ -2,7 +2,7 @@ import React, {useEffect} from "react";
 import {bindActionCreators} from "redux";
 import {connect} from "react-redux";
 import {actionCreators} from "../../store/Positions";
-import {Button, Grid, Typography} from "@material-ui/core";
+import {Button} from "@material-ui/core";
 import RichTable, {IColumn} from "../core/RichTable";
 import {Link} from "react-router-dom";
 import {IEmployee} from "../../Model/Api";
@@ -30,15 +30,10 @@ const Positions = function (props: IPositionsPageProps) {
     {title: "Cost rate", format: (item) => item.costRate},
   ];
   return (
-    <div>
-      <Typography variant={"h4"}>Positions</Typography>
-      <Grid item xs={12}>
-        <RichTable columns={columns} items={items} onEditRow={handleEditRow}
-                   actions={[<Button color="primary" variant="outlined">
-                     <Link to={{pathname: "/positions/0"}}>Add Grade</Link>
-                   </Button>]}/>        
-      </Grid>
-    </div>
+    <RichTable title={"Positions"} columns={columns} items={items} onEditRow={handleEditRow}
+               actions={[<Button component={Link} to={{pathname: "/positions/0"}} color="primary" variant="outlined">
+                 Add Grade
+               </Button>]}/>
   );
 
   function handleEditRow(item: any) {

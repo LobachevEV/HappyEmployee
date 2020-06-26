@@ -1,9 +1,9 @@
 import {createStyles, FormControl, InputLabel, makeStyles, MenuItem, SelectProps, Theme} from "@material-ui/core";
-import React from "react";
+import React, {useEffect, useRef} from "react";
 import Select from "@material-ui/core/Select";
 
 export interface ISelectValue{
-  value:any;
+  value:any | undefined;
   label?:string
 }
 
@@ -27,9 +27,9 @@ const useStyles = makeStyles((theme: Theme) =>
 const SelectCmp = (props: IProps) => {
   const classes = useStyles();
   
-  const inputLabel = React.useRef<HTMLLabelElement>(null);
+  const inputLabel = useRef<HTMLLabelElement>(null);
   const [labelWidth, setLabelWidth] = React.useState(0);
-  React.useEffect(() => {
+  useEffect(() => {
     setLabelWidth(inputLabel.current!.offsetWidth);
   }, []);
   

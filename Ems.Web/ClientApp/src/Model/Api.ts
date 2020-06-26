@@ -7,6 +7,7 @@ export interface IEmployee extends WithId<number>{
   gradeId: number,
   positionId: number,
   personalCostMultiplier: number,
+  employmentDate: Date,
 }
 
 export interface IGrade extends WithId<number>{  

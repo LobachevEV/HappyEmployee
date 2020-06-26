@@ -25,7 +25,7 @@ const ChildComp: FunctionComponent<IGradeEditDialog> = (props) => {
   </Grid>;
 };
 
-const GradeEditDialog: FunctionComponent<{ match: any }> = ({ match}) => {
+const GradeEditDialog: FunctionComponent = () => {
   const EditDialog = createEditDialog({
     ChildComponent: ChildComp,
     save: actionCreators.saveGrade,
@@ -33,7 +33,7 @@ const GradeEditDialog: FunctionComponent<{ match: any }> = ({ match}) => {
     entityName: "Grade",
     getTitle: entity => entity?.Id
   });
-  return <EditDialog match={match}/>
+  return <EditDialog />
 };
 
 

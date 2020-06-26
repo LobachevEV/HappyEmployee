@@ -25,7 +25,7 @@ const ChildComp: FunctionComponent<IPositionEditDialog> = (props) => {
   </Grid>;
 };
 
-const PositionEditDialog: FunctionComponent<{ match: any }> = ({match}) => {
+const PositionEditDialog: FunctionComponent = () => {
   const EditDialog = createEditDialog({
     ChildComponent: ChildComp,
     save: actionCreators.savePosition,
@@ -36,7 +36,7 @@ const PositionEditDialog: FunctionComponent<{ match: any }> = ({match}) => {
     entityName: "Position",
     getTitle: entity => entity?.Id
   });
-  return <EditDialog match={match}/>
+  return <EditDialog />
 };
 
 export default PositionEditDialog;

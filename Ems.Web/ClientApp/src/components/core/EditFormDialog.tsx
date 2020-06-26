@@ -1,10 +1,9 @@
 import React, {FunctionComponent, useEffect, useReducer} from "react";
 import FormDialog from "../core/FormDialog";
 import {useStore} from "react-redux";
-import {useLocation} from "react-router";
+import {useLocation, useParams} from "react-router";
 
 interface IEditDialogProps {
-  match: any,
 }
 
 export interface IChildComponentProps {
@@ -16,9 +15,9 @@ export interface IChildComponentProps {
 interface IEditDialogConfigs {
   ChildComponent: FunctionComponent<IChildComponentProps>,
   entityName: string,
-  getTitle: (entity: any) => string,  
+  getTitle: (entity: any) => string,
   getById: (state: any, id: any) => any,
-  save: (entity: any) => void, 
+  save: (entity: any) => void
 }
 
 const createEditDialog = (cfg: IEditDialogConfigs) => (props: IEditDialogProps) => {
@@ -37,11 +36,13 @@ const createEditDialog = (cfg: IEditDialogConfigs) => (props: IEditDialogProps) 
     },
     {} as any);
 
+  const {id} = useParams();
   const store = useStore();
   useEffect(() => {
-    const entity = getById(store.getState(), props.match.params.id);
-    dispatchLocal({type: "SET_ENTITY", value: entity})
-  }, [props.match.params.id]);
+    console.log("set entity: " + id);
+    const entity = getById(store.getState(), id);
+    dispatchLocal({type: "SET_ENTITY", value: entity});
+  }, [id]);
 
   const handleChange = (event: any) => {
     const target = event.target;
@@ -53,7 +54,7 @@ const createEditDialog = (cfg: IEditDialogConfigs) => (props: IEditDialogProps) 
 
   const onSave = () => save(entity);
 
-  const regex = new RegExp("(\\/" + props.match.params.id + ")$");
+  const regex = new RegExp("(\\/" + id + ")$");
   const parentLink = useLocation().pathname.replace(regex, '');
   return <FormDialog {...props}
                      parentLink={parentLink}
@@ -61,7 +62,7 @@ const createEditDialog = (cfg: IEditDialogConfigs) => (props: IEditDialogProps) 
                      buttonCaption={`Add ${entityName}`}
                      actions={[{label: "Cancel", color: "secondary"}, {label: "Save", action: onSave}]}>
     <React.Fragment>
-      <ChildComponent entityId={props.match.params.id} entity={entity} handleChange={handleChange}/>
+      <ChildComponent entityId={id} entity={entity} handleChange={handleChange}/>
     </React.Fragment>
   </FormDialog>
 };

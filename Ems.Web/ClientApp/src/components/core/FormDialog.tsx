@@ -3,9 +3,7 @@ import Button from '@material-ui/core/Button';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import {ButtonGroup, createStyles, makeStyles, Paper, PropTypes, Theme} from "@material-ui/core";
-import Grid from "@material-ui/core/Grid";
-import {History, LocationState} from "history";
+import {ButtonGroup, createStyles, Dialog, makeStyles, Paper, PropTypes, Theme, Zoom} from "@material-ui/core";
 import {useHistory} from "react-router";
 
 interface IDialogAction {
@@ -26,7 +24,7 @@ export interface IDialogProps {
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
-      height:"100%"
+      height: "100%"
     },
   })
 );
@@ -34,32 +32,32 @@ const useStyles = makeStyles((theme: Theme) =>
 const FormDialog = (props: IDialogProps) => {
   const {title, children, actions, parentLink} = props;
   const classes = useStyles();
-  const history =useHistory();
+  const history = useHistory();
   return (
-    <Grid item xs={4}>
-      <Paper className={classes.root}>
-        <DialogTitle id="form-dialog-title">{title}</DialogTitle>
-        <DialogContent>
-          {children}
-        </DialogContent>
-        <DialogActions>
-          <ButtonGroup>
-            {actions && actions.length > 0 && actions.map(action => {
-              const handleAction = async () => {
-                console.log("handleAction: " + action.action);
-                await action.action?.();
-                console.log("parentLink: " + parentLink);
-                if (parentLink)
-                  history.replace(parentLink);
-              };
-              return <Button onClick={handleAction} color={action.color || "primary"} variant="outlined">
-                {action.label}
-              </Button>;
-            })}
-          </ButtonGroup>
-        </DialogActions>
-      </Paper>
-    </Grid>
+    <Dialog open={true}>      
+        <Paper className={classes.root}>
+          <DialogTitle id="form-dialog-title">{title}</DialogTitle>
+          <DialogContent>
+            {children}
+          </DialogContent>
+          <DialogActions>
+            <ButtonGroup>
+              {actions && actions.length > 0 && actions.map(action => {
+                const handleAction = async () => {
+                  console.log("handleAction: " + action.action);
+                  await action.action?.();
+                  console.log("parentLink: " + parentLink);
+                  if (parentLink)
+                    history.push(parentLink);
+                };
+                return <Button onClick={handleAction} color={action.color || "primary"} variant="outlined">
+                  {action.label}
+                </Button>;
+              })}
+            </ButtonGroup>
+          </DialogActions>
+        </Paper>
+    </Dialog>
   );
 };
 

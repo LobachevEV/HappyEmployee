@@ -1,4 +1,4 @@
-import React, {FunctionComponent, useEffect} from "react";
+import React, {FunctionComponent} from "react";
 import {Grid, TextField} from "@material-ui/core";
 import createEditDialog, {IChildComponentProps} from "../core/EditFormDialog";
 import SelectCmp from "../core/SelectCmp";
@@ -6,10 +6,9 @@ import {IEmployee} from "../../Model/Api";
 import {useDispatch, useSelector} from "react-redux";
 import {actionCreators as gradesActionCreators} from "../../store/Grades";
 import {actionCreators as positionsActionCreators} from "../../store/Positions";
-import {actionCreators as employeesActionCreators} from "../../store/Employees";
+import {actionCreators} from "../../store/Employees";
 
 interface IEmployeeEditDialog extends IChildComponentProps {
-
 }
 
 const ChildComp: FunctionComponent<IEmployeeEditDialog> = (props) => {
@@ -18,12 +17,6 @@ const ChildComp: FunctionComponent<IEmployeeEditDialog> = (props) => {
   const positions = useSelector((state: any) => state.positions.items);
   const grades = useSelector((state: any) => state.grades.items);
 
-  const dispatch = useDispatch();
-  useEffect(()=>{
-    dispatch(gradesActionCreators.requestGrades());
-    dispatch(positionsActionCreators.requestPositions());
-  }, [props.entityId]);
-  
   return <Grid container spacing={2}>
     <Grid item xs={12}>
       <TextField id="emp_name" name={"name"} label="Employee name" value={employee?.name}
@@ -47,15 +40,18 @@ const ChildComp: FunctionComponent<IEmployeeEditDialog> = (props) => {
   </Grid>;
 };
 
-const EmployeeEditDialog: FunctionComponent<{ match: any }> = ({match}) => {
+const EmployeeEditDialog: FunctionComponent = ({}) => {
+  const dispatch = useDispatch();  
+  dispatch(gradesActionCreators.requestGrades());
+  dispatch(positionsActionCreators.requestPositions());
   const EditDialog = createEditDialog({
     ChildComponent: ChildComp,
-    save: employeesActionCreators.saveEmployee,
+    save: entity => dispatch(actionCreators.saveEmployee(entity)),
     getById: (state, id) => state.employees.items.find((e: IEmployee) => e.id === parseInt(id, 10)),
     entityName: "Employee",
     getTitle: entity => entity?.name
   });
-  return <EditDialog match={match}/>
+  return <EditDialog/>
 };
 
 

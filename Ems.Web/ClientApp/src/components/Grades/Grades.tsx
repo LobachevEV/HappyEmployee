@@ -33,16 +33,11 @@ const Grades = function (props: IGradesPageProps) {
     {title: "Id", format: (item) => item.id},
     {title: "Cost multiplier", format: (item) => item.costMultiplier},
   ];
-  return (
-    <div>
-      <Typography variant={"h4"}>Grades</Typography>
-      <Grid item xs={12}>
-        <RichTable columns={columns} items={items} onEditRow={handleEditRow}
-                   actions={[<Button color="primary" variant="outlined">
-                     <Link to={{pathname: "/grades/0"}}>Add Grade</Link>
+  return (    
+        <RichTable title={"Grades"} columns={columns} items={items} onEditRow={handleEditRow}
+                   actions={[<Button component={Link} to={{pathname: "/grades/0"}} color="primary" variant="outlined">
+                     Add Grade
                    </Button>]}/>        
-      </Grid>
-    </div>
   );
 
   function handleEditRow(item: any) {

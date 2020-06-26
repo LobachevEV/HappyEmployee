@@ -2,7 +2,6 @@ import React, {FunctionComponent, useEffect} from "react";
 import {bindActionCreators} from "redux";
 import {connect} from "react-redux";
 import {Button} from "@material-ui/core";
-import Grid from '@material-ui/core/Grid';
 import {actionCreators} from "../../store/Employees";
 import {Link} from "react-router-dom";
 import {IEmployee} from "../../Model/Api";
@@ -20,13 +19,13 @@ interface IEmployeesPageProps {
 }
 
 const Employees: FunctionComponent<IEmployeesPageProps> = (props: IEmployeesPageProps) => {
-  const {requestEmployees, items, history, match} = props;
+  const {items, history, match} = props;
   const columns: IColumn[] = [
     {title: "Id", format: (item) => item.id},
     {title: "Name", format: (item) => item.name},
     {title: "Grade", format: (item) => item.gradeId},
     {title: "Position", format: (item) => item.positionId},
-    {title: "Personal Cost Mult.", format: (item) => item.personalCostMultiplier},
+    {title: "Personal Cost Mult.", format: (item) => item.personalCostMultiplier}
   ];
 
   useEffect(() => {
@@ -35,13 +34,11 @@ const Employees: FunctionComponent<IEmployeesPageProps> = (props: IEmployeesPage
     props.requestEmployees(startIndex, rowsPerPage);
   }, [match.params.startIndex, match.params.rowsPerPage]);
 
-  return (    
-      <Grid item xs={4}>
-        <RichTable title={"Employees"} columns={columns} items={items} onEditRow={handleEditRow}
-                   actions={[<Button color="primary" variant="outlined">
-                     <Link to={{pathname: "/employees/0"}}>Add Employee</Link>
-                   </Button>]}/>
-      </Grid>    
+  return (
+    <RichTable title={"Employees"} columns={columns} items={items} onEditRow={handleEditRow}
+               actions={[<Button component={Link} to={{pathname: "/employees/0"}} color="primary" variant="outlined">
+                 Add Employee
+               </Button>]}/>
   );
 
   function handleEditRow(item: any) {

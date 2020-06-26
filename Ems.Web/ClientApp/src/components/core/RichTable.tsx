@@ -3,7 +3,6 @@ import {
   createStyles,
   IconButton,
   makeStyles,
-  Paper,
   Table,
   TableBody,
   TableCell,
@@ -16,14 +15,17 @@ import {
 } from "@material-ui/core";
 import DeleteIcon from '@material-ui/icons/Delete';
 import {lighten} from "@material-ui/core/styles";
+import Grid from "@material-ui/core/Grid";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    root: {},
+    root: {
+      height: "100%"
+    },
     margin: {
       margin: theme.spacing(1),
     },
-  }),  
+  }),
 );
 
 export interface IColumn {
@@ -34,7 +36,7 @@ export interface IColumn {
 interface ITableProps {
   title?: string
   columns: IColumn[],
-  items: any[],  
+  items: any[],
   actions?: React.ReactNode[]
   onEditRow?: (item: any) => any
   onDeleteRow?: (item: any) => any
@@ -42,34 +44,38 @@ interface ITableProps {
 
 const RichTable = (props: ITableProps) => {
   const {title, items, columns, actions, onEditRow, onDeleteRow} = props;
-  const classes = useStyles();  
+  const classes = useStyles();
   return (
-    <Paper className={classes.root}>
-      <TableTitle title={title || ""}>
-        {actions}
-      </TableTitle>
-      <Table className='table table-striped'>
-        <TableHead>
-          <TableRow>
-            {columns && columns.map(col => <TableCell>{col.title}</TableCell>)}            
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {items && items.map(item => <TableRow key={item.id} hover >
-              {columns.map(col => <TableCell key={col.title} onClick={()=>onEditRow && onEditRow(item)}>{col.format(item)}</TableCell>)}              
-              {onDeleteRow && <TableCell>
-                  <IconButton aria-label="delete" className={classes.margin} onClick={()=>onDeleteRow(item)}>
-                      <DeleteIcon fontSize="small"/>
-                  </IconButton>
-              </TableCell>}
+    <React.Fragment>
+      <Grid item xs={3}/>
+      <Grid item xs={6}>
+        <TableTitle title={title || ""}>
+          {actions}
+        </TableTitle>
+        <Table className='table table-striped'>
+          <TableHead>
+            <TableRow>
+              {columns && columns.map(col => <TableCell>{col.title}</TableCell>)}
             </TableRow>
-          )}
-        </TableBody>
-        <TableFooter>
-        </TableFooter>
-      </Table>
-    </Paper>
-  ); 
+          </TableHead>
+          <TableBody>
+            {items && items.map(item => <TableRow key={item.id} hover>
+                {columns.map(col => <TableCell key={col.title}
+                                               onClick={() => onEditRow && onEditRow(item)}>{col.format(item)}</TableCell>)}
+                {onDeleteRow && <TableCell>
+                    <IconButton aria-label="delete" className={classes.margin} onClick={() => onDeleteRow(item)}>
+                        <DeleteIcon fontSize="small"/>
+                    </IconButton>
+                </TableCell>}
+              </TableRow>
+            )}
+          </TableBody>
+          <TableFooter>
+          </TableFooter>
+        </Table>
+      </Grid>
+    </React.Fragment>
+  );
 };
 
 const toolbarStyles = makeStyles(theme => ({

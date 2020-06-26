@@ -19,10 +19,14 @@ export const actionCreators = {
   },
 
   saveEmployee: (employee: IEmployee) => async (dispatch: any, getState: any) => {    
+    console.log("Saving employee")
     const url = `api/Save?type=Employee`;
     const headers = new Headers({'Accept': 'application/json', "Content-Type": "application/json"});    
     const response = await fetch(url,{method:"POST", body: JSON.stringify(employee), headers:headers});
     const result = await response.json();
+    const items = getState().employees.items;
+    items.push(result);
+    dispatch({type: addEmployeeType, items});
   },
   editEmployee: (employee: any) => async (dispatch: any, getState: any) => {
     const items = getState().employees.items;
