@@ -35,7 +35,7 @@ const SelectCmp = (props: IProps) => {
   
   const {label, items} = props;
   return <FormControl className={classes.formControl}>
-    <InputLabel ref={inputLabel} id="demo-simple-select-label">{label}</InputLabel>
+    <InputLabel ref={inputLabel} id="simple-select">{label}</InputLabel>
     <Select value={props.value || items[0]?.value} {...props} labelWidth={labelWidth}>
       {items.map(item => <MenuItem key={item.value} value={item.value}>{item.label || item.value}</MenuItem>)}
     </Select>

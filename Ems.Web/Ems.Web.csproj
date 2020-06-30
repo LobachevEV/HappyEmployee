@@ -27,6 +27,7 @@
     <TypeScriptCompile Include="ClientApp\src\components\core\EditFormDialog.tsx" />
     <TypeScriptCompile Include="ClientApp\src\components\core\EmsRichTable.tsx" />
     <TypeScriptCompile Include="ClientApp\src\components\core\FormDialog.tsx" />
+    <TypeScriptCompile Include="ClientApp\src\components\core\HistoricActions.tsx" />
     <TypeScriptCompile Include="ClientApp\src\components\core\NavMenu.tsx" />
     <TypeScriptCompile Include="ClientApp\src\components\core\RichTable.tsx" />
     <TypeScriptCompile Include="ClientApp\src\components\core\SelectCmp.tsx" />

@@ -1,24 +1,15 @@
 import React from 'react';
-import Button from '@material-ui/core/Button';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import {ButtonGroup, createStyles, Dialog, makeStyles, Paper, PropTypes, Theme} from "@material-ui/core";
-import {useHistory} from "react-router";
-
-interface IDialogAction {
-  label: string,
-  color?: PropTypes.Color,
-  action?: () => any,
-}
+import {ButtonGroup, createStyles, Dialog, makeStyles, Paper, Theme} from "@material-ui/core";
 
 export interface IDialogProps {
   title: string,
-  buttonCaption: string,
-  parentLink?: string,
+  buttonCaption: string,  
   onClose?: () => void
   children?: React.ReactNode,
-  actions?: IDialogAction[]
+  actions?: React.ReactNode[]
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -30,9 +21,8 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 const FormDialog = (props: IDialogProps) => {
-  const {title, children, actions, parentLink} = props;
+  const {title, children, actions} = props;
   const classes = useStyles();
-  const history = useHistory();
   return (
     <Dialog open={true}>      
         <Paper className={classes.root}>
@@ -42,18 +32,7 @@ const FormDialog = (props: IDialogProps) => {
           </DialogContent>
           <DialogActions>
             <ButtonGroup>
-              {actions && actions.length > 0 && actions.map(action => {
-                const handleAction = async () => {
-                  console.log("handleAction: " + action.action);
-                  await action.action?.();
-                  console.log("parentLink: " + parentLink);
-                  if (parentLink)
-                    history.push(parentLink);
-                };
-                return <Button onClick={handleAction} color={action.color || "primary"} variant="outlined">
-                  {action.label}
-                </Button>;
-              })}
+              {actions}
             </ButtonGroup>
           </DialogActions>
         </Paper>

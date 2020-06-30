@@ -21,7 +21,7 @@ interface IEmployeesPageProps {
 }
 
 const Employees: FunctionComponent<IEmployeesPageProps> = (props: IEmployeesPageProps) => {
-  const {items, history} = props;
+  const {requestEmployees, items, history} = props;
   const {startIndex, rowsPerPage} = useParams();
 
   const dispatch = useDispatch();
@@ -32,7 +32,7 @@ const Employees: FunctionComponent<IEmployeesPageProps> = (props: IEmployeesPage
   useEffect(() => {
     const startIndexInt = startIndex && parseInt(startIndex, 10) || 0;
     const rowsPerPageInt = rowsPerPage && parseInt(rowsPerPage, 10) || 5;
-    props.requestEmployees(startIndexInt, rowsPerPageInt);
+    requestEmployees(startIndexInt, rowsPerPageInt);
   }, [startIndex, rowsPerPage]);
 
   const positions = useSelector((state: any) => state.positions.items).reduce((map: Map<number, string>, p: IPosition) => {

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {forwardRef, useMemo} from 'react';
 import clsx from 'clsx';
 import {AppBar, createStyles, makeStyles, Theme, Toolbar, Tooltip, Typography, useTheme} from "@material-ui/core";
 import ListItemText from "@material-ui/core/ListItemText";
@@ -83,9 +83,9 @@ interface ListItemLinkProps extends LinkProps {
 const ListItemLink = (props: ListItemLinkProps) => {
   const {icon, primary, to} = props;
 
-  const renderLink = React.useMemo(
+  const renderLink = useMemo(
     () =>
-      React.forwardRef<any, Omit<LinkProps, 'to'>>((itemProps, ref) => (
+      forwardRef<any, Omit<LinkProps, 'to'>>((itemProps, ref) => (
         <Link to={to} ref={ref} {...itemProps} />
       )),
     [to],

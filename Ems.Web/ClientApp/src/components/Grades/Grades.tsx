@@ -2,11 +2,10 @@ import React, {useEffect} from "react";
 import {bindActionCreators} from "redux";
 import {connect} from "react-redux";
 import {actionCreators} from "../../store/Grades";
-import {Button, Grid, Typography} from "@material-ui/core";
+import {Button} from "@material-ui/core";
 import RichTable, {IColumn} from "../core/RichTable";
-import {Link} from "react-router-dom";
+import {Link, useParams} from "react-router-dom";
 import {IEmployee} from "../../Model/Api";
-import EmsRichTable from "../core/EmsRichTable";
 
 interface IGradesPageProps {
   items: Array<IEmployee>,
@@ -15,18 +14,17 @@ interface IGradesPageProps {
   rowsPerPage: number,
   requestGrades: (startIndex: number, rowsPerPage: number) => IEmployee[],
   history: any,
-  match: any,
 }
 
 const Grades = function (props: IGradesPageProps) {
-  const {requestGrades, items, history, match, ...tableProps} = props;
-
+  const {requestGrades, items, history} = props;
+  const {startIndex, rowsPerPage} = useParams();
 
   useEffect(() => {
-    const startIndex = parseInt(match.params.startIndex, 10) || 0;
-    const rowsPerPage = parseInt(match.params.rowsPerPage, 10) || 5;
-    props.requestGrades(startIndex, rowsPerPage);
-  }, [match.params.startIndex, match.params.rowsPerPage]);
+    const startIndexInt = startIndex && parseInt(startIndex, 10) || 0;
+    const rowsPerPageInt = rowsPerPage && parseInt(rowsPerPage, 10) || 5;
+    requestGrades(startIndexInt, rowsPerPageInt);
+  }, [startIndex, rowsPerPage]);
 
   const columns: IColumn[] = [
     {title: "Description", format: (item) => item.description},

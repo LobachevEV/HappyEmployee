@@ -4,26 +4,24 @@ import {connect} from "react-redux";
 import {actionCreators} from "../../store/Positions";
 import {Button} from "@material-ui/core";
 import RichTable, {IColumn} from "../core/RichTable";
-import {Link} from "react-router-dom";
+import {Link, useParams} from "react-router-dom";
 import {IEmployee} from "../../Model/Api";
 
 interface IPositionsPageProps {
   items: Array<IEmployee>,
   total: number,
-  startIndex: number,
-  rowsPerPage: number,
   requestPositions: (startIndex: number, rowsPerPage: number) => IEmployee[],
   history: any,
-  match: any,
 }
 
 const Positions = function (props: IPositionsPageProps) {
-  const {requestPositions, items, match, history} = props;
+  const {requestPositions, items, history} = props;
+  const {startIndex, rowsPerPage} = useParams();
   useEffect(() => {
-    const startIndex = parseInt(match.params.startIndex, 10) || 0;
-    const rowsPerPage = parseInt(match.params.rowsPerPage, 10) || 5;
-    requestPositions(startIndex, rowsPerPage);
-  }, [match.params.startIndex, match.params.rowsPerPage]);
+    const startIndexInt = startIndex && parseInt(startIndex, 10) || 0;
+    const rowsPerPageInt = rowsPerPage && parseInt(rowsPerPage, 10) || 5;
+    requestPositions(startIndexInt, rowsPerPageInt);
+  }, [startIndex, rowsPerPage]);
 
   const columns: IColumn[] = [
     {title: "Title", format: (item) => item.title},

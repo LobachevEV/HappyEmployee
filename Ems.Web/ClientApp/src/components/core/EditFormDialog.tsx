@@ -2,6 +2,7 @@ import React, {FunctionComponent, useEffect, useReducer} from "react";
 import FormDialog from "../core/FormDialog";
 import {useStore} from "react-redux";
 import {useLocation, useParams} from "react-router";
+import {CancelButton, SaveButton} from "./HistoricActions";
 
 interface IEditDialogProps {
 }
@@ -55,11 +56,10 @@ const createEditDialog = (cfg: IEditDialogConfigs) => (props: IEditDialogProps) 
 
   const regex = new RegExp("(\\/" + id + ")$");
   const parentLink = useLocation().pathname.replace(regex, '');
-  return <FormDialog {...props}
-                     parentLink={parentLink}
+  return <FormDialog {...props}                     
                      title={getTitle(entity) ?? `New ${entityName}`}
                      buttonCaption={`Add ${entityName}`}
-                     actions={[{label: "Cancel", color: "secondary"}, {label: "Save", action: onSave}]}>
+                     actions={[<CancelButton color={"secondary"} to={parentLink}/>, <SaveButton color={"primary"} to={parentLink} invoke={onSave}/>]}>
     <React.Fragment>
       <ChildComponent entityId={id} entity={entity} handleChange={handleChange}/>
     </React.Fragment>
