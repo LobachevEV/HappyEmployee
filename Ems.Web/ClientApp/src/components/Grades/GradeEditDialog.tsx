@@ -5,12 +5,12 @@ import {actionCreators} from "../../store/Grades";
 import {IGrade} from "../../Model/Api";
 import {useDispatch} from "react-redux";
 
-interface IGradeEditDialog extends IChildComponentProps {
+interface IGradeEditDialog extends IChildComponentProps<IGrade> {
 
 }
 
 const ChildComp: FunctionComponent<IGradeEditDialog> = (props) => {
-  const grade = props.entity as IGrade;
+  const grade = props.entity;
   const handleChange = props.handleChange;
 
   return <Grid container spacing={2}>
@@ -33,7 +33,7 @@ const GradeEditDialog: FunctionComponent = () => {
     save: entity => dispatch(actionCreators.saveGrade(entity)),
     getById: (state, id) => state.grades.items.find((e: IGrade) => e.id === id),
     entityName: "Grade",
-    getTitle: entity => entity?.Id
+    getTitle: entity => entity?.description
   });
   return <EditDialog/>
 };

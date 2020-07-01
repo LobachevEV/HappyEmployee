@@ -3,14 +3,16 @@ using System;
 using Ems.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Ems.Data.Migrations
 {
     [DbContext(typeof(EmployeesContext))]
-    partial class EmployeesContextModelSnapshot : ModelSnapshot
+    [Migration("20200701140003_Employee_AddCol_Availdability")]
+    partial class Employee_AddCol_Availdability
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

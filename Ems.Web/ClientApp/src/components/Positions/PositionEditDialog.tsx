@@ -6,12 +6,12 @@ import {IPosition} from "../../Model/Api";
 import {useDispatch} from "react-redux";
 
 
-interface IPositionEditDialog extends IChildComponentProps {
+interface IPositionEditDialog extends IChildComponentProps<IPosition> {
 
 }
 
 const ChildComp: FunctionComponent<IPositionEditDialog> = (props) => {
-  const position = props.entity as IPosition;
+  const position = props.entity;
   const handleChange = props.handleChange;
   
   return <Grid container spacing={2}>
@@ -32,7 +32,7 @@ const PositionEditDialog: FunctionComponent = () => {
     save: entity => dispatch(actionCreators.savePosition(entity)),
     getById: (state, id) => state.positions.items.find((e: IPosition) => e.id === id),
     entityName: "Position",
-    getTitle: entity => entity?.Id
+    getTitle: entity => entity?.title
   });
   return <EditDialog/>
 };

@@ -8,6 +8,7 @@ export interface IEmployee extends IWithId<number>{
   positionId: number,
   personalCostMultiplier: number,
   employmentDate: Date,
+  availability: EmployeeAvailability
 }
 
 export interface IGrade extends IWithId<number>{  
@@ -21,8 +22,8 @@ export interface IPosition extends IWithId<number>{
 }
 
 export enum EmployeeAvailability  {
-  EmployedDayInFuture,
-  Available,
-  SickLeave,
-  Vacation
+  willStartWorkSoon,
+  available,
+  sickLeave,
+  vacation
 }
