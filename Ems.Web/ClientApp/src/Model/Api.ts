@@ -19,3 +19,10 @@ export interface IPosition extends IWithId<number>{
   title:string,
   costRate:number
 }
+
+export enum EmployeeAvailability  {
+  EmployedDayInFuture,
+  Available,
+  SickLeave,
+  Vacation
+}

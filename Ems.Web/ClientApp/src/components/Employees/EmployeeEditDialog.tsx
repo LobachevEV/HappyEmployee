@@ -1,5 +1,5 @@
 import React, {FunctionComponent, useEffect} from "react";
-import {Grid, TextField} from "@material-ui/core";
+import {createStyles, Grid, makeStyles, TextField, Theme} from "@material-ui/core";
 import createEditDialog, {IChildComponentProps} from "../core/EditFormDialog";
 import SelectCmp from "../core/SelectCmp";
 import {IEmployee} from "../../Model/Api";
@@ -9,6 +9,18 @@ import {actionCreators as positionsActionCreators} from "../../store/Positions";
 import {actionCreators} from "../../store/Employees";
 import {DatePicker} from "@material-ui/pickers";
 import {MaterialUiPickersDate} from "@material-ui/pickers/typings/date";
+import Avatar from "@material-ui/core/Avatar";
+import AssignmentIcon from '@material-ui/icons/Assignment';
+
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({    
+    largeAvatar: {
+      width: theme.spacing(14),
+      height: theme.spacing(14),
+    },
+  }),
+);
+
 
 interface IEmployeeEditDialog extends IChildComponentProps {
 }
@@ -30,11 +42,18 @@ const ChildComp: FunctionComponent<IEmployeeEditDialog> = (props) => {
     employee.personalCostMultiplier || handleChange({target: {name: "personalCostMultiplier", value: 1}});
   })
 
-
+  const classes = useStyles();  
   return <Grid container spacing={2}>
-    <Grid item xs={12}>
-      <TextField id="emp_name" name={"name"} label="Employee name" value={employee.name}
-                 onChange={handleChange}/>
+    <Grid item container xs={12}>
+      <Grid item xs={3}>
+        <Avatar variant="rounded" className={classes.largeAvatar}>
+          <AssignmentIcon/>
+        </Avatar>
+      </Grid>
+      <Grid item xs={9}>
+        <TextField id="emp_name" name={"name"} label="Employee name" value={employee.name}
+                   onChange={handleChange}/>
+      </Grid>
     </Grid>
     <Grid item xs={6}>
       <SelectCmp id={"position_id"} name={"positionId"} label="Position" onChange={handleChange}
