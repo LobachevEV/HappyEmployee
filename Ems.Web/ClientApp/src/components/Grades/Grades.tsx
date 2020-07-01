@@ -5,19 +5,22 @@ import {actionCreators} from "../../store/Grades";
 import {Button} from "@material-ui/core";
 import RichTable, {IColumn} from "../core/RichTable";
 import {Link, useParams} from "react-router-dom";
-import {IEmployee} from "../../Model/Api";
+import {IEmployee, IGrade} from "../../Model/Api";
 
 interface IGradesPageProps {
   items: Array<IEmployee>,
   total: number,
   startIndex: number,
   rowsPerPage: number,
-  requestGrades: (startIndex: number, rowsPerPage: number) => IEmployee[],
   history: any,
+
+  requestGrades(startIndex: number, rowsPerPage: number): IEmployee[],
+
+  removeGrade(id: number): void
 }
 
 const Grades = function (props: IGradesPageProps) {
-  const {requestGrades, items, history} = props;
+  const {requestGrades, items, history, removeGrade} = props;
   const {startIndex, rowsPerPage} = useParams();
 
   useEffect(() => {
@@ -30,11 +33,13 @@ const Grades = function (props: IGradesPageProps) {
     {title: "Description", format: (item) => item.description},
     {title: "Cost multiplier", format: (item) => item.costMultiplier},
   ];
-  return (    
-        <RichTable title={"Grades"} columns={columns} items={items} onEditRow={handleEditRow}
-                   actions={[<Button component={Link} to={{pathname: "/grades/0"}} color="primary" variant="outlined">
-                     Add Grade
-                   </Button>]}/>        
+  return (
+    <RichTable title={"Grades"} columns={columns} items={items} onEditRow={handleEditRow}
+               onDeleteRow={item => removeGrade(item.id)}
+               deleteConfirmationMessage={(grade: IGrade) => `Confirm deleting the Grade ${grade.description}`}
+               actions={[<Button component={Link} to={{pathname: "/grades/0"}} color="primary" variant="outlined">
+                 Add Grade
+               </Button>]}/>
   );
 
   function handleEditRow(item: any) {

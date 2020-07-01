@@ -5,17 +5,20 @@ import {actionCreators} from "../../store/Positions";
 import {Button} from "@material-ui/core";
 import RichTable, {IColumn} from "../core/RichTable";
 import {Link, useParams} from "react-router-dom";
-import {IEmployee} from "../../Model/Api";
+import {IEmployee, IPosition} from "../../Model/Api";
 
 interface IPositionsPageProps {
   items: Array<IEmployee>,
   total: number,
-  requestPositions: (startIndex: number, rowsPerPage: number) => IEmployee[],
   history: any,
+
+  requestPositions(startIndex: number, rowsPerPage: number): IEmployee[],
+
+  removePosition(id: number): void
 }
 
 const Positions = function (props: IPositionsPageProps) {
-  const {requestPositions, items, history} = props;
+  const {requestPositions, items, history, removePosition} = props;
   const {startIndex, rowsPerPage} = useParams();
   useEffect(() => {
     const startIndexInt = startIndex && parseInt(startIndex, 10) || 0;
@@ -29,6 +32,8 @@ const Positions = function (props: IPositionsPageProps) {
   ];
   return (
     <RichTable title={"Positions"} columns={columns} items={items} onEditRow={handleEditRow}
+               onDeleteRow={item => removePosition(item.id)}
+               deleteConfirmationMessage={(position: IPosition) => `Confirm deleting the Position ${position.title}`}
                actions={[<Button component={Link} to={{pathname: "/positions/0"}} color="primary" variant="outlined">
                  Add Position
                </Button>]}/>

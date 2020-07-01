@@ -16,15 +16,19 @@ import {
 import DeleteIcon from '@material-ui/icons/Delete';
 import {lighten} from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
+import {confirmAlert} from 'react-confirm-alert';
+import ConfirmationDialog from "./ConfirmationDialog";
+import {IWithId} from "../../Model/Api";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       height: "100%"
     },
-    margin: {
-      margin: theme.spacing(1),
-    },
+    deleteButton: {
+      margin: 0,
+      padding: 0
+    }
   }),
 );
 
@@ -36,15 +40,29 @@ export interface IColumn {
 interface ITableProps {
   title?: string
   columns: IColumn[],
-  items: any[],
+  items: IWithId<any>[],
   actions?: React.ReactNode[]
-  onEditRow?: (item: any) => any
-  onDeleteRow?: (item: any) => any
+
+  onEditRow?(item: any): any
+
+  onDeleteRow?(item: any): any
+
+  deleteConfirmationMessage?(entity: IWithId<any>): string
 }
 
 const RichTable = (props: ITableProps) => {
-  const {title, items, columns, actions, onEditRow, onDeleteRow} = props;
+  const {title, items, columns, actions, onEditRow, onDeleteRow, deleteConfirmationMessage} = props;
   const classes = useStyles();
+  const tableColumns = !!onDeleteRow ? [...columns, {
+    title: "Action", format: () => {
+    }
+  }] : [...columns];
+  const submit = (entity: IWithId<any>) => {
+    confirmAlert({
+      customUI: ({onClose}) => <ConfirmationDialog onClose={onClose} onSubmit={() => onDeleteRow?.(entity)}
+                                                   message={deleteConfirmationMessage ? deleteConfirmationMessage(entity) : `Do you want to delete${entity.id}`}/>
+    });
+  };
   return (
     <React.Fragment>
       <Grid item xs={3}/>
@@ -55,7 +73,7 @@ const RichTable = (props: ITableProps) => {
         <Table className='table table-striped'>
           <TableHead>
             <TableRow>
-              {columns && columns.map(col => <TableCell>{col.title}</TableCell>)}
+              {tableColumns && tableColumns.map(col => <TableCell>{col.title}</TableCell>)}
             </TableRow>
           </TableHead>
           <TableBody>
@@ -63,7 +81,7 @@ const RichTable = (props: ITableProps) => {
                 {columns.map(col => <TableCell key={col.title}
                                                onClick={() => onEditRow && onEditRow(item)}>{col.format(item)}</TableCell>)}
                 {onDeleteRow && <TableCell>
-                    <IconButton aria-label="delete" className={classes.margin} onClick={() => onDeleteRow(item)}>
+                    <IconButton aria-label="delete" className={classes.deleteButton} onClick={() => submit(item)}>
                         <DeleteIcon fontSize="small"/>
                     </IconButton>
                 </TableCell>}

@@ -10,8 +10,6 @@ import Grid from "@material-ui/core/Grid";
 import MenuBar from "./components/core/NavMenu";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import {createStyles, makeStyles, Theme} from "@material-ui/core";
-import {MuiPickersUtilsProvider} from "@material-ui/pickers";
-import MomentUtils from '@date-io/moment';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({

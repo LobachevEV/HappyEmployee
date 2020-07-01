@@ -3,7 +3,6 @@ import {IPosition} from "../Model/Api";
 const requestPositionsType = "REQUEST_POSITIONS";
 const receivePositionsType = "RECEIVE_POSITIONS";
 const addPositionType = "ADD_POSITION";
-const editPositionType = "EDIT_POSITION";
 const removePositionType = "REMOVE_POSITION";
 const initialState = {items: [],total:0, isLoading: false};
 
@@ -27,43 +26,43 @@ export const actionCreators = {
     items.push(result);
     dispatch({type: addPositionType, items});
   },
-  editPosition: (position: any) => async (dispatch: any, getState: any) => {
-    const items = getState().positions.items;
-    items.push(items);
-    dispatch({type: editPositionType, items});
-  },
-  removePosition: (position: any) => async (dispatch: any, getState: any) => {
-    const positions = getState().positions.positions;
-    positions.push(positions);
-    dispatch({type: removePositionType, positions});
+  removePosition: (id: number) => async (dispatch: any, getState: any) => {
+    const url = `api/Delete?type=Position`;
+    const headers = new Headers({'Accept': 'application/json', "Content-Type": "application/json"});
+    const response = await fetch(url,{method:"DELETE", body: JSON.stringify(id), headers:headers});
+    const deletedId =  await response.json();
+    const items = getState().positions.items.filter((position:IPosition) => position.id !== deletedId);
+    dispatch({type: removePositionType, items});
   },
 };
 
 export const reducer = (state: any, action: any) => {
   state = state || initialState;
 
-  if (action.type === requestPositionsType) {
-    return {
-      ...state,
-      isLoading: true
-    };
+  switch (action.type) {
+    case requestPositionsType:
+      return {
+        ...state,
+        isLoading: true
+      };
+    case receivePositionsType:
+      return {
+        ...state,
+        items: action.items,
+        total: action.total,
+        isLoading: false
+      };
+    case addPositionType:
+      return {
+        ...state,
+        items: action.items
+      };
+    case removePositionType:
+      return {
+        ...state,
+        items: action.items
+      };
   }
-
-  if (action.type === receivePositionsType) {
-    return {
-      ...state,      
-      items: action.items,
-      total: action.total,
-      isLoading: false
-    };
-  }
-
-  if (action.type === addPositionType) {
-    return {
-      ...state,
-      items: action.items
-    };
-  }
-
   return state;
 };
+

@@ -1,8 +1,8 @@
-export interface WithId<T> {
+export interface IWithId<T> {
   id?:T
 }
 
-export interface IEmployee extends WithId<number>{  
+export interface IEmployee extends IWithId<number>{  
   name: string,
   gradeId: number,
   positionId: number,
@@ -10,12 +10,12 @@ export interface IEmployee extends WithId<number>{
   employmentDate: Date,
 }
 
-export interface IGrade extends WithId<number>{  
+export interface IGrade extends IWithId<number>{  
   description:string,
   costMultiplier:number
 }
 
-export interface IPosition extends WithId<number>{
+export interface IPosition extends IWithId<number>{
   title:string,
   costRate:number
 }

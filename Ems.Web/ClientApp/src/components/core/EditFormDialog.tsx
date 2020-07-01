@@ -39,16 +39,17 @@ const createEditDialog = (cfg: IEditDialogConfigs) => (props: IEditDialogProps) 
 
   const {id} = useParams();
   const store = useStore();
-  useEffect(() => {
-    const entity = getById(store.getState(), id);
-    dispatchLocal({type: "SET_ENTITY", value: entity});
-  }, [id]);
+  if (id && id != "0") {
+    useEffect(() => {
+      const entity = getById(store.getState(), id);
+      dispatchLocal({type: "SET_ENTITY", value: entity});
+    }, [id]);
+  }
 
   const handleChange = (event: any) => {
     const target = event.target;
     const value = target.type === 'checkbox' ? target.checked : target.value;
     const name = target.name;
-    // @ts-ignore
     dispatchLocal({type: "UPDATE_PROP", value: {name, value}});
   };
 
@@ -56,25 +57,15 @@ const createEditDialog = (cfg: IEditDialogConfigs) => (props: IEditDialogProps) 
 
   const regex = new RegExp("(\\/" + id + ")$");
   const parentLink = useLocation().pathname.replace(regex, '');
-  return <FormDialog {...props}                     
+  return <FormDialog {...props}
                      title={getTitle(entity) ?? `New ${entityName}`}
                      buttonCaption={`Add ${entityName}`}
-                     actions={[<CancelButton color={"secondary"} to={parentLink}/>, <SaveButton color={"primary"} to={parentLink} invoke={onSave}/>]}>
+                     actions={[<CancelButton color={"secondary"} to={parentLink}/>,
+                       <SaveButton color={"primary"} to={parentLink} invoke={onSave}/>]}>
     <React.Fragment>
       <ChildComponent entityId={id} entity={entity} handleChange={handleChange}/>
     </React.Fragment>
   </FormDialog>
 };
-
-// const EditFormDialog = (props: IEditDialogProps) => {
-//   let {buttonCaption, children, onCancel, onSave, title, history, parentLink} = props;
-//   return <FormDialog title={title} buttonCaption={buttonCaption} onClose={onCancel}
-//                      actions={[{label: "Cancel", color: "secondary"}, {label: "Save", action: onSave}]}
-//                      history={history} parentLink={parentLink}>
-//     <React.Fragment>
-//       {children}
-//     </React.Fragment>
-//   </FormDialog>
-// };
 
 export default createEditDialog;

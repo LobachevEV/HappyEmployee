@@ -13,15 +13,14 @@ interface IPositionEditDialog extends IChildComponentProps {
 const ChildComp: FunctionComponent<IPositionEditDialog> = (props) => {
   const position = props.entity as IPosition;
   const handleChange = props.handleChange;
-
-  console.log(position);
+  
   return <Grid container spacing={2}>
     <Grid item xs={12}>
       <TextField id="position_id" name="title" label="Title" value={position?.title || ""} onChange={handleChange}/>
     </Grid>
     <Grid item xs={12}>
       <TextField id="cost_rate" name="costRate" type="number" label="Cost rate" InputProps={{inputProps: {step: 1}}}
-                 value={position?.costRate || 1} onChange={handleChange}/>
+                 value={position?.costRate} onChange={handleChange}/>
     </Grid>
   </Grid>;
 };

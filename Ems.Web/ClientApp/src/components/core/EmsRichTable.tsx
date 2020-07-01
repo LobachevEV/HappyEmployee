@@ -1,12 +1,12 @@
 import RichTable, {IColumn} from "./RichTable";
 import React from "react";
 import {History, LocationState} from "history";
-import {WithId} from "../../Model/Api";
+import {IWithId} from "../../Model/Api";
 
 interface IEmsRichTableProps {
   resource: string,
   columns: IColumn[],
-  items: Array<WithId<any>>,
+  items: Array<IWithId<any>>,
   request: (newStartIndex: number, rowsPerPage: number) => any[],
   history: History<LocationState>
   actions?: React.ReactNode[]

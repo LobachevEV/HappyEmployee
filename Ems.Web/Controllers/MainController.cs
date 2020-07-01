@@ -1,6 +1,8 @@
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Ems.Data;
+using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
 
@@ -27,6 +29,20 @@ namespace Ems.Web.Controllers
             var result = id == null || (uint) id == 0 ? await _context.AddAsync(entity) : _context.Update(entity);
             await _context.SaveChangesAsync();
             return result?.Entity;
+        }
+        
+        [HttpDelete("[action]")]
+        public async Task<object> Delete([FromBody] object id, [FromQuery] string type)
+        {
+            var assembly = _context.GetType().Assembly;
+            var assemblyName = assembly.GetName().Name;
+            var objectType = assembly.GetType($"{assemblyName}.Models.{type}");
+            var idProp = objectType.GetProperty("Id");
+            var idValue = Convert.ChangeType(id, idProp.PropertyType);
+            var o = await _context.FindAsync(objectType, idValue);
+            _context.Remove(o);
+            await _context.SaveChangesAsync();
+            return id;
         }
 
         [HttpGet("[action]")]

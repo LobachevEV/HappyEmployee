@@ -1495,6 +1495,13 @@
   resolved "https://registry.yarnpkg.com/@types/q/-/q-1.5.2.tgz#690a1475b84f2a884fd07cd797c00f5f31356ea8"
   integrity sha512-ce5d3q03Ex0sy4R14722Rmt6MT07Ua+k4FwDfdcToYJcMKNtRVQvJ6JCAPdAmAnbRb6CsX6aYb9m96NGod9uTw==
 
+"@types/react-alert@^5.2.0":
+  version "5.2.0"
+  resolved "https://registry.yarnpkg.com/@types/react-alert/-/react-alert-5.2.0.tgz#cf5112acb57303dd2066f5a7f052135307b604a8"
+  integrity sha512-1cyu/vQ4X0CJVC3X4CrJHRBc/9BvTqOF9FH6iy/4TLwPng++GC4ftxS/UaM91FqsKjao7pPtqxUlW1cRafNHLw==
+  dependencies:
+    "@types/react" "*"
+
 "@types/react-dom@16.8.4":
   version "16.8.4"
   resolved "https://registry.yarnpkg.com/@types/react-dom/-/react-dom-16.8.4.tgz#7fb7ba368857c7aa0f4e4511c4710ca2c5a12a88"
@@ -8193,6 +8200,11 @@ react-app-polyfill@^1.0.1:
     raf "^3.4.1"
     regenerator-runtime "^0.13.3"
     whatwg-fetch "^3.0.0"
+
+react-confirm-alert@^2.6.1:
+  version "2.6.1"
+  resolved "https://registry.yarnpkg.com/react-confirm-alert/-/react-confirm-alert-2.6.1.tgz#ab870eea77131547daabe2b97f6cd528ca4d921d"
+  integrity sha512-KxlpQoR4x/ET1oFPm/IGpsqnpzP17qkkQZuaO3pw7zGZ9oP5hElPtq/1vgoikoqNHQ2tMm6Iw9HQUNLoNgXkRA==
 
 react-dev-utils@^9.0.1:
   version "9.1.0"

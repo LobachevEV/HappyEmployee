@@ -17,11 +17,12 @@ interface IEmployeesPageProps {
   startIndex: number,
   rowsPerPage: number,
   requestEmployees: (startIndex: number, rowsPerPage: number) => IEmployee[],
+  removeEmployee: (id: number) => IEmployee[],
   history: History<LocationState>
 }
 
 const Employees: FunctionComponent<IEmployeesPageProps> = (props: IEmployeesPageProps) => {
-  const {requestEmployees, items, history} = props;
+  const {requestEmployees, removeEmployee, items, history} = props;
   const {startIndex, rowsPerPage} = useParams();
 
   const dispatch = useDispatch();
@@ -46,22 +47,16 @@ const Employees: FunctionComponent<IEmployeesPageProps> = (props: IEmployeesPage
   const columns: IColumn[] = [
     {title: "Id", format: (item) => item.id},
     {title: "Name", format: (item) => item.name},
-    {
-      title: "Grade", format: (item) => {
-        return grades.get(item.gradeId);
-      }
-    },
-    {
-      title: "Position", format: (item) => {
-        return positions.get(item.positionId);
-      }
-    },
-    {title: "Personal Cost Mult.", format: (item) => item.personalCostMultiplier},
+    {title: "Grade", format: (item) => grades.get(item.gradeId)},
+    {title: "Position", format: (item) => positions.get(item.positionId)},
+    {title: "Personal Cost Multiplier", format: (item) => item.personalCostMultiplier},
     {title: "Employment Date", format: (item) => moment(item.employmentDate).format('L')},
   ];
 
   return (
     <RichTable title={"Employees"} columns={columns} items={items} onEditRow={handleEditRow}
+               onDeleteRow={item => removeEmployee(item.id)}
+               deleteConfirmationMessage={(employee: IEmployee) => `Confirm deleting the Employee ${employee.name}`}
                actions={[<Button component={Link} to={{pathname: "/employees/0"}} color="primary" variant="outlined">
                  Add Employee
                </Button>]}/>

@@ -3,7 +3,6 @@ import {IEmployee} from "../Model/Api";
 const requestEmployeesType = "REQUEST_EMPLOYEES";
 const receiveEmployeesType = "RECEIVE_EMPLOYEES";
 const addEmployeeType = "ADD_EMPLOYEE";
-const editEmployeeType = "EDIT_EMPLOYEE";
 const removeEmployeeType = "REMOVE_EMPLOYEE";
 const initialState = {items: [], total: 0, isLoading: false};
 
@@ -18,24 +17,25 @@ export const actionCreators = {
     return Promise.resolve();
   },
 
-  saveEmployee: (employee: IEmployee) => async (dispatch: any, getState: any) => {    
-    console.log("Saving employee")
+  saveEmployee: (employee: IEmployee) => async (dispatch: any, getState: any) => {
     const url = `api/Save?type=Employee`;
     const headers = new Headers({'Accept': 'application/json', "Content-Type": "application/json"});    
     const response = await fetch(url,{method:"POST", body: JSON.stringify(employee), headers:headers});
     const result = await response.json();
     const items = getState().employees.items;
-    items.push(result);
+    const updatedEmployeeIdx = items.findIndex((emp:IEmployee)=> emp.id === result.id)
+    if (updatedEmployeeIdx === -1)
+      items.push(result);
+    else
+      items[updatedEmployeeIdx] = result;
     dispatch({type: addEmployeeType, items});
   },
-  editEmployee: (employee: any) => async (dispatch: any, getState: any) => {
-    const items = getState().employees.items;
-    items.push(items);
-    dispatch({type: editEmployeeType, items});
-  },
-  removeEmployee: (employee: any) => async (dispatch: any, getState: any) => {
-    const items = getState().employees.items;
-    items.push(items);
+  removeEmployee: (id: number) => async (dispatch: any, getState: any) => {
+    const url = `api/Delete?type=Employee`;
+    const headers = new Headers({'Accept': 'application/json', "Content-Type": "application/json"});
+    const response = await fetch(url,{method:"DELETE", body: JSON.stringify(id), headers:headers});
+    const deletedId =  await response.json();
+    const items = getState().employees.items.filter((emp:IEmployee) => emp.id !== deletedId);    
     dispatch({type: removeEmployeeType, items});
   },
 };
@@ -60,6 +60,13 @@ export const reducer = (state: any, action: any) => {
   }
 
   if (action.type === addEmployeeType) {
+    return {
+      ...state,
+      items: action.items
+    };
+  }
+
+  if (action.type === removeEmployeeType) {
     return {
       ...state,
       items: action.items
