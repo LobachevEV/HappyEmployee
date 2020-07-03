@@ -116,25 +116,25 @@ const ChildComp: FunctionComponent<IEmployeeEditDialog> = (props) => {
 };
 
 const EmployeeEditDialog: FunctionComponent = () => {
-  const dispatch = useDispatch();  
+  const dispatch = useDispatch();
+  const getEntityOrDefault = (state: any, id: any) => {
+    const employee = state.employees.items.find((item: IEmployee) => item.id === (parseInt(id, 10)));
+    return employee ?? {
+      name: "",
+      gradeId: 1,
+      positionId: 1,
+      personalCostMultiplier: 1,
+      employmentDate: new Date(),
+      availability: EmployeeAvailability.available
+    }
+  };
   const EditDialog = createEditDialog<IEmployee>({
-    entityName: "Employee",
     ChildComponent: ChildComp,
-    save: entity => dispatch(actionCreators.saveEmployee(entity)),    
-    getTitle: entity => entity?.name,
-    getItemOrDefault: (state, id) => {
-      const employee = state.employees.items.find((item:IEmployee) => item.id === (parseInt(id, 10)));
-      return employee ?? {
-        name: "",
-        gradeId: 1,
-        positionId: 1,
-        personalCostMultiplier: 1,
-        employmentDate: new Date(),
-        availability: EmployeeAvailability.available
-      }
-    },
+    save: entity => dispatch(actionCreators.saveEmployee(entity)),
+    getTitle: entity => entity.name || "New Employee",
+    getEntityOrDefault: getEntityOrDefault,
   });
-  return <EditDialog/>
+  return <EditDialog buttonCaption={"Add new Employee"}/>
 };
 
 

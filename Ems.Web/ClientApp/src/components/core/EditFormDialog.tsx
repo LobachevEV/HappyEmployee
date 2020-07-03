@@ -6,6 +6,7 @@ import {CancelButton, SaveButton} from "./HistoricActions";
 import {IWithId} from "../../Model/Api";
 
 interface IEditDialogProps {
+  buttonCaption: string;
 }
 
 export interface IChildComponentProps<T extends IWithId<any>> {
@@ -16,16 +17,14 @@ export interface IChildComponentProps<T extends IWithId<any>> {
 
 interface IEditDialogConfigs<T extends IWithId<any>> {
   ChildComponent: FunctionComponent<IChildComponentProps<T>>,
-  entityName: string,
   getTitle: (entity: T) => string,
-  getItemOrDefault:(state: any, id: any)=> T,
+  getEntityOrDefault: (state: any, id: any) => T,
   save: (entity: T) => void,
 }
 
 function createEditDialog<T>(cfg: IEditDialogConfigs<T>) {
-  const {ChildComponent, getItemOrDefault, save, getTitle, entityName} = cfg;
+  const {ChildComponent, getEntityOrDefault, save, getTitle} = cfg;
   return (props: IEditDialogProps) => {
-
     const {id} = useParams();
     const store = useStore();
     const [entity, dispatchLocal] = useReducer((state: any, {type, value}: any) => {
@@ -40,7 +39,7 @@ function createEditDialog<T>(cfg: IEditDialogConfigs<T>) {
         }
         return state;
       },
-      getItemOrDefault(store.getState(), id));
+      getEntityOrDefault(store.getState(), id));
 
     const handleChange = (event: any) => {
       const target = event.target;
@@ -53,9 +52,9 @@ function createEditDialog<T>(cfg: IEditDialogConfigs<T>) {
 
     const regex = new RegExp("(\\/" + id + ")$");
     const parentLink = useLocation().pathname.replace(regex, '');
+    const title = getTitle(entity);
     return <FormDialog {...props}
-                       title={getTitle(entity) ?? `New ${entityName}`}
-                       buttonCaption={`Add ${entityName}`}
+                       title={title}
                        actions={[<CancelButton color={"secondary"} to={parentLink}/>,
                          <SaveButton color={"primary"} to={parentLink} invoke={onSave}/>]}>
       <React.Fragment>

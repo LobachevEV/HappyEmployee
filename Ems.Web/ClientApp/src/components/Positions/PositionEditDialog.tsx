@@ -13,7 +13,7 @@ interface IPositionEditDialog extends IChildComponentProps<IPosition> {
 const ChildComp: FunctionComponent<IPositionEditDialog> = (props) => {
   const position = props.entity;
   const handleChange = props.handleChange;
-  
+
   return <Grid container spacing={2}>
     <Grid item xs={12}>
       <TextField id="position_id" name="title" label="Title" value={position?.title || ""} onChange={handleChange}/>
@@ -27,20 +27,20 @@ const ChildComp: FunctionComponent<IPositionEditDialog> = (props) => {
 
 const PositionEditDialog: FunctionComponent = () => {
   const dispatch = useDispatch();
+  const entityOrDefault = (state: any, id: any) => {
+    const position = state.positions.items.find((item: IPosition) => item.id === (parseInt(id, 10)));
+    return position ?? {
+      title: "",
+      costRate: 1000
+    }
+  };
   const EditDialog = createEditDialog({
-    entityName: "Position",
     ChildComponent: ChildComp,
-    getTitle: entity => entity?.title,
+    getTitle: entity => entity.name || "New Position",
     save: entity => dispatch(actionCreators.savePosition(entity)),
-    getItemOrDefault: (state, id) => {
-      const position = state.positions.items.find((item:IPosition) => item.id === (parseInt(id, 10)));
-      return position ?? {
-        title:"",
-        costRate:1000
-      }
-    },    
+    getEntityOrDefault: entityOrDefault,
   });
-  return <EditDialog/>
+  return <EditDialog buttonCaption={"Add new Position"}/>
 };
 
 export default PositionEditDialog;

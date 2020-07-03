@@ -28,20 +28,20 @@ const ChildComp: FunctionComponent<IGradeEditDialog> = (props) => {
 
 const GradeEditDialog: FunctionComponent = () => {
   const dispatch = useDispatch();
+  const getEntityOrDefault = (state: any, id: any) => {
+    const grade = state.grades.items.find((item: IGrade) => item.id === (parseInt(id, 10)));
+    return grade ?? {
+      description: "",
+      costMultiplier: 1
+    }
+  };
   const EditDialog = createEditDialog({
-    entityName: "Grade",
     ChildComponent: ChildComp,
-    getTitle: entity => entity?.description,
     save: grade => dispatch(actionCreators.saveGrade(grade)),
-    getItemOrDefault: (state, id) => {
-      const grade = state.grades.items.find((item:IGrade) => item.id === (parseInt(id, 10)));
-      return grade ?? {
-        description: "",
-        costMultiplier: 1
-      }
-    },
+    getTitle: entity => entity.name || "New Grade",
+    getEntityOrDefault: getEntityOrDefault,
   });
-  return <EditDialog/>
+  return <EditDialog buttonCaption={"Add new Grade"}/>
 };
 
 
