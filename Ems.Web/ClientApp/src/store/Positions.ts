@@ -1,4 +1,4 @@
-import {IPosition} from "../Model/Api";
+import {IEmployee, IPosition} from "../Model/Api";
 
 const requestPositionsType = "REQUEST_POSITIONS";
 const receivePositionsType = "RECEIVE_POSITIONS";
@@ -23,7 +23,11 @@ export const actionCreators = {
     const response = await fetch(url,{method:"POST", body: JSON.stringify(position), headers:headers});
     const result = await response.json();
     const items = getState().positions.items;
-    items.push(result);
+    const updatedGradeIdx = items.findIndex((emp: IEmployee) => emp.id === result.id)
+    if (updatedGradeIdx === -1)
+      items.push(result);
+    else
+      items[updatedGradeIdx] = result;
     dispatch({type: addPositionType, items});
   },
   removePosition: (id: number) => async (dispatch: any, getState: any) => {

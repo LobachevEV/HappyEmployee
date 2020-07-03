@@ -42,12 +42,9 @@ interface ITableProps {
   columns: IColumn[],
   items: IWithId<any>[],
   actions?: React.ReactNode[]
-
-  onEditRow?(item: any): any
-
-  onDeleteRow?(item: any): any
-
-  deleteConfirmationMessage?(entity: IWithId<any>): string
+  onEditRow?: (item: any) => any
+  onDeleteRow?: (item: any) => any
+  deleteConfirmationMessage?: (entity: IWithId<any>) => string
 }
 
 const RichTable = (props: ITableProps) => {
@@ -132,4 +129,4 @@ const TableTitle = (props: { title: string, children?: React.ReactNode }) => {
   </Toolbar>
 };
 
-export default RichTable
+export default RichTable;

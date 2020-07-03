@@ -24,6 +24,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const App = () => {
   const classes = useStyles();
+  console.log("Router")
   return <div className={classes.root}>
     <CssBaseline/>
     <main className={classes.content}>      

@@ -1,4 +1,4 @@
-import React, {FunctionComponent, useEffect, useReducer} from "react";
+import React, {FunctionComponent, useReducer} from "react";
 import FormDialog from "../core/FormDialog";
 import {useStore} from "react-redux";
 import {useLocation, useParams} from "react-router";
@@ -17,19 +17,17 @@ export interface IChildComponentProps<T extends IWithId<any>> {
 interface IEditDialogConfigs<T extends IWithId<any>> {
   ChildComponent: FunctionComponent<IChildComponentProps<T>>,
   entityName: string,
-
-  getTitle(entity: T): string,
-
-  getById(state: any, id: any): T,
-
-  save(entity: T): void,
-
-  setDefault?(): T
+  getTitle: (entity: T) => string,
+  getItemOrDefault:(state: any, id: any)=> T,
+  save: (entity: T) => void,
 }
 
 function createEditDialog<T>(cfg: IEditDialogConfigs<T>) {
+  const {ChildComponent, getItemOrDefault, save, getTitle, entityName} = cfg;
   return (props: IEditDialogProps) => {
-    const {ChildComponent, getById, save, getTitle, entityName, setDefault} = cfg;
+
+    const {id} = useParams();
+    const store = useStore();
     const [entity, dispatchLocal] = useReducer((state: any, {type, value}: any) => {
         switch (type) {
           case "SET_ENTITY":
@@ -42,16 +40,7 @@ function createEditDialog<T>(cfg: IEditDialogConfigs<T>) {
         }
         return state;
       },
-      setDefault ? setDefault() : {} as T);
-
-    const {id} = useParams();
-    const store = useStore();
-    if (id && id != "0") {
-      useEffect(() => {
-        const entity = getById(store.getState(), id);
-        dispatchLocal({type: "SET_ENTITY", value: entity});
-      }, [id]);
-    }
+      getItemOrDefault(store.getState(), id));
 
     const handleChange = (event: any) => {
       const target = event.target;
@@ -74,6 +63,6 @@ function createEditDialog<T>(cfg: IEditDialogConfigs<T>) {
       </React.Fragment>
     </FormDialog>
   };
-};
+}
 
 export default createEditDialog;

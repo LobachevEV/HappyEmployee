@@ -13,17 +13,17 @@ export const actionCreators = {
     const response = await fetch(url);
     const {employees, total} = await response.json();
 
-    dispatch({type: receiveEmployeesType, items:employees, total});
+    dispatch({type: receiveEmployeesType, items: employees, total});
     return Promise.resolve();
   },
 
   saveEmployee: (employee: IEmployee) => async (dispatch: any, getState: any) => {
     const url = `api/Save?type=Employee`;
-    const headers = new Headers({'Accept': 'application/json', "Content-Type": "application/json"});    
-    const response = await fetch(url,{method:"POST", body: JSON.stringify(employee), headers:headers});
+    const headers = new Headers({'Accept': 'application/json', "Content-Type": "application/json"});
+    const response = await fetch(url, {method: "POST", body: JSON.stringify(employee), headers: headers});
     const result = await response.json();
     const items = getState().employees.items;
-    const updatedEmployeeIdx = items.findIndex((emp:IEmployee)=> emp.id === result.id)
+    const updatedEmployeeIdx = items.findIndex((emp: IEmployee) => emp.id === result.id)
     if (updatedEmployeeIdx === -1)
       items.push(result);
     else
@@ -33,9 +33,9 @@ export const actionCreators = {
   removeEmployee: (id: number) => async (dispatch: any, getState: any) => {
     const url = `api/Delete?type=Employee`;
     const headers = new Headers({'Accept': 'application/json', "Content-Type": "application/json"});
-    const response = await fetch(url,{method:"DELETE", body: JSON.stringify(id), headers:headers});
-    const deletedId =  await response.json();
-    const items = getState().employees.items.filter((emp:IEmployee) => emp.id !== deletedId);    
+    const response = await fetch(url, {method: "DELETE", body: JSON.stringify(id), headers: headers});
+    const deletedId = await response.json();
+    const items = getState().employees.items.filter((emp: IEmployee) => emp.id !== deletedId);
     dispatch({type: removeEmployeeType, items});
   },
 };
@@ -43,34 +43,29 @@ export const actionCreators = {
 export const reducer = (state: any, action: any) => {
   state = state || initialState;
 
-  if (action.type === requestEmployeesType) {
-    return {
-      ...state,      
-      isLoading: true
-    };
-  }
-
-  if (action.type === receiveEmployeesType) {
-    return {
-      ...state,      
-      items: action.items,
-      total:action.total,
-      isLoading: false
-    };
-  }
-
-  if (action.type === addEmployeeType) {
-    return {
-      ...state,
-      items: action.items
-    };
-  }
-
-  if (action.type === removeEmployeeType) {
-    return {
-      ...state,
-      items: action.items
-    };
+  switch (action.type) {
+    case requestEmployeesType:
+      return {
+        ...state,
+        isLoading: true
+      };
+    case receiveEmployeesType:
+      return {
+        ...state,
+        items: action.items,
+        total: action.total,
+        isLoading: false
+      };
+    case addEmployeeType:
+      return {
+        ...state,
+        items: action.items
+      };
+    case removeEmployeeType:
+      return {
+        ...state,
+        items: action.items
+      };
   }
 
   return state;

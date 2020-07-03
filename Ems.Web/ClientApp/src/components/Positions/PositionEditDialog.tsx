@@ -28,11 +28,17 @@ const ChildComp: FunctionComponent<IPositionEditDialog> = (props) => {
 const PositionEditDialog: FunctionComponent = () => {
   const dispatch = useDispatch();
   const EditDialog = createEditDialog({
-    ChildComponent: ChildComp,
-    save: entity => dispatch(actionCreators.savePosition(entity)),
-    getById: (state, id) => state.positions.items.find((e: IPosition) => e.id === id),
     entityName: "Position",
-    getTitle: entity => entity?.title
+    ChildComponent: ChildComp,
+    getTitle: entity => entity?.title,
+    save: entity => dispatch(actionCreators.savePosition(entity)),
+    getItemOrDefault: (state, id) => {
+      const position = state.positions.items.find((item:IPosition) => item.id === (parseInt(id, 10)));
+      return position ?? {
+        title:"",
+        costRate:1000
+      }
+    },    
   });
   return <EditDialog/>
 };

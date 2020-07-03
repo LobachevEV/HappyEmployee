@@ -4,8 +4,6 @@ import createEditDialog, {IChildComponentProps} from "../core/EditFormDialog";
 import SelectCmp from "../core/SelectCmp";
 import {EmployeeAvailability, IEmployee} from "../../Model/Api";
 import {useDispatch, useSelector} from "react-redux";
-import {actionCreators as gradesActionCreators} from "../../store/Grades";
-import {actionCreators as positionsActionCreators} from "../../store/Positions";
 import {actionCreators} from "../../store/Employees";
 import {DatePicker} from "@material-ui/pickers";
 import {MaterialUiPickersDate} from "@material-ui/pickers/typings/date";
@@ -41,7 +39,7 @@ const ChildComp: FunctionComponent<IEmployeeEditDialog> = (props) => {
     else
       return false;
   });
-  
+
   const handleEmploymentDateChange = (pickerDate: MaterialUiPickersDate) => {
     const date = pickerDate?.toDate();
     setEmploymentDateInFuture(moment(date).isAfter())
@@ -52,8 +50,8 @@ const ChildComp: FunctionComponent<IEmployeeEditDialog> = (props) => {
       }
     });
   }
-  
-  const handleAvailabilityChange = (_: any, value:string) => {    
+
+  const handleAvailabilityChange = (_: any, value: string) => {
     handleChange({
       target: {
         name: "availability",
@@ -90,7 +88,7 @@ const ChildComp: FunctionComponent<IEmployeeEditDialog> = (props) => {
               <FormControlLabel value={EmployeeAvailability.vacation} control={<Radio/>} label="Vacation"
                                 disabled={employmentDateInFuture}/>
             </RadioGroup>
-          </FormControl>          
+          </FormControl>
         </Grid>
       </Grid>
     </Grid>
@@ -117,26 +115,24 @@ const ChildComp: FunctionComponent<IEmployeeEditDialog> = (props) => {
   </Grid>;
 };
 
-const EmployeeEditDialog: FunctionComponent = ({}) => {
-  const dispatch = useDispatch();
-  dispatch(gradesActionCreators.requestGrades());
-  dispatch(positionsActionCreators.requestPositions());
+const EmployeeEditDialog: FunctionComponent = () => {
+  const dispatch = useDispatch();  
   const EditDialog = createEditDialog<IEmployee>({
-    ChildComponent: ChildComp,
-    save: entity => dispatch(actionCreators.saveEmployee(entity)),
-    getById: (state, id) => state.employees.items.find((e: IEmployee) => e.id === parseInt(id, 10)),
     entityName: "Employee",
+    ChildComponent: ChildComp,
+    save: entity => dispatch(actionCreators.saveEmployee(entity)),    
     getTitle: entity => entity?.name,
-    setDefault(): IEmployee {
-      return {
-        name:"",
+    getItemOrDefault: (state, id) => {
+      const employee = state.employees.items.find((item:IEmployee) => item.id === (parseInt(id, 10)));
+      return employee ?? {
+        name: "",
         gradeId: 1,
         positionId: 1,
         personalCostMultiplier: 1,
         employmentDate: new Date(),
         availability: EmployeeAvailability.available
       }
-    }
+    },
   });
   return <EditDialog/>
 };

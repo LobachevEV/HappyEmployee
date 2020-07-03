@@ -1,6 +1,6 @@
 import React, {FunctionComponent, useEffect} from "react";
 import {bindActionCreators} from "redux";
-import {connect, useDispatch, useSelector} from "react-redux";
+import {connect, useSelector} from "react-redux";
 import {Button} from "@material-ui/core";
 import {actionCreators} from "../../store/Employees";
 import {Link, useParams} from "react-router-dom";
@@ -16,23 +16,24 @@ interface IEmployeesPageProps {
   total: number,
   startIndex: number,
   rowsPerPage: number,
-  requestEmployees: (startIndex: number, rowsPerPage: number) => IEmployee[],
-  removeEmployee: (id: number) => IEmployee[],
+  requestEmployees: (startIndex: number, rowsPerPage: number) => void,
+  requestGrades: () => void,
+  requestPositions: () => void,
+  removeEmployee: (id: number) => void,
   history: History<LocationState>
 }
 
 const Employees: FunctionComponent<IEmployeesPageProps> = (props: IEmployeesPageProps) => {
-  const {requestEmployees, removeEmployee, items, history} = props;
+  const {requestEmployees, removeEmployee, items, history, requestGrades, requestPositions} = props;
   const {startIndex, rowsPerPage} = useParams();
 
-  const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(gradesActionCreators.requestGrades());
-    dispatch(positionsActionCreators.requestPositions());
-  }, [1])
+    requestGrades();
+    requestPositions();
+  }, [1]);
   useEffect(() => {
-    const startIndexInt = startIndex && parseInt(startIndex, 10) || 0;
-    const rowsPerPageInt = rowsPerPage && parseInt(rowsPerPage, 10) || 5;
+    const startIndexInt = startIndex ? parseInt(startIndex, 10) : 0;
+    const rowsPerPageInt = rowsPerPage ? parseInt(rowsPerPage, 10) : 5;
     requestEmployees(startIndexInt, rowsPerPageInt);
   }, [startIndex, rowsPerPage]);
 
@@ -44,6 +45,9 @@ const Employees: FunctionComponent<IEmployeesPageProps> = (props: IEmployeesPage
     if (!g.id) return map;
     return map.set(g.id, g.description);
   }, new Map<number, string>());
+  
+  const handleEditRow = (item: any) => history.push(`/employees/${item.id || 0}`);
+  
   const columns: IColumn[] = [
     {title: "Id", format: (item) => item.id},
     {title: "Name", format: (item) => item.name},
@@ -56,18 +60,19 @@ const Employees: FunctionComponent<IEmployeesPageProps> = (props: IEmployeesPage
   return (
     <RichTable title={"Employees"} columns={columns} items={items} onEditRow={handleEditRow}
                onDeleteRow={item => removeEmployee(item.id)}
-               deleteConfirmationMessage={(employee: IEmployee) => `Confirm deleting the Employee ${employee.name}`}
-               actions={[<Button component={Link} to={{pathname: "/employees/0"}} color="primary" variant="outlined">
+               deleteConfirmationMessage={(employee: any) => `Confirm deleting the Employee ${employee.name}`}
+               actions={[<Button component={Link} to={{pathname: "/employees/0"}} color="primary"
+                                 variant="outlined">
                  Add Employee
                </Button>]}/>
   );
-
-  function handleEditRow(item: any) {
-    history.push(`/employees/${item.id || 0}`);
-  }
 };
 
 export default connect<any>(
   (state: any) => state.employees,
-  dispatch => bindActionCreators(actionCreators, dispatch)
+  dispatch => bindActionCreators({
+    ...actionCreators,
+    requestGrades: gradesActionCreators.requestGrades,
+    requestPositions: positionsActionCreators.requestPositions
+  }, dispatch)
 )(Employees);

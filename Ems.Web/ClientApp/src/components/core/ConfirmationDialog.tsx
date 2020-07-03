@@ -26,7 +26,7 @@ const ConfirmationDialog = (props: IAlertDialogProps) => {
     >
       <DialogTitle id="alert-dialog-title">{props.message}</DialogTitle>
       <DialogActions>
-        <Button onClick={onClose} color="primary">
+        <Button onClick={onClose} color="secondary">
           Decline
         </Button>
         <Button onClick={handleOk} color="primary" autoFocus>
