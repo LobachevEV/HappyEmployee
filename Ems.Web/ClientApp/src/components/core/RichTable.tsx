@@ -70,14 +70,14 @@ const RichTable = (props: ITableProps) => {
         <Table className='table table-striped'>
           <TableHead>
             <TableRow>
-              {tableColumns && tableColumns.map(col => <TableCell>{col.title}</TableCell>)}
+              {tableColumns && tableColumns.map(col => <TableCell key={col.title}>{col.title}</TableCell>)}
             </TableRow>
           </TableHead>
           <TableBody>
             {items && items.map(item => <TableRow key={item.id} hover>
                 {columns.map(col => <TableCell key={col.title}
                                                onClick={() => onEditRow && onEditRow(item)}>{col.format(item)}</TableCell>)}
-                {onDeleteRow && <TableCell>
+                {onDeleteRow && <TableCell key={`delete-button${item.id}`}>
                     <IconButton aria-label="delete" className={classes.deleteButton} onClick={() => submit(item)}>
                         <DeleteIcon fontSize="small"/>
                     </IconButton>

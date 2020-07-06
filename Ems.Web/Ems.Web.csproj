@@ -32,11 +32,11 @@
     <TypeScriptCompile Include="ClientApp\src\components\core\RichTable.tsx" />
     <TypeScriptCompile Include="ClientApp\src\components\core\SelectCmp.tsx" />
     <TypeScriptCompile Include="ClientApp\src\components\Employees\EmployeeEditDialog.tsx" />
-    <TypeScriptCompile Include="ClientApp\src\components\Employees\Employees.tsx" />
+    <TypeScriptCompile Include="ClientApp\src\components\Employees\EmployeesPage.tsx" />
     <TypeScriptCompile Include="ClientApp\src\components\Grades\GradeEditDialog.tsx" />
-    <TypeScriptCompile Include="ClientApp\src\components\Grades\Grades.tsx" />
+    <TypeScriptCompile Include="ClientApp\src\components\Grades\GradesPage.tsx" />
     <TypeScriptCompile Include="ClientApp\src\components\Positions\PositionEditDialog.tsx" />
-    <TypeScriptCompile Include="ClientApp\src\components\Positions\Positions.tsx" />
+    <TypeScriptCompile Include="ClientApp\src\components\Positions\PositionsPage.tsx" />
     <TypeScriptCompile Include="ClientApp\src\index.tsx" />
     <TypeScriptCompile Include="ClientApp\src\Model\Api.ts" />
     <TypeScriptCompile Include="ClientApp\src\react-app-env.d.ts" />

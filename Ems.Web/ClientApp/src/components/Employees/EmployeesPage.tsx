@@ -23,31 +23,31 @@ interface IEmployeesPageProps {
   history: History<LocationState>
 }
 
-const Employees: FunctionComponent<IEmployeesPageProps> = (props: IEmployeesPageProps) => {
-  const {requestEmployees, removeEmployee, items, history, requestGrades, requestPositions} = props;
+const EmployeesPage: FunctionComponent<IEmployeesPageProps> = (props: IEmployeesPageProps) => {
+  const {items, requestEmployees, removeEmployee,  history, requestGrades, requestPositions} = props;
   const {startIndex, rowsPerPage} = useParams();
 
   useEffect(() => {
     requestGrades();
     requestPositions();
-  }, [1]);
+  }, []);
   useEffect(() => {
     const startIndexInt = startIndex ? parseInt(startIndex, 10) : 0;
     const rowsPerPageInt = rowsPerPage ? parseInt(rowsPerPage, 10) : 5;
     requestEmployees(startIndexInt, rowsPerPageInt);
   }, [startIndex, rowsPerPage]);
 
-  const positions = useSelector((state: any) => state.positions.items).reduce((map: Map<number, string>, p: IPosition) => {
+  const positions = useSelector((state: any) => state.positions.items, (left, right) => left.id === right.id).reduce((map: Map<number, string>, p: IPosition) => {
     if (!p.id) return map;
     return map.set(p.id, p.title);
   }, new Map<number, string>());
-  const grades = useSelector((state: any) => state.grades.items).reduce((map: Map<number, string>, g: IGrade) => {
+  const grades = useSelector((state: any) => state.grades.items, (left, right) => left.id === right.id).reduce((map: Map<number, string>, g: IGrade) => {
     if (!g.id) return map;
     return map.set(g.id, g.description);
   }, new Map<number, string>());
   
   const handleEditRow = (item: any) => history.push(`/employees/${item.id || 0}`);
-  
+
   const columns: IColumn[] = [
     {title: "Id", format: (item) => item.id},
     {title: "Name", format: (item) => item.name},
@@ -61,7 +61,8 @@ const Employees: FunctionComponent<IEmployeesPageProps> = (props: IEmployeesPage
     <RichTable title={"Employees"} columns={columns} items={items} onEditRow={handleEditRow}
                onDeleteRow={item => removeEmployee(item.id)}
                deleteConfirmationMessage={(employee: any) => `Confirm deleting the Employee ${employee.name}`}
-               actions={[<Button component={Link} to={{pathname: "/employees/0"}} color="primary"
+               actions={[<Button key={`open-edit-dialog`} component={Link} to={{pathname: "/employees/0"}}
+                                 color="primary"
                                  variant="outlined">
                  Add Employee
                </Button>]}/>
@@ -75,4 +76,4 @@ export default connect<any>(
     requestGrades: gradesActionCreators.requestGrades,
     requestPositions: positionsActionCreators.requestPositions
   }, dispatch)
-)(Employees);
+)(EmployeesPage);

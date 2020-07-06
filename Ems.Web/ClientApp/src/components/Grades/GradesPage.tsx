@@ -17,7 +17,7 @@ interface IGradesPageProps {
   removeGrade: (id: number) => void
 }
 
-const Grades = function (props: IGradesPageProps) {
+const GradesPage = function (props: IGradesPageProps) {
   const {requestGrades, items, history, removeGrade} = props;
   const {startIndex, rowsPerPage} = useParams();
 
@@ -48,4 +48,4 @@ const Grades = function (props: IGradesPageProps) {
 export default connect<any>(
   (state: any) => state.grades,
   dispatch => bindActionCreators(actionCreators, dispatch)
-)(Grades);
+)(GradesPage);

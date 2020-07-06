@@ -15,7 +15,7 @@ interface IPositionsPageProps {
   removePosition: (id: number) => void
 }
 
-const Positions = function (props: IPositionsPageProps) {
+const PositionsPage = function (props: IPositionsPageProps) {
   const {requestPositions, items, history, removePosition} = props;
   const {startIndex, rowsPerPage} = useParams();
   useEffect(() => {
@@ -45,4 +45,4 @@ const Positions = function (props: IPositionsPageProps) {
 export default connect<any>(
   (state: any) => state.positions,
   dispatch => bindActionCreators(actionCreators, dispatch)
-)(Positions);
+)(PositionsPage);
