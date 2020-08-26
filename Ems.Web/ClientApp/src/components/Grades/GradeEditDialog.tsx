@@ -36,7 +36,7 @@ const GradeEditDialog: FunctionComponent = () => {
     }
   };
   const EditDialog = createEditDialog({
-    ChildComponent: ChildComp,
+    Body: ChildComp,
     save: grade => dispatch(actionCreators.saveGrade(grade)),
     getTitle: entity => entity.name || "New Grade",
     getEntityOrDefault: getEntityOrDefault,

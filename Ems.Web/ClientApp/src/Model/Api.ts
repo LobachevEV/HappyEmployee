@@ -27,3 +27,17 @@ export enum EmployeeAvailability  {
   sickLeave,
   vacation
 }
+
+export function employeeAvailabilityToString(availability: EmployeeAvailability): string{
+  switch (availability){
+    case EmployeeAvailability.willStartWorkSoon:
+      return "Will start work soon";
+    case EmployeeAvailability.available:
+      return "Available";
+    case EmployeeAvailability.sickLeave:
+      return "Sick leave";
+    case EmployeeAvailability.vacation:
+      return "Vacation";
+
+  }
+}

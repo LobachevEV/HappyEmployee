@@ -2,19 +2,15 @@ import React, {FunctionComponent, useState} from "react";
 import {createStyles, Grid, makeStyles, TextField, Theme} from "@material-ui/core";
 import createEditDialog, {IChildComponentProps} from "../core/EditFormDialog";
 import SelectCmp from "../core/SelectCmp";
-import {EmployeeAvailability, IEmployee} from "../../Model/Api";
+import {EmployeeAvailability, employeeAvailabilityToString, IEmployee, IGrade, IPosition} from "../../Model/Api";
 import {useDispatch, useSelector} from "react-redux";
 import {actionCreators} from "../../store/Employees";
 import {DatePicker} from "@material-ui/pickers";
 import {MaterialUiPickersDate} from "@material-ui/pickers/typings/date";
 import Avatar from "@material-ui/core/Avatar";
 import AssignmentIcon from '@material-ui/icons/Assignment';
-import FormControl from "@material-ui/core/FormControl";
-import FormLabel from "@material-ui/core/FormLabel";
-import RadioGroup from "@material-ui/core/RadioGroup";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Radio from "@material-ui/core/Radio";
 import moment from "moment";
+import RadioButtonGroupCmp, {IRadioButton} from "../core/RadioButtonGroupCmp";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -29,7 +25,7 @@ const useStyles = makeStyles((theme: Theme) =>
 interface IEmployeeEditDialog extends IChildComponentProps<IEmployee> {
 }
 
-const ChildComp: FunctionComponent<IEmployeeEditDialog> = (props) => {
+const BodyCmp: FunctionComponent<IEmployeeEditDialog> = (props) => {
   const employee = props.entity;
   console.log(employee);
   const handleChange = props.handleChange;
@@ -38,17 +34,29 @@ const ChildComp: FunctionComponent<IEmployeeEditDialog> = (props) => {
       return moment(employee.employmentDate).isAfter();
     else
       return false;
-  });
-
+  });  
+  
   const handleEmploymentDateChange = (pickerDate: MaterialUiPickersDate) => {
     const date = pickerDate?.toDate();
-    setEmploymentDateInFuture(moment(date).isAfter())
-    handleChange({
-      target: {
-        name: "employmentDate",
-        value: date
+    const inFuture = moment(date).isAfter();
+    setEmploymentDateInFuture(inFuture)
+    const events: Array<any> = [
+      {
+        target: {
+          name: "employmentDate",
+          value: date
+        }
       }
-    });
+    ];
+    if (employmentDateInFuture != inFuture)
+      events.push({
+        target: {
+          name: "availability",
+          value: inFuture ? EmployeeAvailability.willStartWorkSoon : EmployeeAvailability.available
+        }
+      })
+    handleChange(events);
+
   }
 
   const handleAvailabilityChange = (_: any, value: string) => {
@@ -59,9 +67,32 @@ const ChildComp: FunctionComponent<IEmployeeEditDialog> = (props) => {
       }
     });
   }
+
   const positions = useSelector((state: any) => state.positions.items);
   const grades = useSelector((state: any) => state.grades.items);
   const classes = useStyles();
+  const radioButtons: IRadioButton[] = [
+    {
+      value: EmployeeAvailability.willStartWorkSoon,
+      label: employeeAvailabilityToString(EmployeeAvailability.willStartWorkSoon),
+      disabled: !employmentDateInFuture
+    },
+    {
+      value: EmployeeAvailability.available,
+      label: employeeAvailabilityToString(EmployeeAvailability.available),
+      disabled: employmentDateInFuture
+    },
+    {
+      value: EmployeeAvailability.sickLeave,
+      label: employeeAvailabilityToString(EmployeeAvailability.sickLeave),
+      disabled: employmentDateInFuture
+    },
+    {
+      value: EmployeeAvailability.vacation,
+      label: employeeAvailabilityToString(EmployeeAvailability.vacation),
+      disabled: employmentDateInFuture
+    },
+  ];
   return <Grid container spacing={2}>
     <Grid item container xs={12}>
       <Grid item xs={3}>
@@ -71,36 +102,23 @@ const ChildComp: FunctionComponent<IEmployeeEditDialog> = (props) => {
       </Grid>
       <Grid item container xs={9} spacing={2}>
         <Grid item xs={12}>
-          <TextField id="emp_name" name={"name"} label="Employee name" value={employee.name}
-                     onChange={handleChange}/>
+          <TextField id="emp_name" name={"name"} label="Employee name" value={employee.name} onChange={handleChange}/>
         </Grid>
         <Grid item xs={12}>
-          <FormControl component="fieldset">
-            <FormLabel component="legend">Availability</FormLabel>
-            <RadioGroup name="availability"
-                        value={employee.availability} onChange={handleAvailabilityChange} row>
-              <FormControlLabel value={EmployeeAvailability.willStartWorkSoon} control={<Radio/>}
-                                label="Will start work soon" disabled={!employmentDateInFuture}/>
-              <FormControlLabel value={EmployeeAvailability.available} control={<Radio/>} label="Available"
-                                disabled={employmentDateInFuture}/>
-              <FormControlLabel value={EmployeeAvailability.sickLeave} control={<Radio/>} label="Sick leave"
-                                disabled={employmentDateInFuture}/>
-              <FormControlLabel value={EmployeeAvailability.vacation} control={<Radio/>} label="Vacation"
-                                disabled={employmentDateInFuture}/>
-            </RadioGroup>
-          </FormControl>
+          <RadioButtonGroupCmp name="availability" value={employee.availability} onChange={handleAvailabilityChange}
+                               buttons={radioButtons}/>
         </Grid>
       </Grid>
     </Grid>
     <Grid item xs={6}>
       <SelectCmp id={"position_id"} name={"positionId"} label="Position" onChange={handleChange}
                  value={employee.positionId}
-                 items={positions.map((p: any) => ({value: p.id, label: p.title}))}/>
+                 items={positions.map((p: IPosition) => ({value: p.id, label: p.title}))}/>
     </Grid>
     <Grid item xs={6}>
       <SelectCmp id={"grade_id"} name={"gradeId"} label="Grade" onChange={handleChange}
                  value={employee.gradeId}
-                 items={grades.map((g: any) => ({value: g.id, label: g.description}))}/>
+                 items={grades.map((g: IGrade) => ({value: g.id, label: g.description}))}/>
     </Grid>
     <Grid item xs={6}>
       <TextField id="per_cost_mult" type="number" InputProps={{inputProps: {step: 0.1}}} name={"personalCostMultiplier"}
@@ -112,7 +130,8 @@ const ChildComp: FunctionComponent<IEmployeeEditDialog> = (props) => {
                   label="Employment date" onChange={handleEmploymentDateChange}
                   value={employee.employmentDate} InputLabelProps={{shrink: true,}}/>
     </Grid>
-  </Grid>;
+  </Grid>
+    ;
 };
 
 const EmployeeEditDialog: FunctionComponent = () => {
@@ -129,7 +148,7 @@ const EmployeeEditDialog: FunctionComponent = () => {
     }
   };
   const EditDialog = createEditDialog<IEmployee>({
-    ChildComponent: ChildComp,
+    Body: BodyCmp,
     save: entity => dispatch(actionCreators.saveEmployee(entity)),
     getTitle: entity => entity.name || "New Employee",
     getEntityOrDefault: getEntityOrDefault,

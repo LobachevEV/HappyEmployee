@@ -1,4 +1,4 @@
-import React, {FunctionComponent, useReducer} from "react";
+import React, {FunctionComponent, useState} from "react";
 import FormDialog from "../core/FormDialog";
 import {useStore} from "react-redux";
 import {useLocation, useParams} from "react-router";
@@ -16,36 +16,36 @@ export interface IChildComponentProps<T extends IWithId<any>> {
 }
 
 interface IEditDialogConfigs<T extends IWithId<any>> {
-  ChildComponent: FunctionComponent<IChildComponentProps<T>>,
+  Body: FunctionComponent<IChildComponentProps<T>>,
   getTitle: (entity: T) => string,
   getEntityOrDefault: (state: any, id: any) => T,
   save: (entity: T) => void,
+  validation?: Map<string, (value: any) => string | undefined>
 }
 
-function createEditDialog<T>(cfg: IEditDialogConfigs<T>) {
-  const {ChildComponent, getEntityOrDefault, save, getTitle} = cfg;
+function createEditDialog<T extends IWithId<any>>(cfg: IEditDialogConfigs<T>) {
+  const {Body, getEntityOrDefault, save, getTitle, validation} = cfg;
   return (props: IEditDialogProps) => {
     const {id} = useParams();
     const store = useStore();
-    const [entity, dispatchLocal] = useReducer((state: any, {type, value}: any) => {
-        switch (type) {
-          case "SET_ENTITY":
-            return value as T;
-          case "UPDATE_PROP":
-            return {
-              ...state,
-              [value.name]: value.value
-            } as any
-        }
-        return state;
-      },
-      getEntityOrDefault(store.getState(), id));
+    const initialState = getEntityOrDefault(store.getState(), id);
+    const [entity, setEntity] = useState(initialState);
 
     const handleChange = (event: any) => {
-      const target = event.target;
-      const value = target.type === 'checkbox' ? target.checked : target.value;
-      const name = target.name;
-      dispatchLocal({type: "UPDATE_PROP", value: {name, value}});
+      if (!(event instanceof Array)) {
+        event = [event];
+      }
+      const newEntity: T = {
+        ...entity
+      };
+      (event as Array<any>).forEach(ev => {
+        const target = ev.target;
+        const value = target.type === 'checkbox' ? target.checked : target.value;
+        const name = target.name;
+        // @ts-ignore
+        newEntity[name] = value;
+      });
+      setEntity(newEntity)
     };
 
     const onSave = () => save(entity);
@@ -58,7 +58,7 @@ function createEditDialog<T>(cfg: IEditDialogConfigs<T>) {
                        actions={[<CancelButton color={"secondary"} to={parentLink}/>,
                          <SaveButton color={"primary"} to={parentLink} invoke={onSave}/>]}>
       <React.Fragment>
-        <ChildComponent entityId={id} entity={entity} handleChange={handleChange}/>
+        <Body entityId={id} entity={entity} handleChange={handleChange}/>
       </React.Fragment>
     </FormDialog>
   };

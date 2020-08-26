@@ -4,7 +4,7 @@ import {connect, useSelector} from "react-redux";
 import {Button} from "@material-ui/core";
 import {actionCreators} from "../../store/Employees";
 import {Link, useParams} from "react-router-dom";
-import {IEmployee, IGrade, IPosition} from "../../Model/Api";
+import {employeeAvailabilityToString, IEmployee, IGrade, IPosition} from "../../Model/Api";
 import RichTable, {IColumn} from "../core/RichTable";
 import {History, LocationState} from "history";
 import {actionCreators as gradesActionCreators} from "../../store/Grades";
@@ -55,6 +55,7 @@ const EmployeesPage: FunctionComponent<IEmployeesPageProps> = (props: IEmployees
     {title: "Position", format: (item) => positions.get(item.positionId)},
     {title: "Personal Cost Multiplier", format: (item) => item.personalCostMultiplier},
     {title: "Employment Date", format: (item) => moment(item.employmentDate).format('L')},
+    {title: "Availability", format: (item) => employeeAvailabilityToString(item.availability)},
   ];
 
   return (

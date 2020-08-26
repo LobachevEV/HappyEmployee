@@ -35,7 +35,7 @@ const PositionEditDialog: FunctionComponent = () => {
     }
   };
   const EditDialog = createEditDialog({
-    ChildComponent: ChildComp,
+    Body: ChildComp,
     getTitle: entity => entity.name || "New Position",
     save: entity => dispatch(actionCreators.savePosition(entity)),
     getEntityOrDefault: entityOrDefault,
