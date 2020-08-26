@@ -11,42 +11,29 @@ interface IEditDialogProps {
 
 export interface IChildComponentProps<T extends IWithId<any>> {
   entityId: any,
-  entity: T,
-  handleChange: (event: any) => void,
+  entity: Readonly<T>,
+  handleChange: (fieldsToUpdate: Partial<T>) => void,
 }
 
 interface IEditDialogConfigs<T extends IWithId<any>> {
   Body: FunctionComponent<IChildComponentProps<T>>,
   getTitle: (entity: T) => string,
   getEntityOrDefault: (state: any, id: any) => T,
-  save: (entity: T) => void,
-  validation?: Map<string, (value: any) => string | undefined>
+  save: (entity: T) => void, 
 }
 
 function createEditDialog<T extends IWithId<any>>(cfg: IEditDialogConfigs<T>) {
-  const {Body, getEntityOrDefault, save, getTitle, validation} = cfg;
+  const {Body, getEntityOrDefault, save, getTitle} = cfg;
   return (props: IEditDialogProps) => {
     const {id} = useParams();
     const store = useStore();
     const initialState = getEntityOrDefault(store.getState(), id);
     const [entity, setEntity] = useState(initialState);
 
-    const handleChange = (event: any) => {
-      if (!(event instanceof Array)) {
-        event = [event];
-      }
-      const newEntity: T = {
-        ...entity
-      };
-      (event as Array<any>).forEach(ev => {
-        const target = ev.target;
-        const value = target.type === 'checkbox' ? target.checked : target.value;
-        const name = target.name;
-        // @ts-ignore
-        newEntity[name] = value;
-      });
-      setEntity(newEntity)
-    };
+    const handleChange = (fieldsToUpdate: Partial<T>) => {
+      const newEntity = {...entity, ...fieldsToUpdate}
+      setEntity(newEntity);
+    }
 
     const onSave = () => save(entity);
 

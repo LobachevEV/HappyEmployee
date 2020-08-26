@@ -11,17 +11,17 @@ interface IGradeEditDialog extends IChildComponentProps<IGrade> {
 
 const ChildComp: FunctionComponent<IGradeEditDialog> = (props) => {
   const grade = props.entity;
-  const handleChange = props.handleChange;
+  const handleChange1 = props.handleChange;
 
   return <Grid container spacing={2}>
     <Grid item xs={12}>
-      <TextField id="grade_desc" name="description" label="Description" value={grade?.description || ''}
-                 onChange={handleChange}/>
+      <TextField id="grade_desc" label="Description" value={grade?.description || ''}
+                 onChange={event => handleChange1({description: event.target.value})}/>
     </Grid>
     <Grid item xs={12}>
-      <TextField id="cost_mult" name="costMultiplier" type="number" label="Cost multiplier"
+      <TextField id="cost_mult" type="number" label="Cost multiplier"
                  InputProps={{inputProps: {step: 0.1}}}
-                 value={grade?.costMultiplier} onChange={handleChange}/>
+                 value={grade?.costMultiplier} onChange={event => handleChange1({costMultiplier: event.target.value})}/>
     </Grid>
   </Grid>;
 };
@@ -38,7 +38,7 @@ const GradeEditDialog: FunctionComponent = () => {
   const EditDialog = createEditDialog({
     Body: ChildComp,
     save: grade => dispatch(actionCreators.saveGrade(grade)),
-    getTitle: entity => entity.name || "New Grade",
+    getTitle: entity => entity.description || "New Grade",
     getEntityOrDefault: getEntityOrDefault,
   });
   return <EditDialog buttonCaption={"Add new Grade"}/>

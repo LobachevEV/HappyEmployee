@@ -27,45 +27,26 @@ interface IEmployeeEditDialog extends IChildComponentProps<IEmployee> {
 
 const BodyCmp: FunctionComponent<IEmployeeEditDialog> = (props) => {
   const employee = props.entity;
-  console.log(employee);
-  const handleChange = props.handleChange;
+  const {handleChange} = props;
+
   const [employmentDateInFuture, setEmploymentDateInFuture] = useState(() => {
     if (employee.employmentDate)
       return moment(employee.employmentDate).isAfter();
     else
       return false;
-  });  
-  
+  });
+
   const handleEmploymentDateChange = (pickerDate: MaterialUiPickersDate) => {
     const date = pickerDate?.toDate();
     const inFuture = moment(date).isAfter();
     setEmploymentDateInFuture(inFuture)
-    const events: Array<any> = [
-      {
-        target: {
-          name: "employmentDate",
-          value: date
-        }
-      }
-    ];
+    const fieldsToUpdate: Partial<IEmployee> = {
+      employmentDate: date
+    };
     if (employmentDateInFuture != inFuture)
-      events.push({
-        target: {
-          name: "availability",
-          value: inFuture ? EmployeeAvailability.willStartWorkSoon : EmployeeAvailability.available
-        }
-      })
-    handleChange(events);
+      fieldsToUpdate.availability = inFuture ? EmployeeAvailability.willStartWorkSoon : EmployeeAvailability.available;
+    handleChange(fieldsToUpdate);
 
-  }
-
-  const handleAvailabilityChange = (_: any, value: string) => {
-    handleChange({
-      target: {
-        name: "availability",
-        value: +value
-      }
-    });
   }
 
   const positions = useSelector((state: any) => state.positions.items);
@@ -102,36 +83,40 @@ const BodyCmp: FunctionComponent<IEmployeeEditDialog> = (props) => {
       </Grid>
       <Grid item container xs={9} spacing={2}>
         <Grid item xs={12}>
-          <TextField id="emp_name" name={"name"} label="Employee name" value={employee.name} onChange={handleChange}/>
+          <TextField id="emp_name" label="Employee name" value={employee.name}
+                     onChange={event => handleChange({name: event.target.value})}/>
         </Grid>
         <Grid item xs={12}>
-          <RadioButtonGroupCmp name="availability" value={employee.availability} onChange={handleAvailabilityChange}
+          <RadioButtonGroupCmp name="availability" value={employee.availability}
+                               onChange={event => handleChange({availability: +event.target.value})}
                                buttons={radioButtons}/>
         </Grid>
       </Grid>
     </Grid>
     <Grid item xs={6}>
-      <SelectCmp id={"position_id"} name={"positionId"} label="Position" onChange={handleChange}
+      <SelectCmp id={"position_id"} label="Position"
+                 onChange={event => handleChange({positionId: event.target.value as number})}
                  value={employee.positionId}
                  items={positions.map((p: IPosition) => ({value: p.id, label: p.title}))}/>
     </Grid>
     <Grid item xs={6}>
-      <SelectCmp id={"grade_id"} name={"gradeId"} label="Grade" onChange={handleChange}
+      <SelectCmp id={"grade_id"} label="Grade"
+                 onChange={event => handleChange({gradeId: event.target.value as number})}
                  value={employee.gradeId}
                  items={grades.map((g: IGrade) => ({value: g.id, label: g.description}))}/>
     </Grid>
     <Grid item xs={6}>
-      <TextField id="per_cost_mult" type="number" InputProps={{inputProps: {step: 0.1}}} name={"personalCostMultiplier"}
-                 label="Personal cost multiplier" onChange={handleChange}
+      <TextField id="per_cost_mult" type="number" InputProps={{inputProps: {step: 0.1}}}
+                 label="Personal cost multiplier"
+                 onChange={event => handleChange({personalCostMultiplier: +event.target.value})}
                  value={employee.personalCostMultiplier} InputLabelProps={{shrink: true,}}/>
     </Grid>
     <Grid item xs={6}>
-      <DatePicker id="employment_date" type="text" name={"employmentDate"}
+      <DatePicker id="employment_date" type="text"
                   label="Employment date" onChange={handleEmploymentDateChange}
                   value={employee.employmentDate} InputLabelProps={{shrink: true,}}/>
     </Grid>
-  </Grid>
-    ;
+  </Grid>;
 };
 
 const EmployeeEditDialog: FunctionComponent = () => {

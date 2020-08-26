@@ -16,11 +16,11 @@ const ChildComp: FunctionComponent<IPositionEditDialog> = (props) => {
 
   return <Grid container spacing={2}>
     <Grid item xs={12}>
-      <TextField id="position_id" name="title" label="Title" value={position?.title || ""} onChange={handleChange}/>
+      <TextField id="position_id" label="Title" value={position?.title || ""} onChange={event => handleChange({title: event.target.value})}/>
     </Grid>
     <Grid item xs={12}>
-      <TextField id="cost_rate" name="costRate" type="number" label="Cost rate" InputProps={{inputProps: {step: 1}}}
-                 value={position?.costRate} onChange={handleChange}/>
+      <TextField id="cost_rate" type="number" label="Cost rate" InputProps={{inputProps: {step: 1}}}
+                 value={position?.costRate} onChange={event => handleChange({costRate: +event.target.value})}/>
     </Grid>
   </Grid>;
 };
@@ -36,7 +36,7 @@ const PositionEditDialog: FunctionComponent = () => {
   };
   const EditDialog = createEditDialog({
     Body: ChildComp,
-    getTitle: entity => entity.name || "New Position",
+    getTitle: entity => entity.title || "New Position",
     save: entity => dispatch(actionCreators.savePosition(entity)),
     getEntityOrDefault: entityOrDefault,
   });
